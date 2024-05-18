@@ -30,11 +30,12 @@ in {
       ripgrep
       coreutils-prefixed
 
-      # Language Servers (if package not listed here - it should be installed in project's nix shell)
+      # Language Servers (if package not listed here - it should be installed in a project's nix shell)
       nixd
       gopls
       nodePackages.pyright
       terraform-ls
+      dockerfile-language-server-nodejs
     ]);
 
   # On MacOS we need this to make grammars visible for Emacs
