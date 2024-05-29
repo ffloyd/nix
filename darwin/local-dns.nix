@@ -28,7 +28,7 @@ in {
     ${private.workProjectsCaddyfile}
   '';
 
-  launchd.agents.caddy = {
+  launchd.daemons.caddy = {
     serviceConfig.ProgramArguments = [
       "${caddy}/bin/caddy"
       "run"
@@ -50,6 +50,6 @@ in {
   };
 
   system.activationScripts.extraActivation.text = ''
-    ${caddy}/bin/caddy trust
+    ${caddy}/bin/caddy trust || echo "Cannot add certificates. Please run 'caddy trust' manually."
   '';
 }
