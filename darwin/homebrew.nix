@@ -16,7 +16,6 @@
     casks = [
       "brave-browser"
       "readdle-spark"
-      "iterm2"
 
       "loom"
       "notion"

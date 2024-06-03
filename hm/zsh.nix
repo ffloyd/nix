@@ -53,9 +53,7 @@ in {
       autosuggestion.enable = true;
       enableVteIntegration = true;
 
-      syntaxHighlighting = {
-        enable = true;
-      };
+      syntaxHighlighting.enable = true;
 
       localVariables =
         {
