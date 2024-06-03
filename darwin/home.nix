@@ -11,6 +11,7 @@
 
   imports = [
     ../hm/zsh.nix
+    ../hm/terminal.nix
     ../hm/git.nix
     ../hm/emacs.nix
     ../hm/devtools.nix
