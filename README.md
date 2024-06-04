@@ -25,6 +25,7 @@ Install Nix and [homebrew](https://brew.sh/). Homebrew will be used only for ins
 
 ``` shell
 nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake .
+nix --extra-experimental-features nix-command --extra-experimental-features flakes run home-manager/master -- switch --flake .
 ```
 
 ## Common tasks

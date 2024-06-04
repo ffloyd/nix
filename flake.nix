@@ -23,11 +23,23 @@
     nix-darwin,
     ...
   } @ inputs: let
+    # These attr sets are passed to all modules here, both NixOS and
+    # Darwin.
     globals = import ./globals.nix;
     private = import ./private.nix;
   in {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
     formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
+
+    homeConfigurations.${private.darwinUsername} = home-manager.lib.homeManagerConfiguration {
+      pkgs = import nixpkgs {
+        localSystem = "aarch64-darwin";
+        config.allowUnfree = true;
+      };
+      extraSpecialArgs = {inherit globals private;};
+
+      modules = [./darwin/home.nix];
+    };
 
     nixosConfigurations.${private.nixOsHost} = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -53,15 +65,6 @@
 
       modules = [
         ./darwin/configuration.nix
-
-        home-manager.darwinModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {inherit globals private;};
-
-          home-manager.users.${private.darwinUsername} = import ./darwin/home.nix;
-        }
       ];
     };
   };

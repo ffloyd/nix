@@ -63,14 +63,6 @@ in {
         // terminalColorCodes;
 
       shellAliases = {
-        rebuild =
-          if stdenv.isDarwin
-          then "darwin-rebuild switch --flake ~/nix"
-          else "sudo nixos-rebuild switch";
-        rebuild-test =
-          if stdenv.isDarwin
-          then "echo 'NOT IMPLEMENTED'"
-          else "sudo nixos-rebuild test";
         p10k-reconfigure = "POWERLEVEL9K_CONFIG_FILE=~/nix/hm/zsh/p10k.zsh p10k configure";
       };
 

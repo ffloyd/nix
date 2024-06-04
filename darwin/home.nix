@@ -31,11 +31,13 @@
   # environment.
   home.packages = with pkgs; [];
 
-  # programs.zsh = {
-  #   enable = true;
+  programs.zsh = {
+    shellAliases = {
+      os-rebuild = "darwin-rebuild switch --flake ~/nix";
+      hm-rebuild = "home-manager switch --flake ~/nix";
+    };
+  };
 
-  #   shellAliases = {
-  #     update = "darwin-rebuild switch --flake ~/nixos";
-  #   };
-  # };
+  # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
 }
