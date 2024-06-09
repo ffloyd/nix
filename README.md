@@ -11,6 +11,8 @@ This repository contains my personal configuration for NixOS and MacOS. It's a [
 | `nixos/*.nix`  | NixOS configuration modules. `home.nix` is a top-level home-manager module. `hardware-configuration.nix` is a hardware configuration and also encrypted by `git-crypt`. |
 | `darwin/*.nix` | [nix-darwin](https://github.com/LnL7/nix-darwin) configuration modules. `home.nix` is a top-level home-manager module.                                                  |
 
+The reposiory should be cloned into `nix` folder in the user's home folder.
+
 ## Setup on NixOS
 
 Installation command:

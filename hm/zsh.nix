@@ -31,6 +31,7 @@ in {
 
   programs.bat = {
     enable = true;
+    config.theme = "Nord";
   };
 
   programs.z-lua = {

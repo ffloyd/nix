@@ -1,3 +1,26 @@
+live_config_reload = true
+
+[font]
+size = 16
+
+[font.normal]
+family = "IosevkaTerm Nerd Font"
+style = "Regular"
+
+[window]
+blur = true
+dynamic_padding = false
+opacity = 0.85
+option_as_alt = "Both"
+
+[window.padding]
+x = 10
+y = 8
+
+#
+# Nord palette; keep it last because it's long
+#
+
 [colors.bright]
 black = "#4c566a"
 blue = "#81a1c1"

@@ -31,16 +31,6 @@
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
     formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
 
-    homeConfigurations.${private.darwinUsername} = home-manager.lib.homeManagerConfiguration {
-      pkgs = import nixpkgs {
-        localSystem = "aarch64-darwin";
-        config.allowUnfree = true;
-      };
-      extraSpecialArgs = {inherit globals private;};
-
-      modules = [./darwin/home.nix];
-    };
-
     nixosConfigurations.${private.nixOsHost} = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
 
@@ -66,6 +56,16 @@
       modules = [
         ./darwin/configuration.nix
       ];
+    };
+
+    homeConfigurations.${private.darwinUsername} = home-manager.lib.homeManagerConfiguration {
+      pkgs = import nixpkgs {
+        localSystem = "aarch64-darwin";
+        config.allowUnfree = true;
+      };
+      extraSpecialArgs = {inherit globals private;};
+
+      modules = [./darwin/home.nix];
     };
   };
 }
