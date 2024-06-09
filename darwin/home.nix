@@ -16,6 +16,7 @@
     ../hm/emacs.nix
     ../hm/devtools.nix
     ../hm/gpg.nix
+    ../hm/neovim.nix
   ];
 
   # This value determines the Home Manager release that your configuration is
