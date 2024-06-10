@@ -19,7 +19,7 @@ in {
   ];
 
   home.file = {
-    ".config/nvim/init.lua".source = mkOutOfStoreSymlink "${config.home.homeDirectory}/nix/dotfiles/nvim/init.lua";
+    ".config/nvim".source = mkOutOfStoreSymlink "${config.home.homeDirectory}/nix/dotfiles/nvim";
   };
 
   home.sessionVariables.EDITOR = "nvim";
@@ -31,6 +31,6 @@ in {
     vi = "nvim";
     vim = "nvim";
 
-    vi-config = "nvim ${config.home.homeDirectory}/.config/nvim/init.lua";
+    vi-config = "cd ${config.home.homeDirectory}/.config/nvim && nvim init.lua";
   };
 }

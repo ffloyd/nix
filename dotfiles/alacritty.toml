@@ -10,12 +10,12 @@ style = "Regular"
 [window]
 blur = true
 dynamic_padding = false
-opacity = 0.85
+opacity = 0.9
 option_as_alt = "Both"
 
 [window.padding]
-x = 10
-y = 8
+x = 4
+y = 2
 
 #
 # Nord palette; keep it last because it's long
