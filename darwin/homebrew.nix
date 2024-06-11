@@ -14,6 +14,7 @@
     ];
 
     casks = [
+      "arc"
       "brave-browser"
       "readdle-spark"
 
