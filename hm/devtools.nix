@@ -38,4 +38,8 @@
   programs.gh-dash = {
     enable = true;
   };
+
+  programs.zsh.shellAliases = {
+    mfc = "git ls-files --other --modified --exclude-standard | xargs mix format";
+  };
 }
