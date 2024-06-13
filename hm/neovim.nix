@@ -18,6 +18,11 @@ in {
     pkgs.neovim-unwrapped
     pkgs.fd
     pkgs.ripgrep
+
+    # globally installed language servers & formatters
+    # (when possible I prefer keep them in projects' Nix devshells)
+    pkgs.lua-language-server
+    pkgs.stylua
   ];
 
   home.file = {

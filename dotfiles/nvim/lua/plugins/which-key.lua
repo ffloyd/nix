@@ -5,8 +5,7 @@ return {
     vim.o.timeout = true
     vim.o.timeoutlen = 750
   end,
-  opts = {
-  },
+  opts = {},
   config = function()
     local wk = require("which-key")
     wk.register({
@@ -14,7 +13,7 @@ return {
         name = "+file",
         f = { "<cmd>Telescope find_files<cr>", "Find File" },
         r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
-      }
+      },
     })
-  end
+  end,
 }
