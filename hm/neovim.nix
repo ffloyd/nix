@@ -16,6 +16,7 @@ in {
   # immutable configuration files.
   home.packages = [
     pkgs.neovim-unwrapped
+    pkgs.luajit
     pkgs.fd
     pkgs.ripgrep
 
