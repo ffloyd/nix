@@ -14,30 +14,36 @@
     ];
 
     casks = [
+      # Essential
       "arc"
-      "brave-browser"
       "readdle-spark"
+      "notion-calendar"
+      "raycast"
 
+      # Work-related
       "loom"
       "notion"
-      "notion-calendar"
       "linear-linear"
 
+      # Social
       "telegram"
       "whatsapp"
       "discord"
 
+      # Dev Tools
       "dash"
       "postman"
+      "proxyman"
+      "livebook"
 
+      # Tools
+      "tunnelblick"
       "send-to-kindle"
 
+      # Entertaiment
       "spotify"
       "steam"
       "vlc"
-
-      "proxyman"
-      "livebook"
     ];
   };
 }
