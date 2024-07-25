@@ -71,6 +71,14 @@ in {
         # local setup
         [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
 
+        # keybinding adjustments
+        # Home key - does not work by default
+        bindkey '\e[H'  beginning-of-line
+        bindkey '\eOH'  beginning-of-line
+        # End key - does not work by default
+        bindkey '\e[F'  end-of-line
+        bindkey '\eOF'  end-of-line
+
         # use bat as a man pager
         MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
