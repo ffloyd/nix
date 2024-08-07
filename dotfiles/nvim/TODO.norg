@@ -1,0 +1,19 @@
+This file is an ongoing list of things I want to implement in my NeoVim setup.
+
+* Learn
+  - ( ) Go through Vimtutor once more
+
+* Make it comfortable for everyday tasks
+  The goal is achieved is
+
+  - ( ) Go through EMACS config and populate this list
+  - (x) add NeoGit
+  - (x) fix NeoGit highlighting issue
+  - (x) `SPC b b` - buffer list
+  - (x) `SPC g g` - open NeoGit for project
+  - ( ) Autopairing parentesis
+  - ( ) Fix line numbers toggling + maybe enable line numbers by default
+  - ( ) Partially stage a file
+        Solution: https://github.com/lewis6991/gitsigns.nvim?tab=readme-ov-file
+        NeoGit and Diffview does not support it currently
+  - ( ) Configure autocompletion closer to flow from my EMACS
