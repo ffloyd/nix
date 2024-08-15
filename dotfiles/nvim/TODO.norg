@@ -2,6 +2,7 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
 
 * Learn
   - ( ) Go through Vimtutor once more
+  - ( ) Is it possible to execute some code in `Lazy` definition only if particular dependency is installed?
 
 * Make it comfortable for everyday tasks
   The goal is achieved when I can stop using EMACS.
@@ -11,6 +12,9 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
   - (x) fix NeoGit highlighting issue
   - (x) `SPC b b` - buffer list
   - (x) `SPC g g` - open NeoGit for project
+  - (x) Split config into modules like `ai`, `editing`, `git`, `autocompletion`, `lsp`, etc.
+        Write an explanatory comment in the beginning of each molule.
+        All config trick from a single README file should in one plugin definition if possible.
   - ( ) Autopairing parentesis
   - ( ) Relative line numbers by default, absolute on demand
   - ( ) Partially stage a file

@@ -1,6 +1,12 @@
+--
+-- luarocks management
+--
 return {
   "vhyrro/luarocks.nvim",
   lazy = false,
   priority = 1000,
-  config = true,
+  opts = {
+    -- example: { "fzy", "pathlib.nvim ~> 1.0" }
+    rocks = {},
+  },
 }

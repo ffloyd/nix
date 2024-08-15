@@ -1,3 +1,6 @@
+--
+-- Integrations of AI tools.
+--
 return {
   "jackMort/ChatGPT.nvim",
   event = "VeryLazy",

@@ -1,3 +1,6 @@
+--
+-- Custom keymaps and keymap's UX improvements.
+--
 return {
   "folke/which-key.nvim",
   event = "VeryLazy",
@@ -17,7 +20,8 @@ return {
 
       { "<leader>b", group = "buffer" },
       { "<leader>bb", "<cmd>Telescope buffers<cr>", desc = "List Buffers" },
-      { "<leader>bd", "<cmd>bdelete<cr>", desc = "Delete Buffer" },
+      { "<leader>bc", "<cmd>cd %:p:h<cr><cmd>pwd<cr>", desc = "CD to Buffer" },
+      { "<leader>bk", "<cmd>bdelete<cr>", desc = "Kill Buffer" },
       { "<leader>bn", "<cmd>bnext<cr>", desc = "Next Buffer" },
       { "<leader>bp", "<cmd>bprev<cr>", desc = "Prev Buffer" },
 

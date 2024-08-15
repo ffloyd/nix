@@ -1,3 +1,6 @@
+--
+-- Git tooling
+--
 return {
   {
     "NeogitOrg/neogit",
