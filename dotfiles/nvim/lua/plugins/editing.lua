@@ -18,4 +18,13 @@ return {
       vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     end,
   },
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = true
+    -- use opts = {} for passing setup options
+    -- this is equalent to setup({}) function
+    -- 
+    -- TODO: check for integrations in README, especially nvim-cmp
+  }
 }
