@@ -14,8 +14,9 @@ return {
         indent = { enable = true },
       })
 
-      vim.wo.foldmethod = 'expr'
-      vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+      -- use treesitter for folding by default
+      vim.o.foldmethod = 'expr'
+      vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     end,
   },
   {
