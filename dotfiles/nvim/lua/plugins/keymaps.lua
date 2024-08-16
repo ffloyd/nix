@@ -1,6 +1,21 @@
 --
 -- Custom keymaps and keymap's UX improvements.
 --
+
+local function toggle_line_numbers()
+  if vim.wo.number then
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+  else
+    vim.wo.number = true
+    vim.wo.relativenumber = true
+  end
+end
+
+local function toggle_relative_line_numbers()
+  vim.wo.relativenumber = not vim.wo.relativenumber
+end
+
 return {
   "folke/which-key.nvim",
   event = "VeryLazy",
@@ -35,10 +50,10 @@ return {
       { "<leader>gg", "<cmd>Neogit<cr>", desc = "NeoGit" },
 
       { "<leader>p", group = "project" },
-      { "<leader>pp", "<cmd>Telescope projects<cr>", desc = "List Projects" },
 
       { "<leader>t", group = "toggle" },
-      { "<leader>tl", desc = "<cmd>set number<cr><cmd>set relativenumber<cr>" },
+      { "<leader>tl", toggle_line_numbers, desc = "Toggle Line Numbers" },
+      { "<leader>tL", toggle_relative_line_numbers, desc = "Toggle Relative Line Numbers" },
     })
   end,
 }
