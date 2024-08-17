@@ -48,5 +48,8 @@ return {
         mode = { "n", "o", "x" },
       }
     }
+  },
+  {
+    "mbbill/undotree"
   }
 }

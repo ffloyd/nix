@@ -72,7 +72,10 @@ return {
       { "<leader>tb", gitsigns.toggle_signs, desc = "Toggle Gitsigns"},
       { "<leader>tl", toggle_line_numbers, desc = "Toggle line numbers" },
       { "<leader>tL", toggle_relative_line_numbers, desc = "Toggle relative line numbers" },
-      { "<leader>tb", gitsigns.toggle_current_line_blame, desc = "Toggle current line blame"}
+      { "<leader>tb", gitsigns.toggle_current_line_blame, desc = "Toggle current line blame"},
+
+      { "<leader>u", group = "utils" },
+      { "<leader>uu", "<cmd>UndotreeToggle<cr>", desc = "Undo tree" }
     })
   end,
 }

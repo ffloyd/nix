@@ -27,7 +27,7 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
         like `winner-mode` in EMACS
   - (x) `subword-mode`: JumpBetweenCamelizedWords
         consider toggle keybinding
-  - ( ) undo tree
+  - (x) undo tree
   - ( ) check which undo step is most comfortable for me
         in EMACS I use `(setq evil-want-fine-undo t)`
   - ( ) discover possibilities of using CMD for keybindings
