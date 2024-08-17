@@ -69,6 +69,9 @@ return {
       -- diffs
       { "<leader>gd", gitsigns.diffthis, desc = "Diff current file" },
       { "<leader>gD", "<cmd>DiffviewOpen<cr>", desc = "Diff all changes" },
+      -- history explorer
+      { "<leader>gH", "<cmd>DiffviewFileHistory<cr>", desc = "History (branch)" },
+      { "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "History (file)" },
       -- NeoGit
       { "<leader>gg", "<cmd>Neogit<cr>", desc = "NeoGit" },
 
