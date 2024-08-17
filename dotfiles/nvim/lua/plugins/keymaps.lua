@@ -52,26 +52,34 @@ return {
       { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Grep files" },
       { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Open recent file" },
 
+
       { "<leader>g", group = "git" },
-      { "<leader>gb", gitsigns.blame, desc = "Blame" },
-      { "<leader>gd", gitsigns.diffthis, desc = "Diff current file" },
-      { "<leader>gD", "<cmd>DiffviewOpen<cr>", desc = "Diff all" },
-      { "<leader>gg", "<cmd>Neogit<cr>", desc = "NeoGit" },
+      -- navigation between hunks
+      { "<leader>gv", gitsigns.preview_hunk, desc = "Preview hunk" },
+      { "<leader>gn", gitsigns.next_hunk, desc = "Next hunk" },
+      { "<leader>gp", gitsigns.prev_hunk, desc = "Prev hunk" },
+      -- staging/unstaging/resetting hunks & lines
       { "<leader>gs", gitsigns.stage_hunk, desc = "Stage/unstage hunk", mode = "n" },
       { "<leader>gs", function() gitsigns.stage_hunk({vim.fn.line('.'), vim.fn.line('v')}) end, desc = "Stage/unstage lines", mode = "v" },
       { "<leader>gr", gitsigns.reset_hunk, desc = "Reset hunk", mode = "n" },
       { "<leader>gr", function() gitsigns.reset_hunk({vim.fn.line('.'), vim.fn.line('v')}) end, desc = "Reset lines", mode = "v" },
-      { "<leader>gu", gitsigns.undo_stage_hunk, desc = "Undo stage/unstage hunk", mode = "n" },
-      { "<leader>gn", gitsigns.next_hunk, desc = "Next hunk" },
-      { "<leader>gp", gitsigns.prev_hunk, desc = "Prev hunk" },
-      { "<leader>gv", gitsigns.preview_hunk, desc = "Preview hunk" },
+      { "<leader>gu", gitsigns.undo_stage_hunk, desc = "Undo stage/unstage hunk" },
+      -- blaming
+      { "<leader>gb", gitsigns.blame, desc = "Blame" },
+      -- diffs
+      { "<leader>gd", gitsigns.diffthis, desc = "Diff current file" },
+      { "<leader>gD", "<cmd>DiffviewOpen<cr>", desc = "Diff all changes" },
+      -- NeoGit
+      { "<leader>gg", "<cmd>Neogit<cr>", desc = "NeoGit" },
 
       { "<leader>p", group = "project" },
 
       { "<leader>t", group = "toggle" },
-      { "<leader>tb", gitsigns.toggle_signs, desc = "Toggle Gitsigns"},
+      -- line numbers
       { "<leader>tl", toggle_line_numbers, desc = "Toggle line numbers" },
       { "<leader>tL", toggle_relative_line_numbers, desc = "Toggle relative line numbers" },
+      -- Git things
+      { "<leader>tb", gitsigns.toggle_signs, desc = "Toggle Gitsigns"},
       { "<leader>tb", gitsigns.toggle_current_line_blame, desc = "Toggle current line blame"},
 
       { "<leader>u", group = "utils" },
