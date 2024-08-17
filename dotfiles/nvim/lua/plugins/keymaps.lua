@@ -17,6 +17,10 @@ return {
     local wk = require("which-key")
     local gitsigns = require("gitsigns")
 
+    wk.setup({
+      preset = "modern"
+    })
+
     local function toggle_line_numbers()
       if vim.wo.number then
         vim.wo.number = false
@@ -50,8 +54,8 @@ return {
 
       { "<leader>g", group = "git" },
       { "<leader>gb", gitsigns.blame, desc = "Blame" },
-      { "<leader>gd", gitsigns.diffthis, desc = "Diff Current File" },
-      { "<leader>gD", "<cmd>DiffviewOpen<cr>", desc = "Diff All" },
+      { "<leader>gd", gitsigns.diffthis, desc = "Diff current file" },
+      { "<leader>gD", "<cmd>DiffviewOpen<cr>", desc = "Diff all" },
       { "<leader>gg", "<cmd>Neogit<cr>", desc = "NeoGit" },
       { "<leader>gs", gitsigns.stage_hunk, desc = "Stage/unstage hunk", mode = "n" },
       { "<leader>gs", function() gitsigns.stage_hunk({vim.fn.line('.'), vim.fn.line('v')}) end, desc = "Stage/unstage lines", mode = "v" },
@@ -59,8 +63,8 @@ return {
       { "<leader>gr", function() gitsigns.reset_hunk({vim.fn.line('.'), vim.fn.line('v')}) end, desc = "Reset lines", mode = "v" },
       { "<leader>gu", gitsigns.undo_stage_hunk, desc = "Undo stage/unstage hunk", mode = "n" },
       { "<leader>gn", gitsigns.next_hunk, desc = "Next hunk" },
-      { "<leader>gp", gitsigns.prev_hunk, desc = "Prev Hunk" },
-      { "<leader>gv", gitsigns.preview_hunk, desc = "Preview Hunk" },
+      { "<leader>gp", gitsigns.prev_hunk, desc = "Prev hunk" },
+      { "<leader>gv", gitsigns.preview_hunk, desc = "Preview hunk" },
 
       { "<leader>p", group = "project" },
 
