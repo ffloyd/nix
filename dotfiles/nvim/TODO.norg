@@ -17,7 +17,7 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
         All config trick from a single README file should in one plugin definition if possible.
   - (x) Autopairing parentesis
   - (x) Relative line numbers by default, absolute on demand
-  - ( ) Partially stage a file
+  - (x) Partially stage a file
         Solution: https://github.com/lewis6991/gitsigns.nvim?tab=readme-ov-file
         NeoGit and Diffview does not support it currently
   - ( ) Configure autocompletion closer to flow from my EMACS

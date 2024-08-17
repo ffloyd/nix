@@ -27,5 +27,13 @@ return {
       -- fancy diff for deleted lines
       vim.opt.fillchars:append { diff = "╱" }
     end,
+  },
+  {
+    "lewis6991/gitsigns.nvim",
+    init = function()
+      -- see: https://github.com/lewis6991/gitsigns.nvim/issues/1102
+      vim.o.signcolumn = "auto:1-2"
+    end,
+    config = true
   }
 }
