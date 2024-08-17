@@ -13,3 +13,6 @@ vim.o.foldlevelstart = 99
 -- leader key setup
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
+
+-- use system clipboard by default
+vim.opt.clipboard:append("unnamedplus")

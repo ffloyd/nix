@@ -21,7 +21,7 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
         Solution: https://github.com/lewis6991/gitsigns.nvim?tab=readme-ov-file
         NeoGit and Diffview does not support it currently
   - ( ) Configure autocompletion closer to flow from my EMACS
-  - ( ) Integrate with OS clipboard better
+  - (x) Integrate with OS clipboard better
         currently `yy` does not put content to system clipboard
   - ( ) undo window splitting etc change
         like `winner-mode` in EMACS
