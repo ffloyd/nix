@@ -11,11 +11,14 @@ return {
   end,
   dependencies = {
     "nvim-tree/nvim-web-devicons",
-    "lewis6991/gitsigns.nvim"
+    -- for 'require's in config function here
+    "lewis6991/gitsigns.nvim",
+    "nvim-neotest/neotest"
   },
   config = function()
     local wk = require("which-key")
     local gitsigns = require("gitsigns")
+    local neotest = require("neotest")
 
     wk.setup({
       preset = "modern"
@@ -75,15 +78,30 @@ return {
       -- NeoGit
       { "<leader>gg", "<cmd>Neogit<cr>", desc = "NeoGit" },
 
+      { "<leader>t", group = "test" },
+      -- run test(s)
+      { "<leader>tA", function() neotest.run.run({suite = true}) end, desc = "Test all"},
+      { "<leader>ta", function() neotest.run.run(vim.fn.expand("%")) end, desc = "Test file"},
+      { "<leader>tt", function() neotest.run.run() end, desc = "Test this"},
+      { "<leader>tr", function() neotest.run.run_last() end, desc = "Test rerun"},
+      -- execution control
+      { "<leader>t<space>", function() neotest.run.attach() end, desc = "Attach to running"},
+      { "<leader>tx", function() neotest.run.stop() end, desc = "Stop running"},
+      -- visualisation & inspection
+      { "<leader>ts", function() neotest.summary.toggle() end, desc = "Test summary"},
+      { "<leader>to", function() neotest.output.open({enter = true}) end, desc = "Output window"},
+      { "<leader>tO", function() neotest.output_panel.toggle() end, desc = "Output panel"},
+      { "<leader>tC", function() neotest.output_panel.clear() end, desc = "Clear output panel"},
+
       { "<leader>p", group = "project" },
 
-      { "<leader>t", group = "toggle" },
+      { "<leader>T", group = "toggle" },
       -- line numbers
-      { "<leader>tl", toggle_line_numbers, desc = "Toggle line numbers" },
-      { "<leader>tL", toggle_relative_line_numbers, desc = "Toggle relative line numbers" },
+      { "<leader>Tl", toggle_line_numbers, desc = "Toggle line numbers" },
+      { "<leader>TL", toggle_relative_line_numbers, desc = "Toggle relative line numbers" },
       -- Git things
-      { "<leader>tb", gitsigns.toggle_signs, desc = "Toggle Gitsigns"},
-      { "<leader>tb", gitsigns.toggle_current_line_blame, desc = "Toggle current line blame"},
+      { "<leader>Tb", gitsigns.toggle_signs, desc = "Toggle Gitsigns"},
+      { "<leader>Tb", gitsigns.toggle_current_line_blame, desc = "Toggle current line blame"},
 
       { "<leader>u", group = "utils" },
       { "<leader>uu", "<cmd>UndotreeToggle<cr>", desc = "Undo tree" }

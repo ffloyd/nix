@@ -58,7 +58,7 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
   - ( ) Nix support: LS, snippets maybe
   - ( ) Elixir support: LS, snippets maybe
   - ( ) Elixir: switching between Lexical and ElixirLS
-  - ( ) Elixir: run tests
+  - (x) Elixir: run tests
   - ( ) Elixir: switch between test and implementation
   - ( ) Ruby: LS maybe, run tests, switch between test & implementation
   - ( ) NeORG: check what I may need and add TODOs here
