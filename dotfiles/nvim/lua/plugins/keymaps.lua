@@ -48,10 +48,10 @@ return {
       { "<leader>bp", "<cmd>bprev<cr>", desc = "Prev buffer" },
 
       { "<leader>f", group = "file" },
+      { "<leader>fa", "<cmd>Telescope telescope-alternate alternate_file<cr>", desc = "Find alternate file" },
       { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find file" },
       { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Grep files" },
       { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Open recent file" },
-
 
       { "<leader>g", group = "git" },
       -- navigation between hunks
