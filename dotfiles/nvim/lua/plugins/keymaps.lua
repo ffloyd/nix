@@ -138,13 +138,14 @@ return {
         desc = "Stop running",
       },
       -- visualisation & inspection
-      {
-        "<leader>ts",
-        function()
-          neotest.summary.toggle()
-        end,
-        desc = "Test summary",
-      },
+      -- FIXME: summary does not work when watch consumer is disabled
+      -- {
+      --   "<leader>ts",
+      --   function()
+      --     neotest.summary.toggle()
+      --   end,
+      --   desc = "Test summary",
+      -- },
       {
         "<leader>to",
         function()
