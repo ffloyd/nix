@@ -95,6 +95,12 @@ return {
 
       { "<leader>p", group = "project" },
 
+      { "<leader>r", group = "runner" },
+      { "<leader>rr", "<cmd>OverseerRun<cr>", desc = "Run" },
+      { "<leader>rt", "<cmd>OverseerToggle<cr>", desc = "Toggle task list" },
+      { "<leader>rx", "<cmd>OverseerClearCache<cr>", desc = "Clear task cache" },
+      { "<leader>ri", "<cmd>OverseerInfo<cr>", desc = "Tasks info" },
+
       { "<leader>T", group = "toggle" },
       -- line numbers
       { "<leader>Tl", toggle_line_numbers, desc = "Toggle line numbers" },

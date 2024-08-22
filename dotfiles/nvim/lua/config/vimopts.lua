@@ -21,3 +21,6 @@ vim.o.signcolumn = "auto:1-3"
 
 -- use system clipboard by default
 vim.opt.clipboard:append("unnamedplus")
+
+-- required by plugins like nvim-notify
+vim.opt.termguicolors = true

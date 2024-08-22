@@ -1,5 +1,5 @@
 --
--- Themes, general look & feel.
+-- Themes, general look & feel, global UI improvements
 --
 
 -- Function to calculate a darker color from a hexadecimal RGB string
@@ -42,5 +42,15 @@ return {
         theme = "nord",
       },
     },
+  },
+  {
+    "stevearc/dressing.nvim",
+    opts = {}
+  },
+  {
+    "rcarriga/nvim-notify",
+    config = function()
+      vim.notify = require("notify")
+    end
   }
 }
