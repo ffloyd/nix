@@ -110,7 +110,15 @@ return {
       { "<leader>Tb", gitsigns.toggle_current_line_blame, desc = "Toggle current line blame"},
 
       { "<leader>u", group = "utils" },
-      { "<leader>uu", "<cmd>UndotreeToggle<cr>", desc = "Undo tree" }
+      -- undo tree
+      { "<leader>uu", "<cmd>UndotreeToggle<cr>", desc = "Undo tree" },
+      -- LSP
+      { "<leader>ul", group = "LSP" },
+      { "<leader>ull", "<cmd>LspInfo<cr>", desc = "LSP info" },
+      { "<leader>ulL", "<cmd>LspLog<cr>", desc = "LSP log" },
+      { "<leader>uls", "<cmd>LspStart<cr>", desc = "LSP start" },
+      { "<leader>ulx", "<cmd>LspStop<cr>", desc = "LSP stop" },
+      { "<leader>ulr", "<cmd>LspRestart<cr>", desc = "LSP restart" }
     })
   end,
 }
