@@ -1,13 +1,13 @@
--- 
+--
 -- Manage and run various tasks: from make to mix
 --
 return {
   {
-    'stevearc/overseer.nvim',
+    "stevearc/overseer.nvim",
     dependencies = {
       "nvim-telescope/telescope.nvim",
       "stevearc/dressing.nvim",
-      "rcarriga/nvim-notify"
+      "rcarriga/nvim-notify",
     },
     config = function()
       local overseer = require("overseer")
@@ -28,11 +28,11 @@ return {
             components = {
               { "on_output_quickfix", open_on_exit = "failure", set_diagnostics = true },
               { "on_result_diagnostics", remove_on_restart = true },
-              "default"
+              "default",
             },
           }
-        end
+        end,
       })
-    end
-  }
+    end,
+  },
 }

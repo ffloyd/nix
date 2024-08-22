@@ -6,7 +6,7 @@ return {
     "hrsh7th/nvim-cmp",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
-      "folke/lazydev.nvim"
+      "folke/lazydev.nvim",
     },
     config = function()
       local cmp = require("cmp")
@@ -17,10 +17,10 @@ return {
           {
             name = "lazydev",
             group_index = 0, -- set group index to 0 to skip loading LuaLS completions
-          }
-        })
+          },
+        }),
       })
-    end
+    end,
   },
   {
     "neovim/nvim-lspconfig",
@@ -30,7 +30,7 @@ return {
 
       lspconfig.lua_ls.setup({})
       lspconfig.lexical.setup({
-        cmd = { "lexical" }
+        cmd = { "lexical" },
       })
     end,
   },

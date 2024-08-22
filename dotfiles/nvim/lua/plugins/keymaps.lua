@@ -13,7 +13,7 @@ return {
     "nvim-tree/nvim-web-devicons",
     -- for 'require's in config function here
     "lewis6991/gitsigns.nvim",
-    "nvim-neotest/neotest"
+    "nvim-neotest/neotest",
   },
   config = function()
     local wk = require("which-key")
@@ -21,7 +21,7 @@ return {
     local neotest = require("neotest")
 
     wk.setup({
-      preset = "modern"
+      preset = "modern",
     })
 
     local function toggle_line_numbers()
@@ -63,9 +63,23 @@ return {
       { "<leader>gp", gitsigns.prev_hunk, desc = "Prev hunk" },
       -- staging/unstaging/resetting hunks & lines
       { "<leader>gs", gitsigns.stage_hunk, desc = "Stage/unstage hunk", mode = "n" },
-      { "<leader>gs", function() gitsigns.stage_hunk({vim.fn.line('.'), vim.fn.line('v')}) end, desc = "Stage/unstage lines", mode = "v" },
+      {
+        "<leader>gs",
+        function()
+          gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+        end,
+        desc = "Stage/unstage lines",
+        mode = "v",
+      },
       { "<leader>gr", gitsigns.reset_hunk, desc = "Reset hunk", mode = "n" },
-      { "<leader>gr", function() gitsigns.reset_hunk({vim.fn.line('.'), vim.fn.line('v')}) end, desc = "Reset lines", mode = "v" },
+      {
+        "<leader>gr",
+        function()
+          gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+        end,
+        desc = "Reset lines",
+        mode = "v",
+      },
       { "<leader>gu", gitsigns.undo_stage_hunk, desc = "Undo stage/unstage hunk" },
       -- blaming
       { "<leader>gb", gitsigns.blame, desc = "Blame" },
@@ -80,18 +94,78 @@ return {
 
       { "<leader>t", group = "test" },
       -- run test(s)
-      { "<leader>tA", function() neotest.run.run({suite = true}) end, desc = "Test all"},
-      { "<leader>ta", function() neotest.run.run(vim.fn.expand("%")) end, desc = "Test file"},
-      { "<leader>tt", function() neotest.run.run() end, desc = "Test this"},
-      { "<leader>tr", function() neotest.run.run_last() end, desc = "Test rerun"},
+      {
+        "<leader>tA",
+        function()
+          neotest.run.run({ suite = true })
+        end,
+        desc = "Test all",
+      },
+      {
+        "<leader>ta",
+        function()
+          neotest.run.run(vim.fn.expand("%"))
+        end,
+        desc = "Test file",
+      },
+      {
+        "<leader>tt",
+        function()
+          neotest.run.run()
+        end,
+        desc = "Test this",
+      },
+      {
+        "<leader>tr",
+        function()
+          neotest.run.run_last()
+        end,
+        desc = "Test rerun",
+      },
       -- execution control
-      { "<leader>t<space>", function() neotest.run.attach() end, desc = "Attach to running"},
-      { "<leader>tx", function() neotest.run.stop() end, desc = "Stop running"},
+      {
+        "<leader>t<space>",
+        function()
+          neotest.run.attach()
+        end,
+        desc = "Attach to running",
+      },
+      {
+        "<leader>tx",
+        function()
+          neotest.run.stop()
+        end,
+        desc = "Stop running",
+      },
       -- visualisation & inspection
-      { "<leader>ts", function() neotest.summary.toggle() end, desc = "Test summary"},
-      { "<leader>to", function() neotest.output.open({enter = true}) end, desc = "Output window"},
-      { "<leader>tO", function() neotest.output_panel.toggle() end, desc = "Output panel"},
-      { "<leader>tC", function() neotest.output_panel.clear() end, desc = "Clear output panel"},
+      {
+        "<leader>ts",
+        function()
+          neotest.summary.toggle()
+        end,
+        desc = "Test summary",
+      },
+      {
+        "<leader>to",
+        function()
+          neotest.output.open({ enter = true })
+        end,
+        desc = "Output window",
+      },
+      {
+        "<leader>tO",
+        function()
+          neotest.output_panel.toggle()
+        end,
+        desc = "Output panel",
+      },
+      {
+        "<leader>tC",
+        function()
+          neotest.output_panel.clear()
+        end,
+        desc = "Clear output panel",
+      },
 
       { "<leader>p", group = "project" },
 
@@ -106,8 +180,8 @@ return {
       { "<leader>Tl", toggle_line_numbers, desc = "Toggle line numbers" },
       { "<leader>TL", toggle_relative_line_numbers, desc = "Toggle relative line numbers" },
       -- Git things
-      { "<leader>Tb", gitsigns.toggle_signs, desc = "Toggle Gitsigns"},
-      { "<leader>Tb", gitsigns.toggle_current_line_blame, desc = "Toggle current line blame"},
+      { "<leader>Tb", gitsigns.toggle_signs, desc = "Toggle Gitsigns" },
+      { "<leader>Tb", gitsigns.toggle_current_line_blame, desc = "Toggle current line blame" },
 
       { "<leader>u", group = "utils" },
       -- undo tree
@@ -118,7 +192,7 @@ return {
       { "<leader>ulL", "<cmd>LspLog<cr>", desc = "LSP log" },
       { "<leader>uls", "<cmd>LspStart<cr>", desc = "LSP start" },
       { "<leader>ulx", "<cmd>LspStop<cr>", desc = "LSP stop" },
-      { "<leader>ulr", "<cmd>LspRestart<cr>", desc = "LSP restart" }
+      { "<leader>ulr", "<cmd>LspRestart<cr>", desc = "LSP restart" },
     })
   end,
 }

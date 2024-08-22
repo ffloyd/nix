@@ -4,16 +4,16 @@
 
 -- Function to calculate a darker color from a hexadecimal RGB string
 local function darken_color(hex_string, factor)
-    local r = tonumber(hex_string:sub(2, 3), 16)
-    local g = tonumber(hex_string:sub(4, 5), 16)
-    local b = tonumber(hex_string:sub(6, 7), 16)
+  local r = tonumber(hex_string:sub(2, 3), 16)
+  local g = tonumber(hex_string:sub(4, 5), 16)
+  local b = tonumber(hex_string:sub(6, 7), 16)
 
-    -- Decrease RGB values proportionally based on luminance
-    r = math.floor(factor * r)
-    g = math.floor(factor * g)
-    b = math.floor(factor * b)
+  -- Decrease RGB values proportionally based on luminance
+  r = math.floor(factor * r)
+  g = math.floor(factor * g)
+  b = math.floor(factor * b)
 
-    return string.format('#%02X%02X%02X', r, g, b)
+  return string.format("#%02X%02X%02X", r, g, b)
 end
 
 return {
@@ -45,12 +45,12 @@ return {
   },
   {
     "stevearc/dressing.nvim",
-    opts = {}
+    opts = {},
   },
   {
     "rcarriga/nvim-notify",
     config = function()
       vim.notify = require("notify")
-    end
-  }
+    end,
+  },
 }

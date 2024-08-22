@@ -15,17 +15,17 @@ return {
       })
 
       -- use treesitter for folding by default
-      vim.o.foldmethod = 'expr'
-      vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+      vim.o.foldmethod = "expr"
+      vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
     end,
   },
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
-    config = true
+    config = true,
     -- use opts = {} for passing setup options
     -- this is equalent to setup({}) function
-    -- 
+    --
     -- TODO: check for integrations in README, especially nvim-cmp
   },
   {
@@ -46,10 +46,10 @@ return {
         "b",
         "<cmd>lua require('spider').motion('b')<CR>",
         mode = { "n", "o", "x" },
-      }
-    }
+      },
+    },
   },
   {
-    "mbbill/undotree"
-  }
+    "mbbill/undotree",
+  },
 }
