@@ -3,6 +3,11 @@
 --
 return {
   {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    opts = {},
+  },
+  {
     "stevearc/overseer.nvim",
     dependencies = {
       "nvim-telescope/telescope.nvim",

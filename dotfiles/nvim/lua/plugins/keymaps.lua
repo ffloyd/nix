@@ -158,7 +158,7 @@ return {
       {
         "<leader>to",
         function()
-          neotest.output.open({ enter = true })
+          neotest.output.open()
         end,
         desc = "Output window",
       },
