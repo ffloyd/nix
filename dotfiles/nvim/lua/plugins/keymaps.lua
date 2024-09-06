@@ -67,6 +67,9 @@ return {
       { "<leader>gv", gitsigns.preview_hunk, desc = "Preview hunk" },
       { "<leader>gn", gitsigns.next_hunk, desc = "Next hunk" },
       { "<leader>gp", gitsigns.prev_hunk, desc = "Prev hunk" },
+      -- navigation between hunks (alternative)
+      { "[g", gitsigns.prev_hunk, desc = "Prev git hunk" },
+      { "]g", gitsigns.next_hunk, desc = "Next git hunk" },
       -- staging/unstaging/resetting hunks & lines
       { "<leader>gs", gitsigns.stage_hunk, desc = "Stage/unstage hunk", mode = "n" },
       {
