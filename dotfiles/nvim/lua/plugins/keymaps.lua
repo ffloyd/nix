@@ -190,7 +190,7 @@ return {
       { "<leader>Tl", toggle_line_numbers, desc = "Toggle line numbers" },
       { "<leader>TL", toggle_relative_line_numbers, desc = "Toggle relative line numbers" },
       -- Git things
-      { "<leader>Tb", gitsigns.toggle_signs, desc = "Toggle Gitsigns" },
+      { "<leader>Tg", gitsigns.toggle_signs, desc = "Toggle Gitsigns" },
       { "<leader>Tb", gitsigns.toggle_current_line_blame, desc = "Toggle current line blame" },
 
       { "<leader>u", group = "utils" },
