@@ -19,6 +19,8 @@ return {
     local wk = require("which-key")
     local gitsigns = require("gitsigns")
     local neotest = require("neotest")
+    local telescope = require("telescope.builtin")
+    local telescope_utils = require("telescope.utils")
 
     wk.setup({
       preset = "modern",
@@ -39,6 +41,8 @@ return {
     end
 
     wk.add({
+      { "<leader><leader>", "<cmd>Telescope find_files<cr>", desc = "Find file (pwd)" },
+
       { "<leader>a", group = "ai" },
       { "<leader>ae", "<cmd>ChatGPTEditWithInstructions<cr>", desc = "Edit with GPT" },
       { "<leader>ag", "<cmd>ChatGPT<cr>", desc = "Chat with GPT" },
@@ -52,7 +56,9 @@ return {
 
       { "<leader>f", group = "file" },
       { "<leader>fa", "<cmd>Telescope telescope-alternate alternate_file<cr>", desc = "Find alternate file" },
-      { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find file" },
+      { "<leader>ff", function()
+        telescope.find_files({cwd = telescope_utils.buffer_dir()})
+      end, desc = "Find file (cwd)" },
       { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Grep files" },
       { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Open recent file" },
 
