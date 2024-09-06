@@ -30,11 +30,7 @@ return {
           return {
             cmd = { "mix" },
             args = { "test", file },
-            components = {
-              { "on_output_quickfix", open_on_exit = "failure", set_diagnostics = true },
-              { "on_result_diagnostics", remove_on_restart = true },
-              "default",
-            },
+            components = { "default" },
           }
         end,
       })
