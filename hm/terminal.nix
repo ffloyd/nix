@@ -19,7 +19,7 @@ in {
     # configuration files directly to the files in the dotfiles
     # directory of this repository. (Instead of making them part of the
     # Nix store.)
-    # TODO: add Kitty configuration
+    ".config/kitty/kitty.conf".source = mkOutOfStoreSymlink "${config.home.homeDirectory}/nix/dotfiles/kitty.conf"
   };
 
   programs.zsh.shellAliases = {

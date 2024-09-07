@@ -52,4 +52,7 @@ return {
   {
     "mbbill/undotree",
   },
+  {
+    "fladson/vim-kitty",
+  }
 }
