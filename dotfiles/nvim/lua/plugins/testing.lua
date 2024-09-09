@@ -32,7 +32,7 @@ return {
           concurrent = false,
         },
         discovery = {
-          enabled = false
+          enabled = false,
         },
       })
     end,
