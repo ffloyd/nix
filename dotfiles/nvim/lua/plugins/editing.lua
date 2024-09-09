@@ -54,5 +54,5 @@ return {
   },
   {
     "fladson/vim-kitty",
-  }
+  },
 }
