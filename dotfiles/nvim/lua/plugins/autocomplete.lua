@@ -7,29 +7,88 @@ return {
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "folke/lazydev.nvim",
+      "hrsh7th/cmp-buffer",
+      "amarakon/nvim-cmp-buffer-lines",
+      "hrsh7th/cmp-calc",
+      "uga-rosa/cmp-dictionary",
+      "f3fora/cmp-spell",
     },
     config = function()
       local cmp = require("cmp")
 
+      local dabbrev_cmp = {
+        name = "buffer",
+        option = {
+          get_bufnrs = vim.api.nvim_list_bufs,
+        },
+      }
+
+      local lines_cmp = {
+        name = "buffer-lines",
+        option = {
+          line_numbers = true,
+        },
+      }
+
+      local calc_cmp = { name = "calc" }
+      local dict_cmp = { name = "dictionary" }
+      local spell_cmp = { name = "spell" }
+
       cmp.setup({
+        snippet = {
+          expand = function(args)
+            vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+          end,
+        },
+        window = {
+          -- completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
+        },
+        mapping = cmp.mapping.preset.insert({
+          ["<C-b>"] = {
+            i = cmp.mapping.scroll_docs(-4),
+          },
+          ["<C-f>"] = {
+            i = cmp.mapping.scroll_docs(4),
+          },
+          ["<Tab>"] = {
+            i = cmp.mapping.confirm({ select = true }),
+          },
+          ["<C-Tab><C-Tab>"] = { i = cmp.mapping.complete() },
+          ["<C-Tab>c"] = { i = cmp.mapping.complete({ config = { sources = { calc_cmp } } }) },
+          ["<C-Tab>d"] = { i = cmp.mapping.complete({ config = { sources = { dabbrev_cmp } } }) },
+          ["<C-Tab>l"] = { i = cmp.mapping.complete({ config = { sources = { lines_cmp } } }) },
+          ["<C-Tab>s"] = { i = cmp.mapping.complete({ config = { sources = { spell_cmp } } }) },
+          ["<C-Tab>w"] = { i = cmp.mapping.complete({ config = { sources = { dict_cmp } } }) },
+        }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
           {
             name = "lazydev",
             group_index = 0, -- set group index to 0 to skip loading LuaLS completions
           },
+        }, {
+          dabbrev_cmp,
         }),
       })
     end,
   },
   {
     "neovim/nvim-lspconfig",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+    },
     lazy = false,
     config = function()
       local lspconfig = require("lspconfig")
 
-      lspconfig.lua_ls.setup({})
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+      lspconfig.lua_ls.setup({
+        capabilities = capabilities,
+      })
       lspconfig.lexical.setup({
+        capabilities = capabilities,
         cmd = { "lexical" },
       })
     end,

@@ -14,6 +14,10 @@ vim.o.swapfile = false
 -- open files with all folds open
 vim.o.foldlevelstart = 99
 
+-- enable spellsuggest
+vim.opt.spell = true
+vim.opt.spelllang = { "en_us" }
+
 -- leader key setup
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"

@@ -203,6 +203,7 @@ return {
       { "<leader>uls", "<cmd>LspStart<cr>", desc = "LSP start" },
       { "<leader>ulx", "<cmd>LspStop<cr>", desc = "LSP stop" },
       { "<leader>ulr", "<cmd>LspRestart<cr>", desc = "LSP restart" },
+      { "<leader>uc", "<cmd>CmpStatus", desc = "nvim-cmp sources status" },
     })
   end,
 }
