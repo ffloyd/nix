@@ -6,3 +6,12 @@ NeoVim
 configs
 lua
 typings
+NeoTest
+GitSigns
+nvim
+config
+unstaging
+NeoGit
+neotest
+Autocomplete
+LSP

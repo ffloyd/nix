@@ -150,7 +150,7 @@ return {
         end,
         desc = "Stop running",
       },
-      -- visualisation & inspection
+      -- visualization & inspection
       -- FIXME: summary does not work when watch consumer is disabled
       -- {
       --   "<leader>ts",
@@ -207,7 +207,7 @@ return {
       { "<leader>uls", "<cmd>LspStart<cr>", desc = "LSP start" },
       { "<leader>ulx", "<cmd>LspStop<cr>", desc = "LSP stop" },
       { "<leader>ulr", "<cmd>LspRestart<cr>", desc = "LSP restart" },
-      { "<leader>uc", "<cmd>CmpStatus", desc = "nvim-cmp sources status" },
+      { "<leader>uc", "<cmd>CmpStatus<cr>", desc = "nvim-cmp sources status" },
     })
   end,
 }
