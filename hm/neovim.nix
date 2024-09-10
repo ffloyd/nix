@@ -20,9 +20,17 @@ in {
     pkgs.fd
     pkgs.ripgrep
 
-    # globally installed language servers & formatters
+    # globally installed language servers
     # (when possible I prefer keep them in projects' Nix devshells)
+    pkgs.dockerfile-language-server-nodejs
+    pkgs.gopls
     pkgs.lua-language-server
+    pkgs.nixd
+    pkgs.nodePackages.pyright
+    pkgs.terraform-ls
+
+    # globally installed formatters
+    # (when possible I prefer keep them in projects' Nix devshells)
     pkgs.stylua
   ];
 

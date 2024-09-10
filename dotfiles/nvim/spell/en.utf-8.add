@@ -15,3 +15,10 @@ NeoGit
 neotest
 Autocomplete
 LSP
+boolean
+runtime
+wildcard
+trigram
+MacOS
+formatters
+devshells

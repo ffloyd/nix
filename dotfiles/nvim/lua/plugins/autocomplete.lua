@@ -12,6 +12,7 @@ return {
       "hrsh7th/cmp-calc",
       "uga-rosa/cmp-dictionary",
       "f3fora/cmp-spell",
+      "hrsh7th/cmp-nvim-lsp-signature-help",
     },
     config = function()
       local cmp = require("cmp")
@@ -63,6 +64,7 @@ return {
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
+          { name = "nvim_lsp_signature_help" },
           {
             name = "lazydev",
             group_index = 0, -- set group index to 0 to skip loading LuaLS completions
@@ -84,12 +86,33 @@ return {
 
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+      lspconfig.dockerls.setup({
+        capabilities = capabilities,
+      })
+
+      lspconfig.gopls.setup({
+        capabilities = capabilities,
+      })
+
       lspconfig.lua_ls.setup({
         capabilities = capabilities,
       })
+
       lspconfig.lexical.setup({
         capabilities = capabilities,
         cmd = { "lexical" },
+      })
+
+      lspconfig.nixd.setup({
+        capabilities = capabilities,
+      })
+
+      lspconfig.pyright.setup({
+        capabilities = capabilities,
+      })
+
+      lspconfig.terraformls.setup({
+        capabilities = capabilities,
       })
     end,
   },
