@@ -52,7 +52,7 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
   - ( ) investigate if there something like `consult-line` or `avy`'s jump to character
   - ( ) better tab management: visual representation & keybindings (jumping between tables, closing, renaming)
   - ( ) make sure that spaces used for indentation by default
-  - ( ) rainbow delimiters
+  - (x) rainbow delimiters
   - ( ) bookmarks management
   - ( ) is there something like `consult-imenu`?
   - ( ) toggle line truncation and word wrapping

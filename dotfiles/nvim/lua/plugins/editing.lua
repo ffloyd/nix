@@ -24,7 +24,7 @@ return {
     event = "InsertEnter",
     config = true,
     -- use opts = {} for passing setup options
-    -- this is equalent to setup({}) function
+    -- this is equivalent to setup({}) function
     --
     -- TODO: check for integrations in README, especially nvim-cmp
   },
@@ -48,6 +48,17 @@ return {
         mode = { "n", "o", "x" },
       },
     },
+  },
+  {
+    "HiPhish/rainbow-delimiters.nvim",
+    config = function()
+      local rainbow_delimiters = require("rainbow-delimiters")
+      require("rainbow-delimiters.setup").setup({
+        strategy = {
+          [""] = rainbow_delimiters.strategy["local"],
+        },
+      })
+    end,
   },
   {
     "mbbill/undotree",

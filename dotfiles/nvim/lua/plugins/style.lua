@@ -22,6 +22,14 @@ return {
           h.DiffDelete = { bg = utils.darken(palette.aurora.red, 0.2, bg) } -- diff mode: Deleted line
           h.DiffText = { bg = utils.darken(palette.aurora.yellow, 0.3, bg) } -- diff mode: Changed text within a changed line
 
+          -- definitions from another Nord port: https://github.com/shaunsingh/nord.nvim/blob/master/lua/nord/theme.lua#L695
+          h.RainbowDelimiterRed = { fg = palette.aurora.red }
+          h.RainbowDelimiterYellow = { fg = palette.aurora.yellow }
+          h.RainbowDelimiterBlue = { fg = palette.frost.artic_water }
+          h.RainbowDelimiterOrange = { fg = palette.aurora.orange }
+          h.RainbowDelimiterGreen = { fg = palette.aurora.green }
+          h.RainbowDelimiterViolet = { fg = palette.aurora.purple }
+          h.RainbowDelimiterCyan = { fg = palette.frost.ice }
         end,
       })
       vim.cmd.colorscheme("nord")
