@@ -81,4 +81,11 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
   - ( ) Go: LS support, running tests
   - ( ) Mastodon client maybe?
   - ( ) JS/TS(X): LS support, maybe running tests
+  - ( ) improve help window (`K` keybinding in normal mode)
+  -- ( ) bordered window
+  -- ( ) how to scroll?
+  - ( ) Improve spelling behavior
+  -- ( ) make dict setup part of neovim.nix
+  -- ( ) consider adding special technical dictionaries
+  -- ( ) make it intelligent enough to not mark URL as errors etc
 
