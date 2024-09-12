@@ -50,7 +50,7 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
   - ( ) check if there any improvements to NeoVim help system (like `helpful` package for EMACS)
   - ( ) check how nvim deals with files with the same name, but from different dirs
   - ( ) investigate if there something like `consult-line` or `avy`'s jump to character
-  - ( ) better tab management: visual representation & keybindings (jumping between tables, closing, renaming)
+  - (x) better tab management: visual representation & keybindings (jumping between tables, closing, renaming)
   - ( ) make sure that spaces used for indentation by default
   - (x) rainbow delimiters
   - ( ) bookmarks management

@@ -54,4 +54,22 @@ return {
       vim.notify = require("notify")
     end,
   },
+  {
+    "nanozuki/tabby.nvim",
+    init = function()
+      vim.opt.sessionoptions = "curdir,folds,globals,help,tabpages,terminal,winsize"
+    end,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("tabby").setup({
+        preset = "active_wins_at_tail",
+        option = {
+          nerdfont = true,
+          lualine_theme = "nord",
+        },
+      })
+    end,
+  },
 }

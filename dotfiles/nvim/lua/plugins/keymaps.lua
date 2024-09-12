@@ -18,9 +18,9 @@ return {
   config = function()
     local wk = require("which-key")
     local gitsigns = require("gitsigns")
-    local neotest = require("neotest")
     local telescope = require("telescope.builtin")
     local telescope_utils = require("telescope.utils")
+    local tabby = require("tabby")
 
     wk.setup({
       preset = "modern",
@@ -38,6 +38,11 @@ return {
 
     local function toggle_relative_line_numbers()
       vim.wo.relativenumber = not vim.wo.relativenumber
+    end
+
+    local function rename_tab()
+      local new_name = vim.fn.input("New name: ")
+      tabby.tab_rename(new_name)
     end
 
     wk.add({
@@ -105,82 +110,6 @@ return {
       -- NeoGit
       { "<leader>gg", "<cmd>Neogit<cr>", desc = "NeoGit" },
 
-      { "<leader>t", group = "test" },
-      -- run test(s)
-      {
-        "<leader>tA",
-        function()
-          neotest.run.run({ suite = true })
-        end,
-        desc = "Test all",
-      },
-      {
-        "<leader>ta",
-        function()
-          neotest.run.run(vim.fn.expand("%"))
-        end,
-        desc = "Test file",
-      },
-      {
-        "<leader>tt",
-        function()
-          neotest.run.run()
-        end,
-        desc = "Test this",
-      },
-      {
-        "<leader>tr",
-        function()
-          neotest.run.run_last()
-        end,
-        desc = "Test rerun",
-      },
-      -- execution control
-      {
-        "<leader>t<space>",
-        function()
-          neotest.run.attach()
-        end,
-        desc = "Attach to running",
-      },
-      {
-        "<leader>tx",
-        function()
-          neotest.run.stop()
-        end,
-        desc = "Stop running",
-      },
-      -- visualization & inspection
-      -- FIXME: summary does not work when watch consumer is disabled
-      -- {
-      --   "<leader>ts",
-      --   function()
-      --     neotest.summary.toggle()
-      --   end,
-      --   desc = "Test summary",
-      -- },
-      {
-        "<leader>to",
-        function()
-          neotest.output.open()
-        end,
-        desc = "Output window",
-      },
-      {
-        "<leader>tO",
-        function()
-          neotest.output_panel.toggle()
-        end,
-        desc = "Output panel",
-      },
-      {
-        "<leader>tC",
-        function()
-          neotest.output_panel.clear()
-        end,
-        desc = "Clear output panel",
-      },
-
       { "<leader>p", group = "project" },
 
       { "<leader>r", group = "runner" },
@@ -188,6 +117,17 @@ return {
       { "<leader>rt", "<cmd>OverseerToggle<cr>", desc = "Toggle task list" },
       { "<leader>rx", "<cmd>OverseerClearCache<cr>", desc = "Clear task cache" },
       { "<leader>ri", "<cmd>OverseerInfo<cr>", desc = "Tasks info" },
+
+      { "<leader>t", group = "tabs" },
+      { "<leader>tn", "<cmd>tabnext<cr>", desc = "Next tab" },
+      { "<leader>tp", "<cmd>tabprev<cr>", desc = "Prev tab" },
+      { "<leader>t ", "<cmd>tabnew<cr>", desc = "New tab" },
+      { "<leader>tt", "<cmd>Tabby pick_window<cr>", desc = "Jump to window" },
+      { "<leader>tr", rename_tab, desc = "Rename tab" },
+      { "<leader>t>", "<cmd>+tabmove<cr>", desc = "Move tab to right" },
+      { "<leader>t<", "<cmd>-tabmove<cr>", desc = "Move tab to left" },
+      { "<leader>tk", "<cmd>tabclose<cr>", desc = "Kill tab" },
+      { "<leader>to", "<cmd>tabonly<cr>", desc = "Kill other tab(s)" },
 
       { "<leader>T", group = "toggle" },
       -- line numbers
