@@ -1,9 +1,5 @@
 This file is an ongoing list of things I want to implement in my NeoVim setup.
 
-* Learn
-  - ( ) Go through Vimtutor once more
-  - ( ) Is it possible to execute some code in `Lazy` definition only if particular dependency is installed?
-
 * Make it comfortable for everyday tasks
   The goal is achieved when I can stop using EMACS.
 
@@ -88,4 +84,12 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
   -- ( ) make dict setup part of neovim.nix
   -- ( ) consider adding special technical dictionaries
   -- ( ) make it intelligent enough to not mark URL as errors etc
+  - ( ) Alternative to EMACS's autofill mode
+        (something related called "colorcolumn")
+  - ( ) Breadcrumbs + navigation
+  -- option 1: https://github.com/SmiteshP/nvim-navbuddy 
+  -- option 2: https://github.com/Bekaboo/dropbar.nvim
+  - ( ) add overseer to LuaLine
+  - ( ) adopt IEx-based test running for Elixir
+  - ( ) cheatsheet plugin
 
