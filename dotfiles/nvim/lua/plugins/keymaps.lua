@@ -59,6 +59,18 @@ return {
       { "<leader>bn", "<cmd>bnext<cr>", desc = "Next buffer" },
       { "<leader>bp", "<cmd>bprev<cr>", desc = "Prev buffer" },
 
+      { "<leader>c", group = "code" },
+      {
+        "<leader>cs",
+        "<cmd>Trouble symbols toggle<cr>",
+        desc = "Symbols",
+      },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle win.position=right<cr>",
+        desc = "LSP definitions / references / ...",
+      },
+
       { "<leader>f", group = "file" },
       { "<leader>fa", "<cmd>Telescope telescope-alternate alternate_file<cr>", desc = "Find alternate file" },
       {
@@ -148,6 +160,28 @@ return {
       { "<leader>ulx", "<cmd>LspStop<cr>", desc = "LSP stop" },
       { "<leader>ulr", "<cmd>LspRestart<cr>", desc = "LSP restart" },
       { "<leader>uc", "<cmd>CmpStatus<cr>", desc = "nvim-cmp sources status" },
+
+      { "<leader>x", group = "diagnostics" },
+      {
+        "<leader>xx",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics",
+      },
+      {
+        "<leader>xX",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer diagnostics",
+      },
+      {
+        "<leader>xl",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location list",
+      },
+      {
+        "<leader>xq",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix list",
+      },
     })
   end,
 }

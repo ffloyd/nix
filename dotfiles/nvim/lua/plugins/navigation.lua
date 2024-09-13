@@ -36,4 +36,15 @@ return {
       telescope.load_extension("telescope-alternate")
     end,
   },
+  {
+    "folke/trouble.nvim",
+    cmd = "Trouble",
+    config = function()
+      require("trouble").setup({
+        win = {
+          size = 60,
+        },
+      })
+    end,
+  },
 }

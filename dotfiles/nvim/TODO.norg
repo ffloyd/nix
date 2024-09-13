@@ -35,7 +35,7 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
   - (x) `subword-mode`: JumpBetweenCamelizedWords
         consider toggle keybinding
   - (x) undo tree
-  - ( ) https://github.com/folke/trouble.nvim
+  - (x) https://github.com/folke/trouble.nvim
   - ( ) make sure that GPT-4o is used
   - ( ) check which undo step is most comfortable for me
         in EMACS I use `(setq evil-want-fine-undo t)`
@@ -92,4 +92,7 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
   - ( ) add overseer to LuaLine
   - ( ) adopt IEx-based test running for Elixir
   - ( ) cheatsheet plugin
-
+  - ( ) integrate trouble & telescope
+        https://github.com/folke/trouble.nvim?tab=readme-ov-file#telescope
+  - ( ) use all trouble features, especially LSP-related navigational ones
+  - ( ) exit from DiffView by pressing `q`
