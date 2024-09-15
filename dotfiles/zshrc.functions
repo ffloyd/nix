@@ -1,0 +1,6 @@
+# I use it for long-running tasks
+doit() {
+    local cmd="$1"
+    shift  # Shift the arguments to the left, so $@ now contains the remaining arguments
+    eval "$cmd $@ && say 'Done' || say 'Oh fuck, it is failed'"
+}

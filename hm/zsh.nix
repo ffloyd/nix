@@ -2,9 +2,11 @@
   pkgs,
   lib,
   private,
+  config,
   ...
 }: let
   stdenv = pkgs.stdenv;
+  mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
   terminalColorCodes = {
     NOCOLOR = "\033[0m";
     RED = "\033[0;31m";
@@ -68,8 +70,7 @@ in {
       };
 
       initExtra = ''
-        # local setup
-        [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
+        source ~/.zshrc.functions
 
         # keybinding adjustments
         # Home key - does not work by default
@@ -94,4 +95,8 @@ in {
       initExtra = "eval \"$(/opt/homebrew/bin/brew shellenv)\"";
     })
   ];
+
+  home.file = {
+    ".zshrc.functions".source = mkOutOfStoreSymlink "${config.home.homeDirectory}/nix/dotfiles/zshrc.functions";
+  };
 }
