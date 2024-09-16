@@ -23,7 +23,7 @@
     nix-darwin,
     ...
   } @ inputs: let
-    # These attr sets are passed to all modules here, both NixOS and
+    # These attribute sets are passed to all modules here, both NixOS and
     # Darwin.
     globals = import ./globals.nix;
     private = import ./private.nix;
