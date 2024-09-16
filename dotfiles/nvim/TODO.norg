@@ -28,8 +28,9 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
   -- (_) <C-d> - for open docs
   - (x) Integrate with OS clipboard better
         currently `yy` does not put content to system clipboard
-  - ( ) undo window splitting etc change
+  - (x) undo window splitting etc change
         like `winner-mode` in EMACS
+        it's not possible, but the closest thing I found is https://github.com/AndrewRadev/undoquit.vim
   - (x) maximize current window
         nvim has it: C-w o
   - (x) `subword-mode`: JumpBetweenCamelizedWords
