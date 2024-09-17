@@ -32,8 +32,15 @@ return {
       }
 
       local calc_cmp = { name = "calc" }
-      local dict_cmp = { name = "dictionary" }
       local spell_cmp = { name = "spell" }
+
+      require("cmp_dictionary").setup({
+        paths = {
+          "/usr/share/dict/words",
+        },
+        exact_length = 2,
+      })
+      local dict_cmp = { name = "dictionary", keyword_length = 2 }
 
       cmp.setup({
         snippet = {
