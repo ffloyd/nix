@@ -1,3 +1,3 @@
 return {
-  { "AndrewRadev/undoquit.vim" }
+  { "AndrewRadev/undoquit.vim" },
 }
