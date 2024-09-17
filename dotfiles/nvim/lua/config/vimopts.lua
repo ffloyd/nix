@@ -32,3 +32,7 @@ vim.opt.clipboard:append("unnamedplus")
 
 -- required by plugins like nvim-notify
 vim.opt.termguicolors = true
+
+-- the closest thing to evil-want-fine-undo from Evil for EMACS
+-- https://stackoverflow.com/questions/2895551/how-do-i-get-fine-grained-undo-in-vim
+vim.cmd.inoremap("<Space>", "<Space><C-g>u")

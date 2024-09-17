@@ -38,7 +38,7 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
   - (x) undo tree
   - (x) https://github.com/folke/trouble.nvim
   - ( ) make sure that GPT-4o is used
-  - ( ) check which undo step is most comfortable for me
+  - (x) check which undo step is most comfortable for me
         in EMACS I use `(setq evil-want-fine-undo t)`
   - ( ) discover possibilities of using CMD for keybindings
   - ( ) and adjust to MacOS keybindings (CMD-s,f,c,x,v,a; ALT-bckspc,arrows)
