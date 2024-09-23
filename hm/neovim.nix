@@ -20,6 +20,13 @@ in {
     pkgs.fd
     pkgs.ripgrep
 
+    # required by https://github.com/Robitx/gp.nvim
+    (pkgs.sox.override { enableLame = true; })
+    pkgs.curl
+
+    # required by https://github.com/yetone/avante.nvim
+    pkgs.pngpaste
+
     # globally installed language servers
     # (when possible I prefer keep them in projects' Nix devshells)
     pkgs.dockerfile-language-server-nodejs
@@ -36,6 +43,9 @@ in {
 
   home.file = {
     ".config/nvim".source = mkOutOfStoreSymlink "${config.home.homeDirectory}/nix/dotfiles/nvim";
+    
+    # required by https://github.com/zbirenbaum/copilot.lua
+    ".copilot-node".source = "${pkgs.nodejs_20}/bin";
   };
 
   home.sessionVariables.EDITOR = "nvim";

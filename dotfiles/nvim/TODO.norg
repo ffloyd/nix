@@ -37,7 +37,7 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
         consider toggle keybinding
   - (x) undo tree
   - (x) https://github.com/folke/trouble.nvim
-  - ( ) make sure that GPT-4o is used
+  - (x) call chat with OpenAI GPT-4o at least
   - (x) check which undo step is most comfortable for me
         in EMACS I use `(setq evil-want-fine-undo t)`
   - ( ) discover possibilities of using CMD for keybindings
@@ -60,8 +60,8 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
   - ( ) fast access to list of predefined favorite files
   - ( ) specific keybinding for specific types of completion (files, dabbrev, dictionary, etc)
   - ( ) snippets
-  - ( ) GitHub Copilot support
-  - ( ) Use GPT-4o for everything
+  - (x) GitHub Copilot support
+  - (x) Use GPT-4o for everything
   - ( ) REST client?
   - ( ) Check if there any special `direnv` support
   - ( ) Some fancy dashboard on startup

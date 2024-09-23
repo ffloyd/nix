@@ -49,8 +49,6 @@ return {
       { "<leader><leader>", "<cmd>Telescope find_files<cr>", desc = "Find file (pwd)" },
 
       { "<leader>a", group = "ai" },
-      { "<leader>ae", "<cmd>ChatGPTEditWithInstructions<cr>", desc = "Edit with GPT" },
-      { "<leader>ag", "<cmd>ChatGPT<cr>", desc = "Chat with GPT" },
 
       { "<leader>b", group = "buffer" },
       { "<leader>bb", "<cmd>Telescope buffers<cr>", desc = "List buffers" },
@@ -160,6 +158,8 @@ return {
       { "<leader>ulx", "<cmd>LspStop<cr>", desc = "LSP stop" },
       { "<leader>ulr", "<cmd>LspRestart<cr>", desc = "LSP restart" },
       { "<leader>uc", "<cmd>CmpStatus<cr>", desc = "nvim-cmp sources status" },
+      -- notifications
+      { "<leader>un", "<cmd>Telescope notify<cr>", desc = "List recent notifications" },
 
       { "<leader>x", group = "diagnostics" },
       {
