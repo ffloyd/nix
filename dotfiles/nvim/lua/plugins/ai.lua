@@ -4,7 +4,7 @@
 return {
   {
     "robitx/gp.nvim",
-    dependencies = {},
+    dependencies = { "folke/which-key.nvim" },
     config = function()
       require("gp").setup({
         openai_api_key = { "pass", "openai/api_key" },
@@ -122,9 +122,23 @@ return {
   },
   {
     "zbirenbaum/copilot.lua",
-    opts = {
-      copilot_node_command = vim.fn.expand("$HOME") .. "/.copilot-node/node",
-    },
+    config = function()
+      require("copilot").setup({
+        copilot_node_command = vim.fn.expand("$HOME") .. "/.copilot-node/node",
+        suggestion = {
+          enabled = true,
+          auto_trigger = false,
+          keymap = {
+            accept = false,
+            accept_line = "<M-l>",
+          },
+        },
+        panel = {
+          enabled = true,
+          auto_refresh = true,
+        },
+      })
+    end,
   },
   {
     "yetone/avante.nvim",
