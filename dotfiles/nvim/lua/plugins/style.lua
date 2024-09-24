@@ -37,12 +37,57 @@ return {
   },
   {
     "nvim-lualine/lualine.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    opts = {
-      options = {
-        theme = "nord",
-      },
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+      "AndreM222/copilot-lualine",
+      "gbprod/nord.nvim",
     },
+    config = function()
+      local palette = require("nord.colors").palette
+      local darken = require("nord.utils").darken
+
+      require("lualine").setup({
+        options = {
+          theme = "nord",
+        },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = { "branch", "diff", "diagnostics" },
+          lualine_c = { "filename" },
+          lualine_x = {
+            {
+              "copilot",
+              show_colors = true,
+              symbols = {
+                status = {
+                  hl = {
+                    enabled = palette.aurora.green,
+                    sleep = palette.snow_storm.origin,
+                    disabled = darken(palette.snow_storm.origin, 0.5, palette.polar_night.brightest),
+                    warning = palette.aurora.yellow,
+                    unknown = palette.aurora.red,
+                  },
+                },
+                spinner_color = palette.snow_storm.brighter,
+              },
+            },
+            "encoding",
+            "fileformat",
+            "filetype",
+          },
+          lualine_y = { "progress" },
+          lualine_z = { "location" },
+        },
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = { "filename" },
+          lualine_x = { "location" },
+          lualine_y = {},
+          lualine_z = {},
+        },
+      })
+    end,
   },
   {
     "stevearc/dressing.nvim",
