@@ -33,7 +33,7 @@ in {
       # Language Servers (if package not listed here - it should be installed in a project's nix shell)
       nixd
       gopls
-      nodePackages.pyright
+      pyright
       terraform-ls
       dockerfile-language-server-nodejs
     ]);

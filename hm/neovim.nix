@@ -33,7 +33,7 @@ in {
     pkgs.gopls
     pkgs.lua-language-server
     pkgs.nixd
-    pkgs.nodePackages.pyright
+    pkgs.pyright
     pkgs.terraform-ls
 
     # globally installed formatters

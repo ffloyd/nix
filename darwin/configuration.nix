@@ -56,10 +56,7 @@
     enableGlobalCompInit = false;
   };
 
-  fonts = {
-    fontDir.enable = true;
-    fonts = globals.getFonts pkgs;
-  };
+  fonts.packages = globals.getFonts pkgs;
 
   # enable Rosetta 2
   system.activationScripts.extraActivation.text = ''
