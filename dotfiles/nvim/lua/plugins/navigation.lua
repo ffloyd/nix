@@ -40,11 +40,7 @@ return {
     "folke/trouble.nvim",
     cmd = "Trouble",
     config = function()
-      require("trouble").setup({
-        win = {
-          size = 60,
-        },
-      })
+      require("trouble").setup({})
     end,
   },
 }
