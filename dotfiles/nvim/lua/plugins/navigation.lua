@@ -10,7 +10,7 @@ return {
         mappings = {
           -- Elixir
           { "lib/(.*).ex", {
-            { "test/[1]_test.exs", "Test" },
+            { "test/[1]_test.exs", "Test", true },
           } },
           { "test/(.*)_test.exs", {
             { "lib/[1].ex", "Implementation" },
