@@ -36,25 +36,48 @@ return {
     end,
   },
   {
+    "linrongbin16/lsp-progress.nvim",
+    config = function()
+      require("lsp-progress").setup({})
+    end,
+  },
+  {
     "nvim-lualine/lualine.nvim",
+    init = function()
+      vim.o.laststatus = 3
+    end,
     dependencies = {
       "nvim-tree/nvim-web-devicons",
       "AndreM222/copilot-lualine",
       "gbprod/nord.nvim",
+      "linrongbin16/lsp-progress.nvim",
     },
     config = function()
       local palette = require("nord.colors").palette
       local darken = require("nord.utils").darken
 
+      -- lsp-progress setup (https://github.com/linrongbin16/lsp-progress.nvim?tab=readme-ov-file#lualinenvim)
+      vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
+      vim.api.nvim_create_autocmd("User", {
+        group = "lualine_augroup",
+        pattern = "LspProgressStatusUpdated",
+        callback = require("lualine").refresh,
+      })
+
       require("lualine").setup({
         options = {
           theme = "nord",
+          globalstatus = true,
         },
         sections = {
           lualine_a = { "mode" },
           lualine_b = { "branch", "diff", "diagnostics" },
           lualine_c = { "filename" },
           lualine_x = {
+            -- we need function here to avoid lazy loading issues
+            function()
+              return require("lsp-progress").progress()
+            end,
             {
               "copilot",
               show_colors = true,
@@ -90,6 +113,39 @@ return {
     end,
   },
   {
+    "b0o/incline.nvim",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+      "gbprod/nord.nvim",
+    },
+    config = function()
+      local devicons = require("nvim-web-devicons")
+      local palette = require("nord.colors").palette
+
+      require("incline").setup({
+        window = {
+          padding = 0,
+          margin = { horizontal = 0 },
+        },
+        render = function(props)
+          local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
+          if filename == "" then
+            filename = "[No Name]"
+          end
+          local ft_icon, ft_color = devicons.get_icon_color(filename)
+          local modified = vim.bo[props.buf].modified
+          return {
+            ft_icon and { " ", ft_icon, " ", guifg = ft_color } or "",
+            " ",
+            { filename, gui = modified and "bold,italic" or "bold" },
+            " ",
+            guibg = palette.polar_night.bright,
+          }
+        end,
+      })
+    end,
+  },
+  {
     "stevearc/dressing.nvim",
     opts = {},
   },
@@ -109,7 +165,7 @@ return {
     },
     config = function()
       require("tabby").setup({
-        preset = "active_wins_at_tail",
+        preset = "tab_only",
         option = {
           nerdfont = true,
           lualine_theme = "nord",

@@ -145,9 +145,6 @@ return {
     event = "VeryLazy",
     lazy = false,
     version = false, -- set this if you want to always pull the latest change
-    init = function()
-      vim.opt.laststatus = 3
-    end,
     opts = {
       provider = "copilot",
       auto_suggestions_provider = "copilot",
