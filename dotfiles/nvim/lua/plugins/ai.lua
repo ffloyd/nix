@@ -129,7 +129,7 @@ return {
           enabled = true,
           auto_trigger = false,
           keymap = {
-            accept = false,
+            accept = "<M-S-l>",
             accept_line = "<M-l>",
           },
         },
