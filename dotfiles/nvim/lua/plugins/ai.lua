@@ -150,13 +150,20 @@ return {
     event = "VeryLazy",
     lazy = false,
     version = false, -- set this if you want to always pull the latest change
-    opts = {
-      provider = "claude",
-      auto_suggestions_provider = "copilot",
-      claude = {
-        api_key_name = { "pass", "anthropic/api_key" },
-      },
-    },
+    config = function ()
+      require("avante").setup({
+        provider = "claude",
+        auto_suggestions_provider = "copilot",
+        claude = {
+          api_key_name = { "pass", "anthropic/api_key" },
+        },
+      })
+
+      require("which-key").add({
+        { "<leader>ap", "<cmd>AvanteSwitchProvider copilot<cr>", desc = "Avante: use Copilot" },
+        { "<leader>aP", "<cmd>AvanteSwitchProvider claude<cr>", desc = "Avante: use Claude" },
+      })
+    end,
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = "make",
     -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
@@ -168,6 +175,7 @@ return {
       --- The below dependencies are optional,
       "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
       "zbirenbaum/copilot.lua", -- for providers='copilot'
+      "folke/which-key.nvim",
       {
         -- support for image pasting
         "HakonHarnes/img-clip.nvim",
