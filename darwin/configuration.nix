@@ -17,15 +17,17 @@
   # Globally installed packages
   environment.systemPackages = with pkgs; [];
 
-  # Enable usage of darwin-rebuild without passing path to this flake
+  # Enable usage of Darwin-rebuild without passing path to this flake
   environment.darwinConfig = "$HOME/nix/flake.nix";
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
   # nix.package = pkgs.nix;
 
+  # Set trusted users for nix-daemon
+  nix.settings.trusted-users = ["root" private.darwinUsername];
+
   # enable local linux builder
-  # nix.settings.trusted-users = ["root" "@admin"];
   # nix.linux-builder = {
   #   enable = true;
   #   config = {
