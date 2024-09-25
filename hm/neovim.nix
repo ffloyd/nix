@@ -20,6 +20,9 @@ in {
     pkgs.fd
     pkgs.ripgrep
 
+    # optional by https://github.com/MagicDuck/grug-far.nvim
+    pkgs.ast-grep
+
     # required by https://github.com/Robitx/gp.nvim
     (pkgs.sox.override { enableLame = true; })
     pkgs.curl
