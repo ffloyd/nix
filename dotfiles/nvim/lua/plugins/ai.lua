@@ -8,6 +8,11 @@ return {
     config = function()
       require("gp").setup({
         openai_api_key = { "pass", "openai/api_key" },
+        providers = {
+          anthropic = {
+            secret = { "pass", "anthropic/api_key" },
+          },
+        },
       })
 
       require("which-key").add({
@@ -146,8 +151,11 @@ return {
     lazy = false,
     version = false, -- set this if you want to always pull the latest change
     opts = {
-      provider = "copilot",
+      provider = "claude",
       auto_suggestions_provider = "copilot",
+      claude = {
+        api_key_name = { "pass", "anthropic/api_key" },
+      },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = "make",
