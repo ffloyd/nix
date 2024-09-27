@@ -80,6 +80,7 @@ return {
       },
       { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Grep files" },
       { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Open recent file" },
+      { "<leader>fm", "<cmd>RenameFile<cr>", desc = "Rename file" },
 
       { "<leader>g", group = "git" },
       -- navigation between hunks
