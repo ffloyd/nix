@@ -132,7 +132,7 @@ return {
         copilot_node_command = vim.fn.expand("$HOME") .. "/.copilot-node/node",
         suggestion = {
           enabled = true,
-          auto_trigger = false,
+          auto_trigger = true,
           keymap = {
             accept = "<M-S-l>",
             accept_line = "<M-l>",
