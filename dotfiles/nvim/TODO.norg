@@ -97,3 +97,4 @@ This file is an ongoing list of things I want to implement in my NeoVim setup.
         https://github.com/folke/trouble.nvim?tab=readme-ov-file#telescope
   - ( ) use all trouble features, especially LSP-related navigational ones
   - ( ) exit from DiffView by pressing `q`
+  - ( ) use `copilot-cmp` as frontend for Copilot (maybe)
