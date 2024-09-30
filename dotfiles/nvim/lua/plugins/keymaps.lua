@@ -49,6 +49,7 @@ return {
       { "<leader><leader>", "<cmd>Telescope find_files<cr>", desc = "Find file (pwd)" },
 
       { "<leader>a", group = "ai" },
+      { "<leader>aA", "<cmd>TermExec cmd='ai' direction=tab<cr>", desc = "Open Aider in new tab" },
 
       { "<leader>b", group = "buffer" },
       { "<leader>bb", "<cmd>Telescope buffers<cr>", desc = "List buffers" },
