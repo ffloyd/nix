@@ -4,3 +4,27 @@ doit() {
     shift  # Shift the arguments to the left, so $@ now contains the remaining arguments
     eval "$cmd $@ && say 'Done' || say 'Oh fuck, it is failed'"
 }
+
+# Wrapper for aider with custom settings
+ai() {
+    local openai_api_key=$(pass show openai/api_key)
+    local anthropic_api_key=$(pass show anthropic/api_key)
+
+    OPENAI_API_KEY="$openai_api_key" ANTHROPIC_API_KEY="$anthropic_api_key" aider \
+      --dark-mode \
+      --no-auto-commits \
+      --code-theme solarized-dark \
+      --show-diffs \
+      --no-check-update \
+      "$@"
+}
+
+# Wrapper for ai() that continues last session
+ai-continue() {
+  ai --restore-chat-history "$@"
+}
+
+# Function to generate a summary of the current project
+ai-summarize-project() {
+    ai --message "Please provide a summary of the current project, including its main features and structure."
+}
