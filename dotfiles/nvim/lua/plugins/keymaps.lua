@@ -45,6 +45,20 @@ return {
       tabby.tab_rename(new_name)
     end
 
+    local function toggle_line_wrap()
+      vim.wo.wrap = not vim.wo.wrap
+      vim.notify("Line wrap: " .. (vim.wo.wrap and "On" or "Off"))
+    end
+
+    local function toggle_word_wrap()
+      if vim.wo.wrap then
+        vim.wo.linebreak = not vim.wo.linebreak
+        vim.notify("Word wrap: " .. (vim.wo.linebreak and "On" or "Off"))
+      else
+        vim.notify("Enable line wrap first")
+      end
+    end
+
     wk.add({
       { "<leader><leader>", "<cmd>Telescope find_files<cr>", desc = "Find file (pwd)" },
 
@@ -143,8 +157,10 @@ return {
 
       { "<leader>T", group = "toggle" },
       -- line numbers
-      { "<leader>Tl", toggle_line_numbers, desc = "Toggle line numbers" },
-      { "<leader>TL", toggle_relative_line_numbers, desc = "Toggle relative line numbers" },
+      { "<leader>Tn", toggle_line_numbers, desc = "Toggle line numbers" },
+      { "<leader>TN", toggle_relative_line_numbers, desc = "Toggle relative line numbers" },
+      { "<leader>Tl", toggle_line_wrap, desc = "Toggle line wrap" },
+      { "<leader>Tw", toggle_word_wrap, desc = "Toggle word wrap" },
       -- Git things
       { "<leader>Tg", gitsigns.toggle_signs, desc = "Toggle Gitsigns" },
       { "<leader>Tb", gitsigns.toggle_current_line_blame, desc = "Toggle current line blame" },
