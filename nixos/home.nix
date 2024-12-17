@@ -12,9 +12,10 @@
   imports = [
     ../hm/zsh.nix
     ../hm/git.nix
-    ../hm/emacs.nix
     ../hm/devtools.nix
     ../hm/gpg.nix
+    ../hm/neovim.nix
+    ../hm/terminal.nix
   ];
 
   # This value determines the Home Manager release that your configuration is
@@ -24,19 +25,19 @@
   # You should not change this value, even if you update Home Manager. If you do
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
-  home.stateVersion = "23.11"; # Please read the comment before changing.
+  home.stateVersion = "24.11"; # Please read the comment before changing.
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
     # essential GUI apps
     _1password-gui
-    brave # brave configuration is managed manually for now
+    chromium
     telegram-desktop
     spotify
 
     # GNOME adjustment
-    gnome.gnome-tweaks
+    gnome-tweaks
     gnomeExtensions.appindicator
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
@@ -62,6 +63,8 @@
       use-system-font = false;
       custom-font = "IosevkaTerm Nerd Font Mono 10";
     };
+
+    settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
   };
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

@@ -31,11 +31,15 @@ lib.mkMerge [
     };
   })
   (lib.mkIf pkgs.stdenv.isLinux {
+    home.packages = [pkgs.gcr];
+
     services.gpg-agent = {
       enable = true;
 
       enableSshSupport = true;
       enableZshIntegration = true;
+
+      pinentryPackage = pkgs.pinentry-gnome3;
     };
   })
 ]

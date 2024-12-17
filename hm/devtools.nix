@@ -6,7 +6,7 @@
 
     # password management
     (pass.withExtensions (exts: [exts.pass-otp]))
-    _1password
+    _1password-cli
 
     # nix-related helpers
     nix-tree
