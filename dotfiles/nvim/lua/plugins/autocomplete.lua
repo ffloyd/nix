@@ -121,6 +121,10 @@ return {
       lspconfig.terraformls.setup({
         capabilities = capabilities,
       })
+
+      lspconfig.ts_ls.setup({
+        capabilities = capabilities,
+      })
     end,
   },
   {
