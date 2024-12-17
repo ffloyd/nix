@@ -37,13 +37,13 @@
       "livebook"
 
       # Tools
-      "tunnelblick"
       "send-to-kindle"
 
       # Entertaiment
       "spotify"
       "steam"
       "vlc"
+      "kegworks" # wrapper for Windows games (for HOMM3 for example)
     ];
   };
 }
