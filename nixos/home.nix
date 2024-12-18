@@ -64,7 +64,17 @@
       custom-font = "IosevkaTerm Nerd Font Mono 10";
     };
 
+    settings."org/gnome/settings-daemon/plugins/power" = {
+      sleep-inactive-ac-type = "nothing";
+      sleep-inactive-ac-timeout = 0;
+    };
+
     settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+  };
+
+  programs.zsh.shellAliases = {
+    reboot-to-windows = "sudo systemctl reboot --boot-loader-entry=windows_11.conf";
+    os-rebuild = "sudo nixos-rebuild switch --flake ~/nix";
   };
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
