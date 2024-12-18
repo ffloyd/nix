@@ -116,6 +116,7 @@
   environment.systemPackages = with pkgs; [
     bat
     eza
+    gnumake
   ];
 
   fonts.packages = globals.getFonts pkgs;
