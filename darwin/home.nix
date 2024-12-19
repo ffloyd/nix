@@ -30,12 +30,17 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [];
+  home.packages = with pkgs; [
+    # for remote gaming
+    wakeonlan # wake on LAN my gaming rig
+    moonlight-qt # stream games from my gaming rig
+  ];
 
   programs.zsh = {
     shellAliases = {
       os-rebuild = "darwin-rebuild switch --flake ~/nix";
       hm-rebuild = "home-manager switch --flake ~/nix";
+      wakeonlan-rig = "wakeonlan -i $(dig +short rig.lan) ${private.gamingRigMacAddress}";
     };
   };
 
