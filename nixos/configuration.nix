@@ -134,6 +134,19 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  # Make sure Wake on LAN is enabled after each shutdown/reboot
+  systemd.services.wol = {
+    description = "Enable Wake-on-LAN";
+    after = ["network-online.target"];
+    wants = ["network-online.target"];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.ethtool}/bin/ethtool -s $(ip addr | awk '/state UP/ {print $2}' | sed 's/.$//') wol g";
+      RemainAfterExit = true;
+    };
+    wantedBy = ["multi-user.target"];
+  };
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
