@@ -64,11 +64,6 @@
       custom-font = "IosevkaTerm Nerd Font Mono 10";
     };
 
-    settings."org/gnome/settings-daemon/plugins/power" = {
-      sleep-inactive-ac-type = "nothing";
-      sleep-inactive-ac-timeout = 0;
-    };
-
     settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
   };
 
