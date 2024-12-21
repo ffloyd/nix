@@ -14,6 +14,11 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    foundryvtt = {
+      url = "github:reckenrode/nix-foundryvtt";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -21,6 +26,7 @@
     nixpkgs,
     home-manager,
     nix-darwin,
+    foundryvtt,
     ...
   } @ inputs: let
     # These attribute sets are passed to all modules here, both NixOS and
@@ -38,6 +44,7 @@
 
       modules = [
         ./nixos/configuration.nix
+        foundryvtt.nixosModules.foundryvtt
 
         home-manager.nixosModules.home-manager
         {
