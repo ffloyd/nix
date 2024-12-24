@@ -11,7 +11,13 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./foundryvtt.nix
+    # and rest of my modules
+    ./services/caddy.nix
+    ./services/foundryvtt.nix
+    ./services/livebook.nix
+    ./services/ollama.nix
+    ./services/open-webui.nix
+    ./services/wakeonlan.nix
   ];
 
   # nix settings
@@ -103,8 +109,10 @@
     shell = pkgs.zsh;
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    cudaSupport = true;
+  };
 
   # System-wide programs
   programs.zsh.enable = true;
@@ -138,28 +146,9 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # Make sure Wake on LAN is enabled after each shutdown/reboot
-  systemd.services.wol = {
-    description = "Enable Wake-on-LAN";
-    after = ["network-online.target"];
-    wants = ["network-online.target"];
-    script = ''
-      IFACE=$(ip addr | awk '/state UP/ {print $2}' | sed 's/.$//')
-
-      echo "Enabling Wake-on-LAN on $IFACE..."
-      ethtool -s $IFACE wol g
-      echo "Done"
-    '';
-    path = with pkgs; [iproute2 gawk gnused ethtool];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-    wantedBy = ["multi-user.target"];
-  };
-
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [80 443];
+  # Note: I opened some ports in nixos/services/*.nix
+  # networking.firewall.allowedTCPPorts = [80 443];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;

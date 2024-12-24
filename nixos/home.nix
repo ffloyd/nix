@@ -70,6 +70,8 @@
   programs.zsh.shellAliases = {
     reboot-to-windows = "sudo systemctl reboot --boot-loader-entry=windows_11.conf";
     os-rebuild = "sudo nixos-rebuild switch --flake ~/nix";
+    os-rebuild-boot = "sudo nixos-rebuild boot --flake ~/nix";
+    os-gc = "sudo nix-collect-garbage -d";
   };
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage

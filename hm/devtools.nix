@@ -11,6 +11,7 @@
     # nix-related helpers
     nix-tree
 
+    btop
     gawk
     jq
     wget

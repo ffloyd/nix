@@ -1,11 +1,9 @@
 {
   pkgs,
   inputs,
+  config,
   ...
-}: let
-  hostName = "vtt.ffloyd.space";
-  port = 30000;
-in {
+}: {
   services.foundryvtt = {
     enable = true;
     package = inputs.foundryvtt.packages.${pkgs.system}.foundryvtt_12.overrideAttrs {
@@ -13,7 +11,7 @@ in {
       build = "331";
     };
 
-    inherit hostName port;
+    hostName = "vtt.ffloyd.space";
 
     minifyStaticFiles = true;
     upnp = false;
@@ -22,15 +20,7 @@ in {
     proxyPort = 443;
   };
 
-  services.caddy = {
-    enable = true;
-
-    globalConfig = ''
-      local_certs
-    '';
-
-    virtualHosts.${hostName}.extraConfig = ''
-      reverse_proxy localhost:${toString port}
-    '';
-  };
+  services.caddy.virtualHosts.${config.services.foundryvtt.hostName}.extraConfig = ''
+    reverse_proxy localhost:${toString config.services.foundryvtt.port}
+  '';
 }
