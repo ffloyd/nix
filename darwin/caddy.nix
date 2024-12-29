@@ -11,6 +11,7 @@ in {
     addresses = {
       # I want all *.test domains to point to localhost
       test = "127.0.0.1";
+      "lb.here" = "127.0.0.1";
     };
   };
 
@@ -25,24 +26,22 @@ in {
       local_certs
     }
 
+    https://lb.here {
+      reverse_proxy localhost:8080
+    }
+
     ${private.workProjectsCaddyfile}
   '';
 
   launchd.daemons.caddy = {
-    serviceConfig.ProgramArguments = [
-      "${caddy}/bin/caddy"
-      "run"
-      "--config"
-      "/etc/Caddyfile"
-    ];
+    command = "${caddy}/bin/caddy run --config /etc/Caddyfile";
+
+    environment = {
+      HOME = "/var/caddy";
+    };
 
     serviceConfig = {
       KeepAlive = true;
-      RunAtLoad = true;
-
-      EnvironmentVariables = {
-        HOME = "/var/caddy";
-      };
 
       StandardErrorPath = "/var/caddy/stderr";
       StandardOutPath = "/var/caddy/stdout";

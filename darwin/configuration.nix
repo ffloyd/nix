@@ -7,7 +7,8 @@
 }: {
   imports = [
     ./homebrew.nix
-    ./local-dns.nix
+    ./caddy.nix
+    ./livebook.nix
   ];
 
   # The platform the configuration will be used on.

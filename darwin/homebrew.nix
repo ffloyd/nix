@@ -34,10 +34,11 @@
       "dash"
       "postman"
       "proxyman"
-      "livebook"
 
       # Tools
       "send-to-kindle"
+      "domzilla-caffeine"
+      "launchcontrol"
 
       # Entertaiment
       "spotify"
