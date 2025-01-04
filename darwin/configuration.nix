@@ -16,7 +16,7 @@
   nixpkgs.config.allowUnfree = true;
 
   # Globally installed packages
-  environment.systemPackages = with pkgs; [];
+  environment.systemPackages = [];
 
   # Enable usage of Darwin-rebuild without passing path to this flake
   environment.darwinConfig = "$HOME/nix/flake.nix";
