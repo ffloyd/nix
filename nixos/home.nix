@@ -16,6 +16,7 @@
     ../hm/gpg.nix
     ../hm/neovim.nix
     ../hm/terminal.nix
+    ../hm/webos.nix
   ];
 
   # This value determines the Home Manager release that your configuration is

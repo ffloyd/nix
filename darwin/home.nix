@@ -10,13 +10,14 @@
   home.homeDirectory = "/Users/${private.darwinUsername}";
 
   imports = [
-    ../hm/zsh.nix
-    ../hm/terminal.nix
-    ../hm/git.nix
-    ../hm/emacs.nix
     ../hm/devtools.nix
+    ../hm/emacs.nix
+    ../hm/git.nix
     ../hm/gpg.nix
     ../hm/neovim.nix
+    ../hm/terminal.nix
+    ../hm/webos.nix
+    ../hm/zsh.nix
   ];
 
   # This value determines the Home Manager release that your configuration is
