@@ -20,6 +20,10 @@
       "notion-calendar"
       "raycast"
 
+      # Proton family
+      "proton-mail"
+      "proton-pass"
+
       # Work-related
       "loom"
       "notion"
