@@ -38,11 +38,13 @@
       "dash"
       "postman"
       "proxyman"
+      "tableplus"
 
       # Tools
       "send-to-kindle"
       "domzilla-caffeine"
       "launchcontrol"
+      "winbox"
 
       # Entertaiment
       "spotify"
