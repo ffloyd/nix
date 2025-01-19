@@ -25,6 +25,9 @@ in
         # optional by https://github.com/MagicDuck/grug-far.nvim
         pkgs.ast-grep
 
+        # required by snacks.nvim dashboard
+        pkgs.dwt1-shell-color-scripts
+
         # required by https://github.com/Robitx/gp.nvim
         (pkgs.sox.override {enableLame = true;})
         pkgs.curl
