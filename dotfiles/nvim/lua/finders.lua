@@ -19,28 +19,42 @@ require("features").add({
         function()
           Snacks.picker.buffers()
         end,
-        desc = "Buffers",
+        desc = "Buffer",
       },
       {
         "<leader>fc",
         function()
           Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
         end,
-        desc = "Find Config File",
+        desc = "Config File",
       },
       {
         "<leader>ff",
         function()
-          Snacks.picker.files()
+          Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") })
         end,
-        desc = "Find Files",
+        desc = "File (current buffer directory)",
       },
       {
         "<leader>fg",
         function()
+          Snacks.picker.grep()
+        end,
+        desc = "Grep Files",
+      },
+      {
+        "<leader>fG",
+        function()
           Snacks.picker.git_files()
         end,
-        desc = "Find Git Files",
+        desc = "Git File",
+      },
+      {
+        "<leader>fl",
+        function()
+          Snacks.picker.lines()
+        end,
+        desc = "Line",
       },
       {
         "<leader>fr",
@@ -52,4 +66,3 @@ require("features").add({
     })
   end,
 })
-

@@ -1,5 +1,5 @@
 -- A small wrapper aroung lazy.nvim which allows configuring features rather than plugins.
--- 
+--
 -- By default lazy.nvim has the following disadventages:
 --
 -- 1) Tt allows call `setup` function only once.
@@ -13,14 +13,28 @@
 -- * plugins - a list of lazy.nvim plugin specs
 -- * setup - a function that will be called after all plugins (including plugins from other features) are loaded
 
+---@module "lazy"
+
+---@class Feature
+---@field [1] string The name of the feature
+---@field plugins LazyPluginSpec[]|nil An optional array of lazy.nvim plugin specifications
+---@field setup function|nil An optional setup function to be called after loading plugins
+
 local M = {
-  features = {}
+  ---@type Feature[]
+  features = {},
 }
 
+---Add a new feature to the global features list
+---@param feature Feature A Feature object to be added
+---@return nil
 function M.add(feature)
   M.features[#M.features + 1] = feature
+  return nil
 end
 
+---Return all lazy.nvim plugin specs from all features
+---@return LazyPluginSpec[]
 function M.lazy_specs()
   local lazy_specs = {}
 
@@ -35,6 +49,9 @@ function M.lazy_specs()
   return lazy_specs
 end
 
+---Load all features
+---It will setup all plugins using lazy.nvim and execute setup functions for all features afterwards.
+---@return nil
 function M.load()
   require("lazy").setup(M.lazy_specs())
 
@@ -43,7 +60,8 @@ function M.load()
       feature.setup()
     end
   end
+
+  return nil
 end
 
 return M
-
