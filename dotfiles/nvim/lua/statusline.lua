@@ -76,36 +76,3 @@ features.add({
     },
   },
 })
-
-features.add({
-  "Show current LSP symbol in the statusline",
-  plugins = {
-    {
-      "nvim-lualine/lualine.nvim",
-      dependencies = { "folke/trouble.nvim" },
-      opts = function(_, opts)
-        local trouble = require("trouble")
-        local symbols = trouble.statusline({
-          mode = "lsp_document_symbols",
-          groups = {},
-          title = false,
-          filter = { range = true },
-          format = "{kind_icon}{symbol.name:Normal} >",
-          -- The following line is needed to fix the background color
-          -- Set it to the lualine section you want to use
-          -- But it does not work properly at the moment of writing
-          -- Will be fixed in: https://github.com/folke/trouble.nvim/pull/616
-          hl_group = "lualine_c_normal",
-        })
-        table.insert(opts.sections.lualine_c, {
-          symbols.get,
-          cond = symbols.has,
-        })
-      end,
-    },
-  },
-  setup = function()
-    -- remove after https://github.com/folke/trouble.nvim/pull/616 merged
-    vim.api.nvim_set_hl(0, "StatusLine", { link = "lualine_c_normal" })
-  end,
-})

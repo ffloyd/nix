@@ -32,6 +32,9 @@ in
         (pkgs.sox.override {enableLame = true;})
         pkgs.curl
 
+        # required by Copilot Chat
+        pkgs.lynx
+
         # globally installed language servers
         # (when possible I prefer keep them in projects' Nix devshells)
         pkgs.dockerfile-language-server-nodejs

@@ -95,6 +95,7 @@ features.add({
     require("which-key").add({
       { "<leader>a", group = "Apps/AI" },
       { "<leader>b", group = "Buffer" },
+      { "<leader>e", group = "Editor Helpers" },
       { "<leader>g", group = "Git/VCS" },
       { "<leader>f", group = "Finders" },
       { "<leader>s", group = "Search/Replace" },
@@ -640,7 +641,9 @@ features.add({
   plugins = {
     {
       "lewis6991/gitsigns.nvim",
-      opts = {},
+      opts = {
+        signs_staged_enable = false,
+      },
     },
   },
   setup = function()
@@ -1129,5 +1132,86 @@ features.add({
     },
   },
 })
+
+features.add({
+  "Copy current relative file path with line number",
+  setup = function()
+    local copy_relative_path_with_linum = function()
+      local path = vim.fn.expand("%:.")
+      local line = vim.fn.line(".")
+      local text = string.format("%s:%d", path, line)
+      vim.fn.setreg("+", text)
+      vim.notify("Copied: " .. text)
+    end
+
+    require("which-key").add({
+      {
+        "<leader>ey",
+        copy_relative_path_with_linum,
+        desc = "Copy Relative Path with Line Number",
+      },
+    })
+  end,
+})
+
+features.add({
+  "Copilot Chat",
+  plugins = {
+    {
+      "CopilotC-Nvim/CopilotChat.nvim",
+      dependencies = {
+        { "zbirenbaum/copilot.lua" },
+        { "nvim-lua/plenary.nvim" },
+      },
+      build = "make tiktoken",
+      ---@module "CopilotChat"
+      ---@type CopilotChat.config
+      opts = {
+        model = "claude-3.5-sonnet",
+        auto_insert_mode = true,
+      },
+    },
+  },
+  setup = function()
+    --- Adjust completion behavior
+    vim.api.nvim_create_autocmd("BufEnter", {
+      pattern = "copilot-*",
+      callback = function()
+        vim.opt_local.completeopt = "menu,preview,noinsert,popup"
+      end,
+    })
+
+    require("which-key").add({
+      { "<leader>ac", group = "Copilot Chat" },
+      { "<leader>acc", "<cmd>CopilotChatToggle<cr>", desc = "Toggle Chat" },
+      { "<leader>acm", "<cmd>CopilotChatModel<cr>", desc = "Change Model" },
+      { "<leader>acS", "<cmd>CopilotChatCommitStaged<cr>", desc = "Commit Message (staged)" },
+      { "<leader>acC", "<cmd>CopilotChatCommit<cr>", desc = "Commit Message" },
+      {
+        "<leader>acq",
+        function()
+          vim.ui.input({ prompt = "Quick Chat: " }, function(input)
+            if input ~= "" then
+              require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+            end
+          end)
+        end,
+        desc = "Quick chat",
+      },
+    })
+  end,
+})
+
+features.add({
+  "Support for Kitty terminal config",
+  plugins = {
+    {
+      "fladson/vim-kitty",
+      ft = "kitty",
+    },
+  },
+})
+
+-- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
 
 features.load()
