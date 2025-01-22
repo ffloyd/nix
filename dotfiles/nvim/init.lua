@@ -1185,8 +1185,7 @@ features.add({
       { "<leader>ac", group = "Copilot Chat" },
       { "<leader>acc", "<cmd>CopilotChatToggle<cr>", desc = "Toggle Chat" },
       { "<leader>acm", "<cmd>CopilotChatModel<cr>", desc = "Change Model" },
-      { "<leader>acS", "<cmd>CopilotChatCommitStaged<cr>", desc = "Commit Message (staged)" },
-      { "<leader>acC", "<cmd>CopilotChatCommit<cr>", desc = "Commit Message" },
+      { "<leader>acs", "<cmd>CopilotChatCommitStaged<cr>", desc = "Commit Message (staged)" },
       {
         "<leader>acq",
         function()
