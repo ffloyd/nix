@@ -34,6 +34,7 @@ in
 
         # required by Copilot Chat
         pkgs.lynx
+        pkgs.luajitPackages.tiktoken_core
 
         # globally installed language servers
         # (when possible I prefer keep them in projects' Nix devshells)

@@ -191,6 +191,7 @@ features.add({
       "saghen/blink.cmp",
       dependencies = {
         "rafamadriz/friendly-snippets",
+        "saghen/blink.compat",
       },
       version = "*",
       ---@module "blink-cmp"
@@ -272,6 +273,7 @@ features.add({
         }
         opts.input = { enabled = true }
         opts.notifier = { enabled = true }
+        opts.picker = { enabled = true, ui_select = true }
       end,
     },
   },
@@ -413,7 +415,12 @@ features.add({
         "nvim-lua/plenary.nvim", -- required
         "sindrets/diffview.nvim", -- optional - Diff integration
       },
-      opts = {},
+      opts = {
+        disable_insert_on_commit = true,
+        integrations = {
+          diffview = true,
+        },
+      },
       keys = {
         {
           "<leader>gg",
@@ -547,6 +554,16 @@ features.add({
 
 features.add({
   "Toggle terminal",
+  plugins = {
+    {
+      "folke/snacks.nvim",
+      opts = function (_, opts)
+        --- TODO: when this resolved adjust the config: https://github.com/folke/snacks.nvim/issues/965
+        ---@type snacks.terminal.Config
+        opts.terminal = {}
+      end
+    }
+  },
   setup = function()
     require("which-key").add({
       {
@@ -1155,7 +1172,7 @@ features.add({
 })
 
 features.add({
-  "Copilot Chat",
+  "Copilot Chat (via CopilotChat.nvim)",
   plugins = {
     {
       "CopilotC-Nvim/CopilotChat.nvim",
@@ -1181,11 +1198,23 @@ features.add({
       end,
     })
 
+    -- TODO: implement some spinner or blocking behavior
+    local insert_commit_message = function()
+      local cc = require("CopilotChat")
+      cc.ask("/Commit",  {
+        headless = true,
+        callback = function(response)
+          local lines = vim.split(response, "\n")
+          vim.api.nvim_put(lines, "l", true, true)
+        end,
+      })
+    end
+
     require("which-key").add({
       { "<leader>ac", group = "Copilot Chat" },
       { "<leader>acc", "<cmd>CopilotChatToggle<cr>", desc = "Toggle Chat" },
       { "<leader>acm", "<cmd>CopilotChatModel<cr>", desc = "Change Model" },
-      { "<leader>acs", "<cmd>CopilotChatCommitStaged<cr>", desc = "Commit Message (staged)" },
+      { "<leader>acs", insert_commit_message, desc = "Insert Commit Message (staged)" },
       {
         "<leader>acq",
         function()
@@ -1200,6 +1229,119 @@ features.add({
     })
   end,
 })
+
+features.add({
+  "Fancy Markdown rendering despite being in a terminal",
+  plugins = {
+    {
+      "MeanderingProgrammer/render-markdown.nvim",
+      dependencies = {
+        "nvim-treesitter/nvim-treesitter",
+        "nvim-tree/nvim-web-devicons",
+        {
+          "saghen/blink.cmp",
+          opts = function(_, opts)
+            table.insert(opts.sources.default, "markdown")
+            opts.sources.providers.markdown = {
+              name = "RenderMarkdown",
+              module = "render-markdown.integ.blink",
+              fallbacks = { "lsp" },
+            }
+          end,
+        },
+      },
+      ---@module 'render-markdown'
+      ---@type render.md.UserConfig
+      opts = {
+        filetypes = { "markdown" },
+      },
+    },
+  },
+})
+
+-- features.add({
+--   "Cursor-like experience with Avante",
+--   plugins = {
+--     {
+--       "yetone/avante.nvim",
+--       event = "VeryLazy",
+--       build = "make",
+--       init = function()
+--         vim.o.laststatus = 3
+--       end,
+--       dependencies = {
+--         "stevearc/dressing.nvim",
+--         "nvim-lua/plenary.nvim",
+--         "MunifTanjim/nui.nvim",
+--         {
+--           "MeanderingProgrammer/render-markdown.nvim",
+--           opts = function(_, opts)
+--             table.insert(opts.filetypes, "Avante")
+--           end,
+--         },
+--         {
+--           "saghen/blink.cmp",
+--           opts = function(_, opts)
+--             table.insert(opts.sources.default, "avante_commands")
+--             opts.sources.providers.avante_commands = {
+--               name = "avante_commands",
+--               module = "blink.compat.source",
+--               score_offset = 90, -- show at a higher priority than lsp
+--               opts = {},
+--             }
+--
+--             table.insert(opts.sources.default, "avante_files")
+--             opts.sources.providers.avante_files = {
+--               name = "avante_commands",
+--               module = "blink.compat.source",
+--               score_offset = 100, -- show at a higher priority than lsp
+--               opts = {},
+--             }
+--
+--             table.insert(opts.sources.default, "avante_mentions")
+--             opts.sources.providers.avante_mentions = {
+--               name = "avante_mentions",
+--               module = "blink.compat.source",
+--               score_offset = 1000, -- show at a higher priority than lsp
+--               opts = {},
+--             }
+--           end,
+--         },
+--       },
+--       ---@module "avante"
+--       ---@type avante.Config
+--       ---@diagnostic disable-next-line: missing-fields
+--       opts = {
+--         provider = "copilot",
+--         mappings = {
+--           ask = "<leader>aaa",
+--           edit = "<leader>aae",
+--           refresh = "<leader>aar",
+--           focus = "<leader>aaf",
+--           toggle = {
+--             default = "<leader>aat",
+--             debug = "<leader>aad",
+--             hint = "<leader>aah",
+--             suggestion = "<leader>aas",
+--             repomap = "<leader>aaR",
+--           },
+--           files = {
+--             add_current = "<leader>aac",
+--           },
+--         },
+--       },
+--       setup = function()
+--         require("which-key").add({
+--           {
+--             "<leader>aa",
+--             "<cmd>AvanteToggle<cr>",
+--             desc = "Toggle Avante",
+--           },
+--         })
+--       end,
+--     },
+--   },
+-- })
 
 features.add({
   "Support for Kitty terminal config",

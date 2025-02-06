@@ -5,10 +5,6 @@ require("features").add({
   plugins = {
     {
       "folke/snacks.nvim",
-      opts = function(_, opts)
-        ---@type snacks.picker.Config
-        opts.picker = {}
-      end,
     },
   },
   setup = function()

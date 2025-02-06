@@ -11,7 +11,7 @@
   mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
 in {
   home.packages = with pkgs; [
-    kitty # TODO: focus on kitty, use programs.kitty, fetchFromGithub alternative icon & nord theme
+    kitty
   ];
 
   home.file = {
