@@ -557,12 +557,12 @@ features.add({
   plugins = {
     {
       "folke/snacks.nvim",
-      opts = function (_, opts)
+      opts = function(_, opts)
         --- TODO: when this resolved adjust the config: https://github.com/folke/snacks.nvim/issues/965
         ---@type snacks.terminal.Config
         opts.terminal = {}
-      end
-    }
+      end,
+    },
   },
   setup = function()
     require("which-key").add({
@@ -1201,7 +1201,7 @@ features.add({
     -- TODO: implement some spinner or blocking behavior
     local insert_commit_message = function()
       local cc = require("CopilotChat")
-      cc.ask("/Commit",  {
+      cc.ask("/Commit", {
         headless = true,
         callback = function(response)
           local lines = vim.split(response, "\n")
@@ -1351,6 +1351,32 @@ features.add({
       ft = "kitty",
     },
   },
+})
+
+features.add({
+  "File Explorer (snacks.nvim)",
+  plugins = {
+    {
+      "folke/snacks.nvim",
+      opts = function(_, opts)
+        ---@type snacks.explorer.Config
+        opts.explorer = {
+          replace_netrw = true,
+        }
+      end,
+    },
+  },
+  setup = function()
+    require("which-key").add({
+      {
+        "<leader>ue",
+        function()
+          Snacks.explorer.open()
+        end,
+        desc = "Explorer (snacks.nvim)",
+      },
+    })
+  end,
 })
 
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
