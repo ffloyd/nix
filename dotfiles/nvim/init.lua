@@ -1363,6 +1363,14 @@ features.add({
         opts.explorer = {
           replace_netrw = true,
         }
+
+        opts.picker = opts.picker or {}
+        opts.picker.sources = opts.picker.sources or {}
+        opts.picker.sources.explorer = {
+          layout = { preset = "default", preview = false },
+          auto_close = true,
+          jump = { close = true },
+        }
       end,
     },
   },
