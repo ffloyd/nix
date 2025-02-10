@@ -1387,6 +1387,98 @@ features.add({
   end,
 })
 
+features.add({
+  "Jump Between Implementation and Test",
+  setup = function()
+    local file_patterns = {
+      elixir = {
+        impl = "lib/*.ex",
+        test = "test/*_test.exs",
+      },
+      go = {
+        impl = "*.go",
+        test = "*_test.go",
+      },
+      python = {
+        impl = "*.py",
+        test = "test_*.py",
+      },
+      ruby = {
+        impl = "lib/*.rb",
+        test = "test/*_test.rb",
+      },
+    }
+
+    local function pattern_to_regex(pattern)
+      local escaped = pattern:gsub("%.", "%."):gsub("%-", "%-")
+      return "^" .. escaped:gsub("%*", "(.+)") .. "$"
+    end
+
+    local function pattern_to_format(pattern)
+      return pattern:gsub("%*", "%%s")
+    end
+
+    local function create_file_with_dirs(path)
+      local dir = vim.fn.fnamemodify(path, ":h")
+      if dir ~= "." and vim.fn.isdirectory(dir) == 0 then
+        vim.fn.mkdir(dir, "p")
+      end
+      vim.cmd("edit " .. path)
+      vim.cmd("write")
+    end
+
+    local function jump_between_implementation_and_test()
+      local buf_name = vim.fn.expand("%:.")
+      local ft = vim.bo.filetype
+      local patterns = file_patterns[ft]
+
+      if not patterns then
+        vim.notify("No test file pattern defined for filetype: " .. ft, vim.log.levels.WARN)
+        return
+      end
+
+      local impl_regex = pattern_to_regex(patterns.impl)
+      local test_regex = pattern_to_regex(patterns.test)
+
+      local impl_match = string.match(buf_name, impl_regex)
+      local test_match = string.match(buf_name, test_regex)
+
+      local target_path
+      local file_type
+      if impl_match then
+        target_path = string.format(pattern_to_format(patterns.test), impl_match)
+        file_type = "test"
+      elseif test_match then
+        target_path = string.format(pattern_to_format(patterns.impl), test_match)
+        file_type = "implementation"
+      else
+        vim.notify("Current file doesn't match any known pattern", vim.log.levels.WARN)
+        return
+      end
+
+      if vim.fn.filereadable(target_path) == 1 then
+        vim.cmd("edit " .. target_path)
+      else
+        vim.ui.select({ "Yes", "No" }, {
+          prompt = string.format("Create %s file at %s?", file_type, target_path),
+        }, function(choice)
+          if choice == "Yes" then
+            create_file_with_dirs(target_path)
+          end
+        end)
+      end
+    end
+
+    require("which-key").add({
+      {
+        "<leader>et",
+        jump_between_implementation_and_test,
+        desc = "Jump Between Implementation and Test",
+      },
+    })
+  end,
+})
+
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
 
 features.load()
