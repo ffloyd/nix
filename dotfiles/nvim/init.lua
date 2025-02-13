@@ -558,7 +558,6 @@ features.add({
     {
       "folke/snacks.nvim",
       opts = function(_, opts)
-        --- TODO: when this resolved adjust the config: https://github.com/folke/snacks.nvim/issues/965
         ---@type snacks.terminal.Config
         opts.terminal = {}
       end,
@@ -569,7 +568,12 @@ features.add({
       {
         "<leader>at",
         function()
-          Snacks.terminal.toggle()
+          Snacks.terminal.toggle(nil, {
+            start_insert = true,
+            auto_close = true,
+            -- to have a more consistent experience when jumping between windows and tabs
+            auto_insert = false,
+          })
         end,
         desc = "Terminal",
       },
@@ -1480,5 +1484,6 @@ features.add({
 })
 
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
+-- TODO: jump between tabs by g1, g2, g3, etc
 
 features.load()
