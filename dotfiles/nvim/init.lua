@@ -1206,23 +1206,10 @@ features.add({
       end,
     })
 
-    -- TODO: implement some spinner or blocking behavior
-    local insert_commit_message = function()
-      local cc = require("CopilotChat")
-      cc.ask("/Commit", {
-        headless = true,
-        callback = function(response)
-          local lines = vim.split(response, "\n")
-          vim.api.nvim_put(lines, "l", true, true)
-        end,
-      })
-    end
-
     require("which-key").add({
       { "<leader>ac", group = "Copilot Chat" },
       { "<leader>acc", "<cmd>CopilotChatToggle<cr>", desc = "Toggle Chat" },
       { "<leader>acm", "<cmd>CopilotChatModel<cr>", desc = "Change Model" },
-      { "<leader>acs", insert_commit_message, desc = "Insert Commit Message (staged)" },
       {
         "<leader>acq",
         function()
@@ -1234,6 +1221,45 @@ features.add({
         end,
         desc = "Quick chat",
       },
+    })
+  end,
+})
+
+features.add({
+  "Generate commit message from staged changes and insert it at cursor",
+  dependencies = {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    "nvim-tree/nvim-web-devicons",
+  },
+  setup = function()
+    -- TODO: implement some spinner or blocking behavior
+    local insert_commit_message = function()
+      local cc = require("CopilotChat")
+      local notification_title = "Copilot Chat"
+      local notification_id
+
+      notification_id = vim.notify("Generating commit message...", vim.log.levels.INFO, {
+        icon = "",
+        title = notification_title,
+        timeout = 0,
+      })
+
+      cc.ask("/Commit", {
+        headless = true,
+        callback = function(response)
+          local lines = vim.split(response, "\n")
+          vim.api.nvim_put(lines, "l", true, true)
+          Snacks.notifier.hide(notification_id)
+          vim.notify("Commit message inserted", vim.log.levels.INFO, {
+            icon = "✓",
+            title = notification_title,
+          })
+        end,
+      })
+    end
+
+    require("which-key").add({
+      { "<leader>acs", insert_commit_message, desc = "Insert Commit Message (staged)" },
     })
   end,
 })
