@@ -21,10 +21,6 @@
   # Enable usage of Darwin-rebuild without passing path to this flake
   environment.darwinConfig = "$HOME/nix/flake.nix";
 
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
-  # nix.package = pkgs.nix;
-
   # Set trusted users for nix-daemon
   nix.settings.trusted-users = ["root" private.darwinUsername];
 

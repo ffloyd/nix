@@ -587,28 +587,22 @@ features.add({
     { "folke/snacks.nvim" },
   },
   setup = function()
-    Snacks.toggle.words():map("<leader>tw")
+    Snacks.toggle.words():map("<leader>tW")
 
     require("which-key").add({
       {
-        "<a-n>",
+        "<M-n>",
         function()
           Snacks.words.jump(vim.v.count1, true)
         end,
         desc = "Next Reference",
-        cond = function()
-          return Snacks.words.is_enabled()
-        end,
       },
       {
-        "<a-p>",
+        "<M-p>",
         function()
           Snacks.words.jump(-vim.v.count1, true)
         end,
         desc = "Previous Reference",
-        cond = function()
-          return Snacks.words.is_enabled()
-        end,
       },
       {
         "gd",
@@ -978,7 +972,17 @@ features.add({
     {
       "MagicDuck/grug-far.nvim",
       dependencies = { "nvim-tree/nvim-web-devicons" },
-      opts = {},
+      ---@type GrugFarOptions
+      ---@diagnostic disable-next-line: missing-fields
+      opts = {
+        ---@diagnostic disable-next-line: missing-fields
+        engines = {
+          ---@diagnostic disable-next-line: missing-fields
+          astgrep = {
+            path = "ast-grep",
+          },
+        },
+      },
     },
   },
   setup = function()
@@ -1095,7 +1099,7 @@ features.add({
         desc = "Symbols (Trouble)",
       },
       {
-        "<leader>xl",
+        "<leader>xL",
         function()
           ---@diagnostic disable-next-line: missing-fields
           require("trouble").toggle({
@@ -1257,7 +1261,10 @@ features.add({
       ---@module 'render-markdown'
       ---@type render.md.UserConfig
       opts = {
-        filetypes = { "markdown" },
+        file_types = { "markdown" },
+        latex = {
+          enabled = false,
+        },
       },
     },
   },
@@ -1280,7 +1287,7 @@ features.add({
 --         {
 --           "MeanderingProgrammer/render-markdown.nvim",
 --           opts = function(_, opts)
---             table.insert(opts.filetypes, "Avante")
+--             table.insert(opts.file_types, "Avante")
 --           end,
 --         },
 --         {
