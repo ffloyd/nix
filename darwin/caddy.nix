@@ -4,8 +4,7 @@
   private,
   ...
 }: let
-  caddy = pkgs.caddy;
-  dnsmasq = pkgs.dnsmasq;
+  inherit (pkgs) caddy dnsmasq;
   addresses = {
     test = "127.0.0.1";
     "lb.here" = "127.0.0.1";

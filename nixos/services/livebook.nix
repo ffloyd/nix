@@ -4,7 +4,7 @@
   private,
   ...
 }: let
-  cudatoolkit = pkgs.cudaPackages.cudatoolkit;
+  inherit (pkgs.cudaPackages) cudatoolkit;
   dependencies = [pkgs.gnumake pkgs.gcc cudatoolkit pkgs.cudaPackages.cudnn];
   inherit (pkgs.lib) makeLibraryPath;
 in {

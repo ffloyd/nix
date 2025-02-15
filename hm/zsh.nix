@@ -5,8 +5,8 @@
   config,
   ...
 }: let
-  stdenv = pkgs.stdenv;
-  mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
+  inherit (pkgs) stdenv;
+  inherit (config.lib.file) mkOutOfStoreSymlink;
   terminalColorCodes = {
     NOCOLOR = "\033[0m";
     RED = "\033[0;31m";
