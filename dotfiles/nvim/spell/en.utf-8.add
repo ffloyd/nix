@@ -6,3 +6,8 @@ typespec
 demotivation
 styleguide
 codebases
+linters
+terraform
+lua
+formatters
+editorconfig
