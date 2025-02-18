@@ -1180,6 +1180,21 @@ features.add({
 })
 
 features.add({
+  "Get/open link to repo for browser",
+  plugins = {
+    {
+      "linrongbin16/gitlinker.nvim",
+      cmd = "GitLink",
+      opts = {},
+      keys = {
+        { "<leader>gy", "<cmd>GitLink<cr>",  mode = { "n", "v" }, desc = "Yank Git Link" },
+        { "<leader>gY", "<cmd>GitLink!<cr>", mode = { "n", "v" }, desc = "Open Git Link" },
+      },
+    },
+  },
+})
+
+features.add({
   "Copilot Chat (via CopilotChat.nvim)",
   plugins = {
     {
