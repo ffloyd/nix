@@ -1247,7 +1247,6 @@ features.add({
     "nvim-tree/nvim-web-devicons",
   },
   setup = function()
-    -- TODO: implement some spinner or blocking behavior
     local insert_commit_message = function()
       local cc = require("CopilotChat")
       local notification_title = "Copilot Chat"
@@ -1262,10 +1261,18 @@ features.add({
       cc.ask("/Commit", {
         headless = true,
         callback = function(response)
+          local original_response = response
+
+          -- Sometimes it return a message with snippet, but we need only snippet
+          local snippet_content = response:match("```%s*gitcommit\n(.+)```")
+          if snippet_content then
+            response = snippet_content
+          end
+
           local lines = vim.split(response, "\n")
-          vim.api.nvim_put(lines, "l", true, true)
+          vim.api.nvim_put(lines, "l", false, false)
           Snacks.notifier.hide(notification_id)
-          vim.notify("Commit message inserted", vim.log.levels.INFO, {
+          vim.notify("Commit message inserted, original response was:\n\n" .. original_response, vim.log.levels.INFO, {
             icon = "✓",
             title = notification_title,
           })
