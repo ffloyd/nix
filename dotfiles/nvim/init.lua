@@ -163,6 +163,7 @@ features.add({
         lspconfig.nixd.setup({ capabilities = capabilities })
         lspconfig.terraformls.setup({ capabilities = capabilities })
         lspconfig.ts_ls.setup({ capabilities = capabilities })
+        lspconfig.rust_analyzer.setup({ capabilities = capabilities })
       end,
     },
   },
@@ -646,6 +647,28 @@ features.add({
           Snacks.picker.lsp_symbols()
         end,
         desc = "LSP Symbols",
+      },
+    })
+  end,
+})
+
+features.add({
+  "LSP code actions & rename",
+  setup = function()
+    require("which-key").add({
+      {
+        "<leader>ea",
+        function()
+          vim.lsp.buf.code_action()
+        end,
+        desc = "LSP Code Actions",
+      },
+      {
+        "<leader>er",
+        function()
+          vim.lsp.buf.rename()
+        end,
+        desc = "LSP Rename",
       },
     })
   end,
