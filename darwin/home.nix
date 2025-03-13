@@ -41,8 +41,9 @@
     shellAliases = {
       os-rebuild = "darwin-rebuild switch --flake ~/nix";
       hm-rebuild = "home-manager switch --flake ~/nix";
-      wakeonlan-rig = "wakeonlan ${private.gamingRigMacAddress}";
-      wakeonlan-rig-by-ip = "wakeonlan -i $(dig +short rig.lan) ${private.gamingRigMacAddress}";
+      wakeonlan-rig = ''
+        curl -X POST -u ${private.routerUsername}:${private.routerPassword} http://${private.routerHost}/rest/tool/wol --data '{"mac": "${private.gamingRigMacAddress}", "interface": "bridge"}' -H "content-type: application/json"
+      '';
     };
   };
 
