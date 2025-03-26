@@ -280,7 +280,69 @@ features.add({
   },
 })
 
-require("finders")
+require("features").add({
+  "Enable fancy fuzzy finders",
+  plugins = {
+    {
+      "folke/snacks.nvim",
+    },
+  },
+  setup = function()
+    require("which-key").add({
+      -- Top-level finders
+      {
+        "<leader>fb",
+        function()
+          Snacks.picker.buffers()
+        end,
+        desc = "Buffer",
+      },
+      {
+        "<leader>fc",
+        function()
+          ---@diagnostic disable-next-line: assign-type-mismatch
+          Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
+        end,
+        desc = "Config File",
+      },
+      {
+        "<leader>ff",
+        function()
+          Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") })
+        end,
+        desc = "File (current buffer directory)",
+      },
+      {
+        "<leader>fg",
+        function()
+          Snacks.picker.grep()
+        end,
+        desc = "Grep Files",
+      },
+      {
+        "<leader>fG",
+        function()
+          Snacks.picker.git_files()
+        end,
+        desc = "Git File",
+      },
+      {
+        "<leader>fl",
+        function()
+          Snacks.picker.lines()
+        end,
+        desc = "Line",
+      },
+      {
+        "<leader>fr",
+        function()
+          Snacks.picker.recent()
+        end,
+        desc = "Recent",
+      },
+    })
+  end,
+})
 
 features.add({
   "Github Copilot integration",
@@ -485,8 +547,98 @@ features.add({
   end,
 })
 
-require("statusline")
-require("buffer_filename")
+features.add({
+  "Fancy global statusline",
+  plugins = {
+    {
+      "nvim-lualine/lualine.nvim",
+      dependencies = { "nvim-tree/nvim-web-devicons" },
+      opts = {
+        options = {
+          globalstatus = true,
+        },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = { "branch", "diff", "diagnostics" },
+          lualine_c = { { "filename", path = 1 } },
+          lualine_x = {
+            { "lsp_status", ignore_lsp = { "copilot" } },
+            "encoding",
+            "fileformat",
+            "filetype",
+          },
+          lualine_y = { "progress" },
+          lualine_z = { "location" },
+        },
+      },
+    },
+  },
+})
+
+features.add({
+  "Show Copilot status in the statusline",
+  plugins = {
+    { "AndreM222/copilot-lualine" },
+    {
+      "nvim-lualine/lualine.nvim",
+      opts = function(_, opts)
+        table.insert(opts.sections.lualine_x, 2, {
+          "copilot",
+          show_colors = true,
+          symbols = {
+            status = {
+              icons = {
+                enabled = "",
+                sleep = "", -- auto-trigger disabled
+                disabled = "",
+                warning = "",
+                unknown = "",
+              },
+            },
+          },
+        })
+      end,
+    },
+  },
+})
+
+require("features").add({
+  "Show file name in a buffer corner",
+  plugins = {
+    {
+      "b0o/incline.nvim",
+      init = function()
+        vim.o.laststatus = 3
+      end,
+      opts = {
+        window = {
+          padding = 0,
+          margin = { horizontal = 0 },
+        },
+        render = function(props)
+          local devicons = require("nvim-web-devicons")
+          local bg_color = require("kanagawa.colors").setup().theme.ui.bg_p1
+
+          local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
+          if filename == "" then
+            filename = "[No Name]"
+          end
+
+          local ft_icon, ft_color = devicons.get_icon_color(filename)
+          local modified = vim.bo[props.buf].modified
+
+          return {
+            ft_icon and { " ", ft_icon, " ", guifg = ft_color } or "",
+            " ",
+            { filename, gui = modified and "bold,italic" or "bold" },
+            " ",
+            guibg = bg_color,
+          }
+        end,
+      },
+    },
+  },
+})
 
 features.add({
   "Tabs control",
@@ -1341,90 +1493,6 @@ features.add({
   },
 })
 
--- features.add({
---   "Cursor-like experience with Avante",
---   plugins = {
---     {
---       "yetone/avante.nvim",
---       event = "VeryLazy",
---       build = "make",
---       init = function()
---         vim.o.laststatus = 3
---       end,
---       dependencies = {
---         "stevearc/dressing.nvim",
---         "nvim-lua/plenary.nvim",
---         "MunifTanjim/nui.nvim",
---         {
---           "MeanderingProgrammer/render-markdown.nvim",
---           opts = function(_, opts)
---             table.insert(opts.file_types, "Avante")
---           end,
---         },
---         {
---           "saghen/blink.cmp",
---           opts = function(_, opts)
---             table.insert(opts.sources.default, "avante_commands")
---             opts.sources.providers.avante_commands = {
---               name = "avante_commands",
---               module = "blink.compat.source",
---               score_offset = 90, -- show at a higher priority than lsp
---               opts = {},
---             }
---
---             table.insert(opts.sources.default, "avante_files")
---             opts.sources.providers.avante_files = {
---               name = "avante_commands",
---               module = "blink.compat.source",
---               score_offset = 100, -- show at a higher priority than lsp
---               opts = {},
---             }
---
---             table.insert(opts.sources.default, "avante_mentions")
---             opts.sources.providers.avante_mentions = {
---               name = "avante_mentions",
---               module = "blink.compat.source",
---               score_offset = 1000, -- show at a higher priority than lsp
---               opts = {},
---             }
---           end,
---         },
---       },
---       ---@module "avante"
---       ---@type avante.Config
---       ---@diagnostic disable-next-line: missing-fields
---       opts = {
---         provider = "copilot",
---         mappings = {
---           ask = "<leader>aaa",
---           edit = "<leader>aae",
---           refresh = "<leader>aar",
---           focus = "<leader>aaf",
---           toggle = {
---             default = "<leader>aat",
---             debug = "<leader>aad",
---             hint = "<leader>aah",
---             suggestion = "<leader>aas",
---             repomap = "<leader>aaR",
---           },
---           files = {
---             add_current = "<leader>aac",
---           },
---         },
---       },
---       setup = function()
---         require("which-key").add({
---           {
---             "<leader>aa",
---             "<cmd>AvanteToggle<cr>",
---             desc = "Toggle Avante",
---           },
---         })
---       end,
---     },
---   },
--- })
-
 features.add({
   "Support for Kitty terminal config",
   plugins = {
@@ -1626,6 +1694,42 @@ features.add({
     })
   end,
 })
+
+features.add({
+  "Support for EBNF syntax highlighting",
+  setup = function()
+    vim.filetype.add({
+      extension = {
+        ebnf = "ebnf",
+      },
+    })
+  end,
+})
+
+features.add({
+  "Opt-in LSP status reporting",
+  plugins = {
+    {
+      "j-hui/fidget.nvim",
+      opts = {},
+    },
+  },
+  setup = function()
+    require("which-key").add({
+      {
+        "<leader>tL",
+        function()
+          require("fidget").notification.suppress()
+        end,
+        desc = "Toggle LSP Status Logging",
+      },
+    })
+
+    -- Suppress notifications by default to reduce noise
+    require("fidget").notification.suppress(true)
+  end,
+})
+
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
 -- TODO: jump between tabs by g1, g2, g3, etc
 
