@@ -28,7 +28,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
       { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out, "WarningMsg" },
+      { out,                            "WarningMsg" },
       { "\nPress any key to exit..." },
     }, true, {})
     vim.fn.getchar()
@@ -160,6 +160,7 @@ features.add({
           cmd = { "lexical" },
           capabilities = capabilities,
         })
+        -- lspconfig.elixirls.setup({ capabilities = capabilities, cmd = { "elixir-ls" } })
         lspconfig.nixd.setup({ capabilities = capabilities })
         lspconfig.terraformls.setup({ capabilities = capabilities })
         lspconfig.ts_ls.setup({ capabilities = capabilities })
@@ -475,7 +476,7 @@ features.add({
     {
       "NeogitOrg/neogit",
       dependencies = {
-        "nvim-lua/plenary.nvim", -- required
+        "nvim-lua/plenary.nvim",  -- required
         "sindrets/diffview.nvim", -- optional - Diff integration
       },
       opts = {
@@ -806,12 +807,20 @@ features.add({
 
 features.add({
   "LSP code actions & rename",
+  plugins = {
+    {
+      "aznhe21/actions-preview.nvim",
+      opts = {
+        backend = { "snacks" },
+      },
+    },
+  },
   setup = function()
     require("which-key").add({
       {
         "<leader>ea",
         function()
-          vim.lsp.buf.code_action()
+          require("actions-preview").code_actions()
         end,
         desc = "LSP Code Actions",
       },
@@ -838,16 +847,16 @@ features.add({
   },
   setup = function()
     Snacks.toggle
-      .new({
-        name = "Git Signs",
-        get = function()
-          return require("gitsigns.config").config.signcolumn
-        end,
-        set = function(state)
-          require("gitsigns").toggle_signs(state)
-        end,
-      })
-      :map("<leader>tg")
+        .new({
+          name = "Git Signs",
+          get = function()
+            return require("gitsigns.config").config.signcolumn
+          end,
+          set = function(state)
+            require("gitsigns").toggle_signs(state)
+          end,
+        })
+        :map("<leader>tg")
   end,
 })
 
@@ -936,16 +945,16 @@ features.add({
   },
   setup = function()
     Snacks.toggle
-      .new({
-        name = "Current Line Blame",
-        get = function()
-          return require("gitsigns.config").config.current_line_blame
-        end,
-        set = function(state)
-          require("gitsigns").toggle_current_line_blame(state)
-        end,
-      })
-      :map("<leader>tb")
+        .new({
+          name = "Current Line Blame",
+          get = function()
+            return require("gitsigns.config").config.current_line_blame
+          end,
+          set = function(state)
+            require("gitsigns").toggle_current_line_blame(state)
+          end,
+        })
+        :map("<leader>tb")
 
     require("which-key").add({
       {
@@ -1039,33 +1048,33 @@ features.add({
         remap = false,
         { "<C-g><C-t>", ":<C-u>'<,'>GpChatNew tabnew<cr>", desc = "ChatNew tabnew" },
         { "<C-g><C-v>", ":<C-u>'<,'>GpChatNew vsplit<cr>", desc = "ChatNew vsplit" },
-        { "<C-g><C-x>", ":<C-u>'<,'>GpChatNew split<cr>", desc = "ChatNew split" },
-        { "<C-g>a", ":<C-u>'<,'>GpAppend<cr>", desc = "Visual Append (after)" },
-        { "<C-g>b", ":<C-u>'<,'>GpPrepend<cr>", desc = "Visual Prepend (before)" },
-        { "<C-g>c", ":<C-u>'<,'>GpChatNew<cr>", desc = "Visual Chat New" },
-        { "<C-g>g", group = "generate into new .." },
-        { "<C-g>ge", ":<C-u>'<,'>GpEnew<cr>", desc = "Visual GpEnew" },
-        { "<C-g>gn", ":<C-u>'<,'>GpNew<cr>", desc = "Visual GpNew" },
-        { "<C-g>gp", ":<C-u>'<,'>GpPopup<cr>", desc = "Visual Popup" },
-        { "<C-g>gt", ":<C-u>'<,'>GpTabnew<cr>", desc = "Visual GpTabnew" },
-        { "<C-g>gv", ":<C-u>'<,'>GpVnew<cr>", desc = "Visual GpVnew" },
-        { "<C-g>i", ":<C-u>'<,'>GpImplement<cr>", desc = "Implement selection" },
-        { "<C-g>n", "<cmd>GpNextAgent<cr>", desc = "Next Agent" },
-        { "<C-g>p", ":<C-u>'<,'>GpChatPaste<cr>", desc = "Visual Chat Paste" },
-        { "<C-g>r", ":<C-u>'<,'>GpRewrite<cr>", desc = "Visual Rewrite" },
-        { "<C-g>s", "<cmd>GpStop<cr>", desc = "GpStop" },
-        { "<C-g>t", ":<C-u>'<,'>GpChatToggle<cr>", desc = "Visual Toggle Chat" },
-        { "<C-g>w", group = "Whisper" },
-        { "<C-g>wa", ":<C-u>'<,'>GpWhisperAppend<cr>", desc = "Whisper Append" },
-        { "<C-g>wb", ":<C-u>'<,'>GpWhisperPrepend<cr>", desc = "Whisper Prepend" },
-        { "<C-g>we", ":<C-u>'<,'>GpWhisperEnew<cr>", desc = "Whisper Enew" },
-        { "<C-g>wn", ":<C-u>'<,'>GpWhisperNew<cr>", desc = "Whisper New" },
-        { "<C-g>wp", ":<C-u>'<,'>GpWhisperPopup<cr>", desc = "Whisper Popup" },
-        { "<C-g>wr", ":<C-u>'<,'>GpWhisperRewrite<cr>", desc = "Whisper Rewrite" },
-        { "<C-g>wt", ":<C-u>'<,'>GpWhisperTabnew<cr>", desc = "Whisper Tabnew" },
-        { "<C-g>wv", ":<C-u>'<,'>GpWhisperVnew<cr>", desc = "Whisper Vnew" },
-        { "<C-g>ww", ":<C-u>'<,'>GpWhisper<cr>", desc = "Whisper" },
-        { "<C-g>x", ":<C-u>'<,'>GpContext<cr>", desc = "Visual GpContext" },
+        { "<C-g><C-x>", ":<C-u>'<,'>GpChatNew split<cr>",  desc = "ChatNew split" },
+        { "<C-g>a",     ":<C-u>'<,'>GpAppend<cr>",         desc = "Visual Append (after)" },
+        { "<C-g>b",     ":<C-u>'<,'>GpPrepend<cr>",        desc = "Visual Prepend (before)" },
+        { "<C-g>c",     ":<C-u>'<,'>GpChatNew<cr>",        desc = "Visual Chat New" },
+        { "<C-g>g",     group = "generate into new .." },
+        { "<C-g>ge",    ":<C-u>'<,'>GpEnew<cr>",           desc = "Visual GpEnew" },
+        { "<C-g>gn",    ":<C-u>'<,'>GpNew<cr>",            desc = "Visual GpNew" },
+        { "<C-g>gp",    ":<C-u>'<,'>GpPopup<cr>",          desc = "Visual Popup" },
+        { "<C-g>gt",    ":<C-u>'<,'>GpTabnew<cr>",         desc = "Visual GpTabnew" },
+        { "<C-g>gv",    ":<C-u>'<,'>GpVnew<cr>",           desc = "Visual GpVnew" },
+        { "<C-g>i",     ":<C-u>'<,'>GpImplement<cr>",      desc = "Implement selection" },
+        { "<C-g>n",     "<cmd>GpNextAgent<cr>",            desc = "Next Agent" },
+        { "<C-g>p",     ":<C-u>'<,'>GpChatPaste<cr>",      desc = "Visual Chat Paste" },
+        { "<C-g>r",     ":<C-u>'<,'>GpRewrite<cr>",        desc = "Visual Rewrite" },
+        { "<C-g>s",     "<cmd>GpStop<cr>",                 desc = "GpStop" },
+        { "<C-g>t",     ":<C-u>'<,'>GpChatToggle<cr>",     desc = "Visual Toggle Chat" },
+        { "<C-g>w",     group = "Whisper" },
+        { "<C-g>wa",    ":<C-u>'<,'>GpWhisperAppend<cr>",  desc = "Whisper Append" },
+        { "<C-g>wb",    ":<C-u>'<,'>GpWhisperPrepend<cr>", desc = "Whisper Prepend" },
+        { "<C-g>we",    ":<C-u>'<,'>GpWhisperEnew<cr>",    desc = "Whisper Enew" },
+        { "<C-g>wn",    ":<C-u>'<,'>GpWhisperNew<cr>",     desc = "Whisper New" },
+        { "<C-g>wp",    ":<C-u>'<,'>GpWhisperPopup<cr>",   desc = "Whisper Popup" },
+        { "<C-g>wr",    ":<C-u>'<,'>GpWhisperRewrite<cr>", desc = "Whisper Rewrite" },
+        { "<C-g>wt",    ":<C-u>'<,'>GpWhisperTabnew<cr>",  desc = "Whisper Tabnew" },
+        { "<C-g>wv",    ":<C-u>'<,'>GpWhisperVnew<cr>",    desc = "Whisper Vnew" },
+        { "<C-g>ww",    ":<C-u>'<,'>GpWhisper<cr>",        desc = "Whisper" },
+        { "<C-g>x",     ":<C-u>'<,'>GpContext<cr>",        desc = "Visual GpContext" },
       },
 
       -- NORMAL mode mappings
@@ -1073,34 +1082,34 @@ features.add({
         mode = { "n" },
         nowait = true,
         remap = false,
-        { "<C-g><C-t>", "<cmd>GpChatNew tabnew<cr>", desc = "New Chat tabnew" },
-        { "<C-g><C-v>", "<cmd>GpChatNew vsplit<cr>", desc = "New Chat vsplit" },
-        { "<C-g><C-x>", "<cmd>GpChatNew split<cr>", desc = "New Chat split" },
-        { "<C-g>a", "<cmd>GpAppend<cr>", desc = "Append (after)" },
-        { "<C-g>b", "<cmd>GpPrepend<cr>", desc = "Prepend (before)" },
-        { "<C-g>c", "<cmd>GpChatNew<cr>", desc = "New Chat" },
-        { "<C-g>f", "<cmd>GpChatFinder<cr>", desc = "Chat Finder" },
-        { "<C-g>g", group = "generate into new .." },
-        { "<C-g>ge", "<cmd>GpEnew<cr>", desc = "GpEnew" },
-        { "<C-g>gn", "<cmd>GpNew<cr>", desc = "GpNew" },
-        { "<C-g>gp", "<cmd>GpPopup<cr>", desc = "Popup" },
-        { "<C-g>gt", "<cmd>GpTabnew<cr>", desc = "GpTabnew" },
-        { "<C-g>gv", "<cmd>GpVnew<cr>", desc = "GpVnew" },
-        { "<C-g>n", "<cmd>GpNextAgent<cr>", desc = "Next Agent" },
-        { "<C-g>r", "<cmd>GpRewrite<cr>", desc = "Inline Rewrite" },
-        { "<C-g>s", "<cmd>GpStop<cr>", desc = "GpStop" },
-        { "<C-g>t", "<cmd>GpChatToggle<cr>", desc = "Toggle Chat" },
-        { "<C-g>w", group = "Whisper" },
-        { "<C-g>wa", "<cmd>GpWhisperAppend<cr>", desc = "Whisper Append (after)" },
-        { "<C-g>wb", "<cmd>GpWhisperPrepend<cr>", desc = "Whisper Prepend (before)" },
-        { "<C-g>we", "<cmd>GpWhisperEnew<cr>", desc = "Whisper Enew" },
-        { "<C-g>wn", "<cmd>GpWhisperNew<cr>", desc = "Whisper New" },
-        { "<C-g>wp", "<cmd>GpWhisperPopup<cr>", desc = "Whisper Popup" },
-        { "<C-g>wr", "<cmd>GpWhisperRewrite<cr>", desc = "Whisper Inline Rewrite" },
-        { "<C-g>wt", "<cmd>GpWhisperTabnew<cr>", desc = "Whisper Tabnew" },
-        { "<C-g>wv", "<cmd>GpWhisperVnew<cr>", desc = "Whisper Vnew" },
-        { "<C-g>ww", "<cmd>GpWhisper<cr>", desc = "Whisper" },
-        { "<C-g>x", "<cmd>GpContext<cr>", desc = "Toggle GpContext" },
+        { "<C-g><C-t>", "<cmd>GpChatNew tabnew<cr>",   desc = "New Chat tabnew" },
+        { "<C-g><C-v>", "<cmd>GpChatNew vsplit<cr>",   desc = "New Chat vsplit" },
+        { "<C-g><C-x>", "<cmd>GpChatNew split<cr>",    desc = "New Chat split" },
+        { "<C-g>a",     "<cmd>GpAppend<cr>",           desc = "Append (after)" },
+        { "<C-g>b",     "<cmd>GpPrepend<cr>",          desc = "Prepend (before)" },
+        { "<C-g>c",     "<cmd>GpChatNew<cr>",          desc = "New Chat" },
+        { "<C-g>f",     "<cmd>GpChatFinder<cr>",       desc = "Chat Finder" },
+        { "<C-g>g",     group = "generate into new .." },
+        { "<C-g>ge",    "<cmd>GpEnew<cr>",             desc = "GpEnew" },
+        { "<C-g>gn",    "<cmd>GpNew<cr>",              desc = "GpNew" },
+        { "<C-g>gp",    "<cmd>GpPopup<cr>",            desc = "Popup" },
+        { "<C-g>gt",    "<cmd>GpTabnew<cr>",           desc = "GpTabnew" },
+        { "<C-g>gv",    "<cmd>GpVnew<cr>",             desc = "GpVnew" },
+        { "<C-g>n",     "<cmd>GpNextAgent<cr>",        desc = "Next Agent" },
+        { "<C-g>r",     "<cmd>GpRewrite<cr>",          desc = "Inline Rewrite" },
+        { "<C-g>s",     "<cmd>GpStop<cr>",             desc = "GpStop" },
+        { "<C-g>t",     "<cmd>GpChatToggle<cr>",       desc = "Toggle Chat" },
+        { "<C-g>w",     group = "Whisper" },
+        { "<C-g>wa",    "<cmd>GpWhisperAppend<cr>",    desc = "Whisper Append (after)" },
+        { "<C-g>wb",    "<cmd>GpWhisperPrepend<cr>",   desc = "Whisper Prepend (before)" },
+        { "<C-g>we",    "<cmd>GpWhisperEnew<cr>",      desc = "Whisper Enew" },
+        { "<C-g>wn",    "<cmd>GpWhisperNew<cr>",       desc = "Whisper New" },
+        { "<C-g>wp",    "<cmd>GpWhisperPopup<cr>",     desc = "Whisper Popup" },
+        { "<C-g>wr",    "<cmd>GpWhisperRewrite<cr>",   desc = "Whisper Inline Rewrite" },
+        { "<C-g>wt",    "<cmd>GpWhisperTabnew<cr>",    desc = "Whisper Tabnew" },
+        { "<C-g>wv",    "<cmd>GpWhisperVnew<cr>",      desc = "Whisper Vnew" },
+        { "<C-g>ww",    "<cmd>GpWhisper<cr>",          desc = "Whisper" },
+        { "<C-g>x",     "<cmd>GpContext<cr>",          desc = "Toggle GpContext" },
       },
 
       -- INSERT mode mappings
@@ -1108,34 +1117,34 @@ features.add({
         mode = { "i" },
         nowait = true,
         remap = false,
-        { "<C-g><C-t>", "<cmd>GpChatNew tabnew<cr>", desc = "New Chat tabnew" },
-        { "<C-g><C-v>", "<cmd>GpChatNew vsplit<cr>", desc = "New Chat vsplit" },
-        { "<C-g><C-x>", "<cmd>GpChatNew split<cr>", desc = "New Chat split" },
-        { "<C-g>a", "<cmd>GpAppend<cr>", desc = "Append (after)" },
-        { "<C-g>b", "<cmd>GpPrepend<cr>", desc = "Prepend (before)" },
-        { "<C-g>c", "<cmd>GpChatNew<cr>", desc = "New Chat" },
-        { "<C-g>f", "<cmd>GpChatFinder<cr>", desc = "Chat Finder" },
-        { "<C-g>g", group = "generate into new .." },
-        { "<C-g>ge", "<cmd>GpEnew<cr>", desc = "GpEnew" },
-        { "<C-g>gn", "<cmd>GpNew<cr>", desc = "GpNew" },
-        { "<C-g>gp", "<cmd>GpPopup<cr>", desc = "Popup" },
-        { "<C-g>gt", "<cmd>GpTabnew<cr>", desc = "GpTabnew" },
-        { "<C-g>gv", "<cmd>GpVnew<cr>", desc = "GpVnew" },
-        { "<C-g>n", "<cmd>GpNextAgent<cr>", desc = "Next Agent" },
-        { "<C-g>r", "<cmd>GpRewrite<cr>", desc = "Inline Rewrite" },
-        { "<C-g>s", "<cmd>GpStop<cr>", desc = "GpStop" },
-        { "<C-g>t", "<cmd>GpChatToggle<cr>", desc = "Toggle Chat" },
-        { "<C-g>w", group = "Whisper" },
-        { "<C-g>wa", "<cmd>GpWhisperAppend<cr>", desc = "Whisper Append (after)" },
-        { "<C-g>wb", "<cmd>GpWhisperPrepend<cr>", desc = "Whisper Prepend (before)" },
-        { "<C-g>we", "<cmd>GpWhisperEnew<cr>", desc = "Whisper Enew" },
-        { "<C-g>wn", "<cmd>GpWhisperNew<cr>", desc = "Whisper New" },
-        { "<C-g>wp", "<cmd>GpWhisperPopup<cr>", desc = "Whisper Popup" },
-        { "<C-g>wr", "<cmd>GpWhisperRewrite<cr>", desc = "Whisper Inline Rewrite" },
-        { "<C-g>wt", "<cmd>GpWhisperTabnew<cr>", desc = "Whisper Tabnew" },
-        { "<C-g>wv", "<cmd>GpWhisperVnew<cr>", desc = "Whisper Vnew" },
-        { "<C-g>ww", "<cmd>GpWhisper<cr>", desc = "Whisper" },
-        { "<C-g>x", "<cmd>GpContext<cr>", desc = "Toggle GpContext" },
+        { "<C-g><C-t>", "<cmd>GpChatNew tabnew<cr>",   desc = "New Chat tabnew" },
+        { "<C-g><C-v>", "<cmd>GpChatNew vsplit<cr>",   desc = "New Chat vsplit" },
+        { "<C-g><C-x>", "<cmd>GpChatNew split<cr>",    desc = "New Chat split" },
+        { "<C-g>a",     "<cmd>GpAppend<cr>",           desc = "Append (after)" },
+        { "<C-g>b",     "<cmd>GpPrepend<cr>",          desc = "Prepend (before)" },
+        { "<C-g>c",     "<cmd>GpChatNew<cr>",          desc = "New Chat" },
+        { "<C-g>f",     "<cmd>GpChatFinder<cr>",       desc = "Chat Finder" },
+        { "<C-g>g",     group = "generate into new .." },
+        { "<C-g>ge",    "<cmd>GpEnew<cr>",             desc = "GpEnew" },
+        { "<C-g>gn",    "<cmd>GpNew<cr>",              desc = "GpNew" },
+        { "<C-g>gp",    "<cmd>GpPopup<cr>",            desc = "Popup" },
+        { "<C-g>gt",    "<cmd>GpTabnew<cr>",           desc = "GpTabnew" },
+        { "<C-g>gv",    "<cmd>GpVnew<cr>",             desc = "GpVnew" },
+        { "<C-g>n",     "<cmd>GpNextAgent<cr>",        desc = "Next Agent" },
+        { "<C-g>r",     "<cmd>GpRewrite<cr>",          desc = "Inline Rewrite" },
+        { "<C-g>s",     "<cmd>GpStop<cr>",             desc = "GpStop" },
+        { "<C-g>t",     "<cmd>GpChatToggle<cr>",       desc = "Toggle Chat" },
+        { "<C-g>w",     group = "Whisper" },
+        { "<C-g>wa",    "<cmd>GpWhisperAppend<cr>",    desc = "Whisper Append (after)" },
+        { "<C-g>wb",    "<cmd>GpWhisperPrepend<cr>",   desc = "Whisper Prepend (before)" },
+        { "<C-g>we",    "<cmd>GpWhisperEnew<cr>",      desc = "Whisper Enew" },
+        { "<C-g>wn",    "<cmd>GpWhisperNew<cr>",       desc = "Whisper New" },
+        { "<C-g>wp",    "<cmd>GpWhisperPopup<cr>",     desc = "Whisper Popup" },
+        { "<C-g>wr",    "<cmd>GpWhisperRewrite<cr>",   desc = "Whisper Inline Rewrite" },
+        { "<C-g>wt",    "<cmd>GpWhisperTabnew<cr>",    desc = "Whisper Tabnew" },
+        { "<C-g>wv",    "<cmd>GpWhisperVnew<cr>",      desc = "Whisper Vnew" },
+        { "<C-g>ww",    "<cmd>GpWhisper<cr>",          desc = "Whisper" },
+        { "<C-g>x",     "<cmd>GpContext<cr>",          desc = "Toggle GpContext" },
       },
     })
   end,
@@ -1178,9 +1187,9 @@ features.add({
     require("which-key").add({
       { "<leader>ss", "<cmd>GrugFar ripgrep<cr>", desc = "Search in project (ripgrep)" },
       { "<leader>sS", "<cmd>GrugFar astgrep<cr>", desc = "Search in project (ast-grep)" },
-      { "<leader>sw", search_word_ripgrep, desc = "Search word in project (ripgrep)" },
-      { "<leader>sf", search_file_ripgrep, desc = "Search in file (ripgrep)" },
-      { "<leader>sF", search_file_astgrep, desc = "Search in file (ast-grep)" },
+      { "<leader>sw", search_word_ripgrep,        desc = "Search word in project (ripgrep)" },
+      { "<leader>sf", search_file_ripgrep,        desc = "Search in file (ripgrep)" },
+      { "<leader>sF", search_file_astgrep,        desc = "Search in file (ast-grep)" },
     })
   end,
 })
@@ -1303,11 +1312,11 @@ features.add({
   "Control LSP status",
   setup = function()
     require("which-key").add({
-      { "<leader>ul", group = "LSP" },
-      { "<leader>ull", "<cmd>LspInfo<cr>", desc = "LSP info" },
-      { "<leader>ulL", "<cmd>LspLog<cr>", desc = "LSP log" },
-      { "<leader>uls", "<cmd>LspStart<cr>", desc = "LSP start" },
-      { "<leader>ulx", "<cmd>LspStop<cr>", desc = "LSP stop" },
+      { "<leader>ul",  group = "LSP" },
+      { "<leader>ull", "<cmd>LspInfo<cr>",    desc = "LSP info" },
+      { "<leader>ulL", "<cmd>LspLog<cr>",     desc = "LSP log" },
+      { "<leader>uls", "<cmd>LspStart<cr>",   desc = "LSP start" },
+      { "<leader>ulx", "<cmd>LspStop<cr>",    desc = "LSP stop" },
       { "<leader>ulr", "<cmd>LspRestart<cr>", desc = "LSP restart" },
     })
   end,
@@ -1362,7 +1371,7 @@ features.add({
       cmd = "GitLink",
       opts = {},
       keys = {
-        { "<leader>gy", "<cmd>GitLink<cr>", mode = { "n", "v" }, desc = "Yank Git Link" },
+        { "<leader>gy", "<cmd>GitLink<cr>",  mode = { "n", "v" }, desc = "Yank Git Link" },
         { "<leader>gY", "<cmd>GitLink!<cr>", mode = { "n", "v" }, desc = "Open Git Link" },
       },
     },
@@ -1397,9 +1406,9 @@ features.add({
     })
 
     require("which-key").add({
-      { "<leader>ac", group = "Copilot Chat" },
+      { "<leader>ac",  group = "Copilot Chat" },
       { "<leader>acc", "<cmd>CopilotChatToggle<cr>", desc = "Toggle Chat" },
-      { "<leader>acm", "<cmd>CopilotChatModel<cr>", desc = "Change Model" },
+      { "<leader>acm", "<cmd>CopilotChatModel<cr>",  desc = "Change Model" },
       {
         "<leader>acq",
         function()
@@ -1707,7 +1716,7 @@ features.add({
 })
 
 features.add({
-  "Opt-in LSP status reporting",
+  "Opt-in verbose LSP progress reporting",
   plugins = {
     {
       "j-hui/fidget.nvim",
@@ -1715,18 +1724,22 @@ features.add({
     },
   },
   setup = function()
-    require("which-key").add({
-      {
-        "<leader>tL",
-        function()
-          require("fidget").notification.suppress()
-        end,
-        desc = "Toggle LSP Status Logging",
-      },
-    })
-
     -- Suppress notifications by default to reduce noise
     require("fidget").notification.suppress(true)
+    local enabled = false
+
+    Snacks.toggle
+        .new({
+          name = "LSP Progress Notifications",
+          get = function()
+            return enabled
+          end,
+          set = function(state)
+            require("fidget").notification.suppress(not state)
+            enabled = state
+          end,
+        })
+        :map("<leader>tL")
   end,
 })
 
@@ -1741,7 +1754,6 @@ features.add({
         code_lenses = true,
         autocmd = {
           enabled = true,
-          updatetime = 1000,
         },
         filter = function(client_name, result)
           if client_name == "lexical" and result.kind == "source.organizeImports" then
@@ -1758,27 +1770,27 @@ features.add({
     local nvim_lightbulb = require("nvim-lightbulb")
 
     Snacks.toggle
-      .new({
-        name = "LSP Actions Lightbulb",
-        get = function()
-          return lightbulb_enabled
-        end,
-        set = function(state)
-          ---@type nvim-lightbulb.Config
-          ---@diagnostic disable-next-line: missing-fields
-          local next_config = {
-            code_lenses = state,
-            autocmd = { enabled = state },
-            sign = { enabled = state },
-          }
+        .new({
+          name = "LSP Actions Lightbulb",
+          get = function()
+            return lightbulb_enabled
+          end,
+          set = function(state)
+            ---@type nvim-lightbulb.Config
+            ---@diagnostic disable-next-line: missing-fields
+            local next_config = {
+              code_lenses = state,
+              autocmd = { enabled = state },
+              sign = { enabled = state },
+            }
 
-          nvim_lightbulb.update_lightbulb(next_config)
-          nvim_lightbulb.setup(next_config)
+            nvim_lightbulb.update_lightbulb(next_config)
+            nvim_lightbulb.setup(next_config)
 
-          lightbulb_enabled = state
-        end,
-      })
-      :map("<leader>ta")
+            lightbulb_enabled = state
+          end,
+        })
+        :map("<leader>ta")
   end,
 })
 
