@@ -11,7 +11,6 @@
 
   imports = [
     ../hm/devtools.nix
-    ../hm/emacs.nix
     ../hm/git.nix
     ../hm/gpg.nix
     ../hm/neovim.nix
@@ -34,7 +33,6 @@
   home.packages = with pkgs; [
     # for remote gaming
     wakeonlan # wake on LAN my gaming rig
-    moonlight-qt # stream games from my gaming rig
   ];
 
   programs.zsh = {

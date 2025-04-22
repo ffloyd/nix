@@ -52,6 +52,7 @@
       "vlc"
       "kegworks" # wrapper for Windows games (for HOMM3 for example)
       "streetpea/streetpea/chiaki-ng" # stream games from my PS4
+      "moonlight" # stream games from my gaming rig
     ];
   };
 }
