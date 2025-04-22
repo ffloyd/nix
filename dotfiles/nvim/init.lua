@@ -1796,5 +1796,10 @@ features.add({
 
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
 -- TODO: jump between tabs by g1, g2, g3, etc
+-- TODO: add Snack.image support
+-- TODO: switch to CodeCompanion and adopt mcp
+-- TODO: improve Copilot highlighting
+-- TODO: fix autocompletion behavior in command mode
+-- TODO: disable trailing spaces warnings in insert mode
 
 features.load()
