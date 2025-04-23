@@ -28,6 +28,7 @@
       "loom"
       "notion"
       "linear-linear"
+      "xmind"
 
       # Social
       "telegram"
