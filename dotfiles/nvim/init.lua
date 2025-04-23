@@ -358,7 +358,13 @@ features.add({
           keymap = {
             accept = "<M-S-l>",
             accept_line = "<M-l>",
+            next = "<M-]>",
+            prev = "<M-[>",
+            dismiss = "<C-]>",
           },
+        },
+        filetypes = {
+          markdown = true,
         },
         panel = { enabled = false },
       },
@@ -1379,6 +1385,36 @@ features.add({
 })
 
 features.add({
+  "Copilot Chat (via CodeCompanion)",
+  plugins = {
+    {
+      "olimorris/codecompanion.nvim",
+      opts = {},
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-treesitter/nvim-treesitter",
+        {
+          "saghen/blink.cmp",
+          opts = function(_, opts)
+            opts.sources = opts.sources or {}
+            opts.sources.per_filetype = opts.sources.per_filetype or {}
+            opts.sources.per_filetype.codecompanion = { "codecompanion" }
+          end,
+        },
+      },
+    },
+  },
+  setup = function ()
+    require("which-key").add({
+      { "<leader>ac", group = "Code Companion" },
+      { "<leader>acc", "<cmd>CodeCompanionChat<cr>", desc = "Chat" },
+      { "<leader>aca", "<cmd>CodeCompanionActions<cr>",  desc = "Action" },
+      { "<leader>acg", "<cmd>CodeCompanionInline<cr>", desc = "Inline" },
+    })
+  end
+})
+
+features.add({
   "Copilot Chat (via CopilotChat.nvim)",
   plugins = {
     {
@@ -1406,9 +1442,9 @@ features.add({
     })
 
     require("which-key").add({
-      { "<leader>ac",  group = "Copilot Chat" },
-      { "<leader>acc", "<cmd>CopilotChatToggle<cr>", desc = "Toggle Chat" },
-      { "<leader>acm", "<cmd>CopilotChatModel<cr>",  desc = "Change Model" },
+      { "<leader>aC",  group = "Copilot Chat" },
+      { "<leader>aCc", "<cmd>CopilotChatToggle<cr>", desc = "Toggle Chat" },
+      { "<leader>aCm", "<cmd>CopilotChatModel<cr>",  desc = "Change Model" },
       {
         "<leader>acq",
         function()
