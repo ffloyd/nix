@@ -1409,7 +1409,7 @@ features.add({
       { "<leader>ac", group = "Code Companion" },
       { "<leader>acc", "<cmd>CodeCompanionChat<cr>", desc = "Chat" },
       { "<leader>aca", "<cmd>CodeCompanionActions<cr>",  desc = "Action" },
-      { "<leader>acg", "<cmd>CodeCompanionInline<cr>", desc = "Inline" },
+      { "<leader>aci", "<cmd>CodeCompanion<cr>", desc = "Inline", mode = { "n", "v" } },
     })
   end
 })
@@ -1501,7 +1501,7 @@ features.add({
     end
 
     require("which-key").add({
-      { "<leader>acs", insert_commit_message, desc = "Insert Commit Message (staged)" },
+      { "<leader>aCs", insert_commit_message, desc = "Insert Commit Message (staged)" },
     })
   end,
 })
