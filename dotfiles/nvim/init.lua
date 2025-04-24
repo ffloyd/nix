@@ -1389,10 +1389,20 @@ features.add({
   plugins = {
     {
       "olimorris/codecompanion.nvim",
-      opts = {},
+      opts = function(_, opts)
+        opts.adapters = opts.adapters or {}
+        opts.adapters.copilot = require("codecompanion.adapters").extend("copilot", {
+          schema = {
+            model = {
+              default = "claude-3.5-sonnet",
+            },
+          },
+        })
+      end,
       dependencies = {
         "nvim-lua/plenary.nvim",
         "nvim-treesitter/nvim-treesitter",
+        "j-hui/fidget.nvim",
         {
           "saghen/blink.cmp",
           opts = function(_, opts)
@@ -1404,14 +1414,16 @@ features.add({
       },
     },
   },
-  setup = function ()
+  setup = function()
     require("which-key").add({
-      { "<leader>ac", group = "Code Companion" },
-      { "<leader>acc", "<cmd>CodeCompanionChat<cr>", desc = "Chat" },
-      { "<leader>aca", "<cmd>CodeCompanionActions<cr>",  desc = "Action" },
-      { "<leader>aci", "<cmd>CodeCompanion<cr>", desc = "Inline", mode = { "n", "v" } },
+      { "<leader>ac",  group = "Code Companion",        mode = { "n", "v" } },
+      { "<leader>acc", "<cmd>CodeCompanionChat<cr>",    desc = "Chat" },
+      { "<leader>aca", "<cmd>CodeCompanionActions<cr>", desc = "Action" },
+      { "<leader>aci", "<cmd>CodeCompanion<cr>",        desc = "Inline",    mode = { "n", "v" } },
     })
-  end
+
+    require("codecompanion-fidget-spinner"):init()
+  end,
 })
 
 features.add({
@@ -1660,7 +1672,7 @@ features.add({
 })
 
 features.add({
-  "Opt-in verbose LSP progress reporting",
+  "Opt-in fidget notifications (used for LSP and CodeCompanion at the moment)",
   plugins = {
     {
       "j-hui/fidget.nvim",
@@ -1674,7 +1686,7 @@ features.add({
 
     Snacks.toggle
         .new({
-          name = "LSP Progress Notifications",
+          name = "Fidget Notifications (LSP, LLMs)",
           get = function()
             return enabled
           end,
@@ -1683,7 +1695,7 @@ features.add({
             enabled = state
           end,
         })
-        :map("<leader>tL")
+        :map("<leader>tf")
   end,
 })
 
@@ -1741,7 +1753,7 @@ features.add({
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
 -- TODO: jump between tabs by g1, g2, g3, etc
 -- TODO: add Snack.image support
--- TODO: switch to CodeCompanion and adopt mcp
+-- TODO: switch to CodeCompanion and adopt mcp - ____IN PROGRESS____
 -- TODO: improve Copilot highlighting
 -- TODO: fix autocompletion behavior in command mode
 -- TODO: disable trailing spaces warnings in insert mode
