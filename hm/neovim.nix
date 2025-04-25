@@ -9,6 +9,25 @@
   ...
 }: let
   inherit (config.lib.file) mkOutOfStoreSymlink;
+  neovim-npm-dir = ".neovim-npm";
+  neovim-npm-dir-full = "${config.home.homeDirectory}/${neovim-npm-dir}";
+  neovim = pkgs.symlinkJoin {
+    name = "neovim-adjusted";
+    paths = [
+      pkgs.neovim-unwrapped
+    ];
+    nativeBuildInputs = [
+      pkgs.makeWrapper
+    ];
+    # Some NeoVim plugins require Node.js to be available in PATH,
+    # but I don't want to install it globally.
+    postBuild = ''
+      wrapProgram $out/bin/nvim \
+        --prefix PATH : ${pkgs.lib.makeBinPath [pkgs.nodejs]} \
+        --prefix PATH : "${neovim-npm-dir-full}/bin" \
+        --set NPM_CONFIG_PREFIX "~/${neovim-npm-dir}"
+    '';
+  };
 in
   lib.mkMerge [
     {
@@ -17,7 +36,7 @@ in
         # editable configuration files places out of the Nix
         # store. Unfortunately, programs.neovim unconditionally generates
         # immutable configuration files.
-        pkgs.neovim-unwrapped
+        neovim
         pkgs.luajit
         pkgs.fd
         pkgs.ripgrep
@@ -55,10 +74,13 @@ in
       ];
 
       home.file = {
-        ".config/nvim".source = mkOutOfStoreSymlink "${config.home.homeDirectory}/nix/dotfiles/nvim";
+        # Directory for NPM packages used by NeoVim plugins
+        "${neovim-npm-dir}/.keep".text = "";
 
-        # required by https://github.com/zbirenbaum/copilot.lua
-        ".copilot-node".source = "${pkgs.nodejs_20}/bin";
+        # NeoVim's mcp-hub.nvim may complain that this directory is not exists
+        ".mcp-hub/.keep".text = "";
+
+        ".config/nvim".source = mkOutOfStoreSymlink "${config.home.homeDirectory}/nix/dotfiles/nvim";
       };
 
       home.sessionVariables.EDITOR = "nvim";
