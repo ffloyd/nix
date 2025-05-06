@@ -35,6 +35,7 @@
           };
           commit.gpgSign = true;
           tag.gpgSign = true;
+          core.sshCommand = "ssh -i ~/.ssh/id_work";
         };
       }
     ];
@@ -51,6 +52,10 @@
         syntax-theme = "Nord";
       };
     };
+  };
+
+  programs.ssh = {
+    enable = true;
   };
 
   # IDEA: use programs.git-cliff
