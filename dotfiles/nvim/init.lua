@@ -1388,6 +1388,7 @@ features.add({
   plugins = {
     {
       "olimorris/codecompanion.nvim",
+      --- @type fun(_: any, opts: CodeCompanion.Schema)
       opts = function(_, opts)
         opts.adapters = opts.adapters or {}
         opts.adapters.copilot = require("codecompanion.adapters").extend("copilot", {
@@ -1397,6 +1398,11 @@ features.add({
             },
           },
         })
+
+        -- TODO: realize how to use @editor and work with diffs
+
+        -- TODO: add MCP extension
+        -- https://codecompanion.olimorris.dev/configuration/extensions.html#installing-extensions
       end,
       dependencies = {
         "nvim-lua/plenary.nvim",
@@ -1698,7 +1704,7 @@ features.add({
 })
 
 features.add({
-  "Opt-in fidget notifications (used for LSP and CodeCompanion at the moment)",
+  "Fidget notifications (used for LSP and CodeCompanion at the moment)",
   plugins = {
     {
       "j-hui/fidget.nvim",
@@ -1706,9 +1712,7 @@ features.add({
     },
   },
   setup = function()
-    -- Suppress notifications by default to reduce noise
-    require("fidget").notification.suppress(true)
-    local enabled = false
+    local enabled = true
 
     Snacks.toggle
         .new({
@@ -1783,5 +1787,6 @@ features.add({
 -- TODO: improve Copilot highlighting
 -- TODO: fix autocompletion behavior in command mode
 -- TODO: disable trailing spaces warnings in insert mode
+-- TODO: zoom-in/out for windows (so I don't have to open a new tab)
 
 features.load()
