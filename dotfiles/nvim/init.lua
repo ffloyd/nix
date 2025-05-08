@@ -2,23 +2,26 @@
 -- Instead of trying to organize everything in a single file,
 -- or splitting it into multiple files by categories,
 -- or organize by plugins or plugin groups,
--- this configuration is gave up on such approaches.
+-- this configuration has given up on such approaches.
 --
--- Instead, it's a single file that has no predefined structure.
--- But when some part of it grows too much,
--- it's extracted into a separate file and required here.
+-- Instead, it starts as a single file that made of multiple features.
+-- Feature is not just a plugin(s) configuration, but something you want to achieve using the set of plugins and configs.
 --
--- Other way to think about it is "folding-driven approach":
--- when you constantly want to fold some big chunk of your configuration -
--- extract it into a separate file.
+-- Over time features will be piling up in the file.
+-- Wait fot the moment when it becomes really inconvinient and distracting,
+-- avoid perfectionistic desire to organize everything in a perfect way!
 --
--- Motivation behind such idea is that it's not possible to create a perfect organization.
--- Often some block of configuration is related to multiple plugins or multiple categories.
--- And it's often hard to decide where to put it.
--- And such decisions by nature are frustrating and consume both time and energy.
--- And we don't really rely on strict organization that much.
--- We usually rely more on project-wide search.
--- So, why spend time on something that doesn't bring much value, but definitely brings suffering?
+-- When the moment comes, start extracting groups of features into separate files.
+-- Start with one and just require it in the main file.
+--
+-- When introducing a new file, avoid thinking about it as a category (UI, LSP, AI, etc).
+-- Instead, organize by objective.
+-- A good examples: "Utilize AI to improve my productivity" (`ai.lua`), "Make code comfortable to read" (`readability.lua`), etc.
+-- Explain objective in the beginning of the file inside a comment.
+--
+-- Such approach is inspired by OKR (Objectives and Key Results) methodology.
+-- It's not applied here as is: instead of having key results that are measurable, we have features.
+-- It can be called "Objective-to-Features" Configuration style.
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -346,32 +349,6 @@ require("features").add({
 })
 
 features.add({
-  "Github Copilot integration",
-  plugins = {
-    {
-      "zbirenbaum/copilot.lua",
-      opts = {
-        suggestion = {
-          enabled = true,
-          auto_trigger = true,
-          keymap = {
-            accept = "<M-S-l>",
-            accept_line = "<M-l>",
-            next = "<M-]>",
-            prev = "<M-[>",
-            dismiss = "<C-]>",
-          },
-        },
-        filetypes = {
-          markdown = true,
-        },
-        panel = { enabled = false },
-      },
-    },
-  },
-})
-
-features.add({
   "Discover top-level keybindings",
   setup = function()
     require("which-key").add({
@@ -581,32 +558,7 @@ features.add({
   },
 })
 
-features.add({
-  "Show Copilot status in the statusline",
-  plugins = {
-    { "AndreM222/copilot-lualine" },
-    {
-      "nvim-lualine/lualine.nvim",
-      opts = function(_, opts)
-        table.insert(opts.sections.lualine_x, 2, {
-          "copilot",
-          show_colors = true,
-          symbols = {
-            status = {
-              icons = {
-                enabled = "",
-                sleep = "", -- auto-trigger disabled
-                disabled = "",
-                warning = "",
-                unknown = "",
-              },
-            },
-          },
-        })
-      end,
-    },
-  },
-})
+require("ai")
 
 require("features").add({
   "Show file name in a buffer corner",
@@ -1029,133 +981,6 @@ features.add({
 })
 
 features.add({
-  "Chat with LLM",
-  plugins = {
-    {
-      "robitx/gp.nvim",
-      opts = {
-        openai_api_key = { "pass", "openai/api_key" },
-        providers = {
-          anthropic = {
-            secret = { "pass", "anthropic/api_key" },
-          },
-        },
-      },
-    },
-  },
-  setup = function()
-    require("which-key").add({
-      -- VISUAL mode mappings
-      -- s, x, v modes are handled the same way by which_key
-      {
-        mode = { "v" },
-        nowait = true,
-        remap = false,
-        { "<C-g><C-t>", ":<C-u>'<,'>GpChatNew tabnew<cr>", desc = "ChatNew tabnew" },
-        { "<C-g><C-v>", ":<C-u>'<,'>GpChatNew vsplit<cr>", desc = "ChatNew vsplit" },
-        { "<C-g><C-x>", ":<C-u>'<,'>GpChatNew split<cr>",  desc = "ChatNew split" },
-        { "<C-g>a",     ":<C-u>'<,'>GpAppend<cr>",         desc = "Visual Append (after)" },
-        { "<C-g>b",     ":<C-u>'<,'>GpPrepend<cr>",        desc = "Visual Prepend (before)" },
-        { "<C-g>c",     ":<C-u>'<,'>GpChatNew<cr>",        desc = "Visual Chat New" },
-        { "<C-g>g",     group = "generate into new .." },
-        { "<C-g>ge",    ":<C-u>'<,'>GpEnew<cr>",           desc = "Visual GpEnew" },
-        { "<C-g>gn",    ":<C-u>'<,'>GpNew<cr>",            desc = "Visual GpNew" },
-        { "<C-g>gp",    ":<C-u>'<,'>GpPopup<cr>",          desc = "Visual Popup" },
-        { "<C-g>gt",    ":<C-u>'<,'>GpTabnew<cr>",         desc = "Visual GpTabnew" },
-        { "<C-g>gv",    ":<C-u>'<,'>GpVnew<cr>",           desc = "Visual GpVnew" },
-        { "<C-g>i",     ":<C-u>'<,'>GpImplement<cr>",      desc = "Implement selection" },
-        { "<C-g>n",     "<cmd>GpNextAgent<cr>",            desc = "Next Agent" },
-        { "<C-g>p",     ":<C-u>'<,'>GpChatPaste<cr>",      desc = "Visual Chat Paste" },
-        { "<C-g>r",     ":<C-u>'<,'>GpRewrite<cr>",        desc = "Visual Rewrite" },
-        { "<C-g>s",     "<cmd>GpStop<cr>",                 desc = "GpStop" },
-        { "<C-g>t",     ":<C-u>'<,'>GpChatToggle<cr>",     desc = "Visual Toggle Chat" },
-        { "<C-g>w",     group = "Whisper" },
-        { "<C-g>wa",    ":<C-u>'<,'>GpWhisperAppend<cr>",  desc = "Whisper Append" },
-        { "<C-g>wb",    ":<C-u>'<,'>GpWhisperPrepend<cr>", desc = "Whisper Prepend" },
-        { "<C-g>we",    ":<C-u>'<,'>GpWhisperEnew<cr>",    desc = "Whisper Enew" },
-        { "<C-g>wn",    ":<C-u>'<,'>GpWhisperNew<cr>",     desc = "Whisper New" },
-        { "<C-g>wp",    ":<C-u>'<,'>GpWhisperPopup<cr>",   desc = "Whisper Popup" },
-        { "<C-g>wr",    ":<C-u>'<,'>GpWhisperRewrite<cr>", desc = "Whisper Rewrite" },
-        { "<C-g>wt",    ":<C-u>'<,'>GpWhisperTabnew<cr>",  desc = "Whisper Tabnew" },
-        { "<C-g>wv",    ":<C-u>'<,'>GpWhisperVnew<cr>",    desc = "Whisper Vnew" },
-        { "<C-g>ww",    ":<C-u>'<,'>GpWhisper<cr>",        desc = "Whisper" },
-        { "<C-g>x",     ":<C-u>'<,'>GpContext<cr>",        desc = "Visual GpContext" },
-      },
-
-      -- NORMAL mode mappings
-      {
-        mode = { "n" },
-        nowait = true,
-        remap = false,
-        { "<C-g><C-t>", "<cmd>GpChatNew tabnew<cr>",   desc = "New Chat tabnew" },
-        { "<C-g><C-v>", "<cmd>GpChatNew vsplit<cr>",   desc = "New Chat vsplit" },
-        { "<C-g><C-x>", "<cmd>GpChatNew split<cr>",    desc = "New Chat split" },
-        { "<C-g>a",     "<cmd>GpAppend<cr>",           desc = "Append (after)" },
-        { "<C-g>b",     "<cmd>GpPrepend<cr>",          desc = "Prepend (before)" },
-        { "<C-g>c",     "<cmd>GpChatNew<cr>",          desc = "New Chat" },
-        { "<C-g>f",     "<cmd>GpChatFinder<cr>",       desc = "Chat Finder" },
-        { "<C-g>g",     group = "generate into new .." },
-        { "<C-g>ge",    "<cmd>GpEnew<cr>",             desc = "GpEnew" },
-        { "<C-g>gn",    "<cmd>GpNew<cr>",              desc = "GpNew" },
-        { "<C-g>gp",    "<cmd>GpPopup<cr>",            desc = "Popup" },
-        { "<C-g>gt",    "<cmd>GpTabnew<cr>",           desc = "GpTabnew" },
-        { "<C-g>gv",    "<cmd>GpVnew<cr>",             desc = "GpVnew" },
-        { "<C-g>n",     "<cmd>GpNextAgent<cr>",        desc = "Next Agent" },
-        { "<C-g>r",     "<cmd>GpRewrite<cr>",          desc = "Inline Rewrite" },
-        { "<C-g>s",     "<cmd>GpStop<cr>",             desc = "GpStop" },
-        { "<C-g>t",     "<cmd>GpChatToggle<cr>",       desc = "Toggle Chat" },
-        { "<C-g>w",     group = "Whisper" },
-        { "<C-g>wa",    "<cmd>GpWhisperAppend<cr>",    desc = "Whisper Append (after)" },
-        { "<C-g>wb",    "<cmd>GpWhisperPrepend<cr>",   desc = "Whisper Prepend (before)" },
-        { "<C-g>we",    "<cmd>GpWhisperEnew<cr>",      desc = "Whisper Enew" },
-        { "<C-g>wn",    "<cmd>GpWhisperNew<cr>",       desc = "Whisper New" },
-        { "<C-g>wp",    "<cmd>GpWhisperPopup<cr>",     desc = "Whisper Popup" },
-        { "<C-g>wr",    "<cmd>GpWhisperRewrite<cr>",   desc = "Whisper Inline Rewrite" },
-        { "<C-g>wt",    "<cmd>GpWhisperTabnew<cr>",    desc = "Whisper Tabnew" },
-        { "<C-g>wv",    "<cmd>GpWhisperVnew<cr>",      desc = "Whisper Vnew" },
-        { "<C-g>ww",    "<cmd>GpWhisper<cr>",          desc = "Whisper" },
-        { "<C-g>x",     "<cmd>GpContext<cr>",          desc = "Toggle GpContext" },
-      },
-
-      -- INSERT mode mappings
-      {
-        mode = { "i" },
-        nowait = true,
-        remap = false,
-        { "<C-g><C-t>", "<cmd>GpChatNew tabnew<cr>",   desc = "New Chat tabnew" },
-        { "<C-g><C-v>", "<cmd>GpChatNew vsplit<cr>",   desc = "New Chat vsplit" },
-        { "<C-g><C-x>", "<cmd>GpChatNew split<cr>",    desc = "New Chat split" },
-        { "<C-g>a",     "<cmd>GpAppend<cr>",           desc = "Append (after)" },
-        { "<C-g>b",     "<cmd>GpPrepend<cr>",          desc = "Prepend (before)" },
-        { "<C-g>c",     "<cmd>GpChatNew<cr>",          desc = "New Chat" },
-        { "<C-g>f",     "<cmd>GpChatFinder<cr>",       desc = "Chat Finder" },
-        { "<C-g>g",     group = "generate into new .." },
-        { "<C-g>ge",    "<cmd>GpEnew<cr>",             desc = "GpEnew" },
-        { "<C-g>gn",    "<cmd>GpNew<cr>",              desc = "GpNew" },
-        { "<C-g>gp",    "<cmd>GpPopup<cr>",            desc = "Popup" },
-        { "<C-g>gt",    "<cmd>GpTabnew<cr>",           desc = "GpTabnew" },
-        { "<C-g>gv",    "<cmd>GpVnew<cr>",             desc = "GpVnew" },
-        { "<C-g>n",     "<cmd>GpNextAgent<cr>",        desc = "Next Agent" },
-        { "<C-g>r",     "<cmd>GpRewrite<cr>",          desc = "Inline Rewrite" },
-        { "<C-g>s",     "<cmd>GpStop<cr>",             desc = "GpStop" },
-        { "<C-g>t",     "<cmd>GpChatToggle<cr>",       desc = "Toggle Chat" },
-        { "<C-g>w",     group = "Whisper" },
-        { "<C-g>wa",    "<cmd>GpWhisperAppend<cr>",    desc = "Whisper Append (after)" },
-        { "<C-g>wb",    "<cmd>GpWhisperPrepend<cr>",   desc = "Whisper Prepend (before)" },
-        { "<C-g>we",    "<cmd>GpWhisperEnew<cr>",      desc = "Whisper Enew" },
-        { "<C-g>wn",    "<cmd>GpWhisperNew<cr>",       desc = "Whisper New" },
-        { "<C-g>wp",    "<cmd>GpWhisperPopup<cr>",     desc = "Whisper Popup" },
-        { "<C-g>wr",    "<cmd>GpWhisperRewrite<cr>",   desc = "Whisper Inline Rewrite" },
-        { "<C-g>wt",    "<cmd>GpWhisperTabnew<cr>",    desc = "Whisper Tabnew" },
-        { "<C-g>wv",    "<cmd>GpWhisperVnew<cr>",      desc = "Whisper Vnew" },
-        { "<C-g>ww",    "<cmd>GpWhisper<cr>",          desc = "Whisper" },
-        { "<C-g>x",     "<cmd>GpContext<cr>",          desc = "Toggle GpContext" },
-      },
-    })
-  end,
-})
-
-features.add({
   "Convinient search/replace UI (grug-far)",
   plugins = {
     {
@@ -1381,54 +1206,6 @@ features.add({
       },
     },
   },
-})
-
-features.add({
-  "Copilot Chat (via CodeCompanion)",
-  plugins = {
-    {
-      "olimorris/codecompanion.nvim",
-      --- @type fun(_: any, opts: CodeCompanion.Schema)
-      opts = function(_, opts)
-        opts.adapters = opts.adapters or {}
-        opts.adapters.copilot = require("codecompanion.adapters").extend("copilot", {
-          schema = {
-            model = {
-              default = "claude-3.5-sonnet",
-            },
-          },
-        })
-
-        -- TODO: realize how to use @editor and work with diffs
-
-        -- TODO: add MCP extension
-        -- https://codecompanion.olimorris.dev/configuration/extensions.html#installing-extensions
-      end,
-      dependencies = {
-        "nvim-lua/plenary.nvim",
-        "nvim-treesitter/nvim-treesitter",
-        "j-hui/fidget.nvim",
-        {
-          "saghen/blink.cmp",
-          opts = function(_, opts)
-            opts.sources = opts.sources or {}
-            opts.sources.per_filetype = opts.sources.per_filetype or {}
-            opts.sources.per_filetype.codecompanion = { "codecompanion" }
-          end,
-        },
-      },
-    },
-  },
-  setup = function()
-    require("which-key").add({
-      { "<leader>ac",  group = "Code Companion",        mode = { "n", "v" } },
-      { "<leader>acc", "<cmd>CodeCompanionChat<cr>",    desc = "Chat" },
-      { "<leader>aca", "<cmd>CodeCompanionActions<cr>", desc = "Action" },
-      { "<leader>aci", "<cmd>CodeCompanion<cr>",        desc = "Inline",    mode = { "n", "v" } },
-    })
-
-    require("codecompanion-fidget-spinner"):init()
-  end,
 })
 
 features.add({
