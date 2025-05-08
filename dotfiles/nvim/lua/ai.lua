@@ -56,17 +56,32 @@ features.add({
 })
 
 features.add({
-  "AI Chat Assistant with CodeCompanion and Copilot",
+  "AI Chat Assistant with CodeCompanion",
   plugins = {
     {
       "olimorris/codecompanion.nvim",
       opts = function(_, opts)
-        opts.adapters = opts.adapters or {}
+        opts.adapters = opts.adapters or { opts = { show_defaults = false } }
+
         opts.adapters.copilot = require("codecompanion.adapters").extend("copilot", {
           schema = {
             model = {
               default = "claude-3.5-sonnet",
             },
+          },
+        })
+
+        opts.adapters.anthropic = require("codecompanion.adapters").extend("anthropic",
+          --- @type CodeCompanion.Adapter
+          {
+            env = {
+              api_key = "cmd:pass anthropic/api_key"
+            },
+          })
+
+        opts.adapters.openai = require("codecompanion.adapters").extend("openai", {
+          env = {
+            api_key = "cmd:pass openai/api_key"
           },
         })
 
@@ -234,4 +249,3 @@ features.add({
     })
   end,
 })
-
