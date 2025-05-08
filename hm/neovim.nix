@@ -66,7 +66,6 @@ in
 
         # globally installed formatters
         # (when possible I prefer keep them in projects' Nix devshells)
-        pkgs.stylua
         pkgs.commitlint
         pkgs.editorconfig-checker
         pkgs.hadolint

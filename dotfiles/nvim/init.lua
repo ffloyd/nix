@@ -1438,7 +1438,6 @@ features.add({
           -- Formatters
           null_ls.builtins.formatting.nix_flake_fmt,
           null_ls.builtins.formatting.mix,
-          null_ls.builtins.formatting.stylua,
           null_ls.builtins.formatting.terraform_fmt,
           -- Linters
           null_ls.builtins.diagnostics.credo,
