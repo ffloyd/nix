@@ -3,7 +3,7 @@
 local features = require("features")
 
 features.add({
-  "Github Copilot integration",
+  "AI Code Completion with GitHub Copilot",
   plugins = {
     {
       "zbirenbaum/copilot.lua",
@@ -29,7 +29,7 @@ features.add({
 })
 
 features.add({
-  "Show Copilot status in the statusline",
+  "Copilot Status Integration for Lualine",
   plugins = {
     { "AndreM222/copilot-lualine" },
     {
@@ -56,7 +56,7 @@ features.add({
 })
 
 features.add({
-  "Copilot Chat (via CodeCompanion)",
+  "AI Chat Assistant with CodeCompanion and Copilot",
   plugins = {
     {
       "olimorris/codecompanion.nvim",
@@ -109,7 +109,7 @@ features.add({
 })
 
 features.add({
-  "Chat with LLM",
+  "Direct conversation with LLMs via API",
   plugins = {
     {
       "robitx/gp.nvim",
@@ -234,3 +234,4 @@ features.add({
     })
   end,
 })
+
