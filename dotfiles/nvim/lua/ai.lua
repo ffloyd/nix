@@ -4,6 +4,7 @@ local features = require("features")
 
 features.add({
   "AI Code Completion with GitHub Copilot",
+  id = "copilot",
   plugins = {
     {
       "zbirenbaum/copilot.lua",
@@ -30,6 +31,7 @@ features.add({
 
 features.add({
   "Copilot Status Integration for Lualine",
+  after = { "copilot", "lualine" },
   plugins = {
     { "AndreM222/copilot-lualine" },
     {
@@ -57,42 +59,43 @@ features.add({
 
 features.add({
   "AI Chat Assistant with CodeCompanion",
+  id = "codecompanion",
+  after = { "mcphub", "blink", "fidget", "which-key", "copilot" },
   plugins = {
     {
       "olimorris/codecompanion.nvim",
-      opts = function(_, opts)
-        opts.adapters = opts.adapters or { opts = { show_defaults = false } }
-
-        opts.adapters.copilot = require("codecompanion.adapters").extend("copilot", {
-          schema = {
-            model = {
-              default = "claude-3.5-sonnet",
-            },
+      opts = function(_, _)
+        return {
+          adapters = {
+            copilot = require("codecompanion.adapters").extend("copilot", {
+              schema = {
+                model = {
+                  default = "claude-3.5-sonnet",
+                },
+              },
+            }),
+            anthropic = require("codecompanion.adapters").extend("anthropic",
+              {
+                env = {
+                  api_key = "cmd:pass anthropic/api_key"
+                },
+              }),
+            openai = require("codecompanion.adapters").extend("openai", {
+              env = {
+                api_key = "cmd:pass openai/api_key"
+              },
+            })
           },
-        })
-
-        opts.adapters.anthropic = require("codecompanion.adapters").extend("anthropic",
-          --- @type CodeCompanion.Adapter
-          {
-            env = {
-              api_key = "cmd:pass anthropic/api_key"
-            },
-          })
-
-        opts.adapters.openai = require("codecompanion.adapters").extend("openai", {
-          env = {
-            api_key = "cmd:pass openai/api_key"
-          },
-        })
-
-        opts.extensions = opts.extensions or {}
-        opts.extensions.mcphub = {
-          callback = "mcphub.extensions.codecompanion",
-          opts = {
-            make_vars = true,
-            make_slash_commands = true,
-            show_result_in_chat = true,
-          },
+          extensions = {
+            mcphub = {
+              callback = "mcphub.extensions.codecompanion",
+              opts = {
+                make_vars = true,
+                make_slash_commands = true,
+                show_result_in_chat = true,
+              },
+            }
+          }
         }
       end,
       dependencies = {
@@ -120,6 +123,35 @@ features.add({
     })
 
     require("codecompanion-fidget-spinner"):init()
+  end,
+})
+
+features.add({
+  "Model Communication Protocol (MCP)",
+  id = "mcphub",
+  after = { "which-key" },
+  plugins = {
+    {
+      "ravitemer/mcphub.nvim",
+      dependencies = {
+        "nvim-lua/plenary.nvim", -- Required for Job and HTTP requests
+      },
+      -- uncomment the following line to load hub lazily
+      --cmd = "MCPHub",  -- lazy load
+      build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
+      -- uncomment this if you don't want mcp-hub to be available globally or can't use -g
+      -- build = "bundled_build.lua",  -- Use this and set use_bundled_binary = true in opts  (see Advanced configuration)
+      opts = {},
+    },
+  },
+  setup = function()
+    require("which-key").add({
+      {
+        "<leader>am",
+        "<cmd>MCPHub<cr>",
+        desc = "MCP Hub",
+      },
+    })
   end,
 })
 
@@ -249,3 +281,4 @@ features.add({
     })
   end,
 })
+

@@ -51,6 +51,7 @@ local features = require("features")
 
 features.add({
   "Use a colorscheme that inspired by the Kanagawa wave",
+  id = "kanagawa",
   plugins = {
     {
       "rebelot/kanagawa.nvim",
@@ -77,6 +78,7 @@ features.add({
 
 features.add({
   "Show available keybindings in a popup as you type",
+  id = "which-key",
   plugins = {
     {
       "folke/which-key.nvim",
@@ -94,6 +96,7 @@ features.add({
 
 features.add({
   "Top-level leader keymap groups",
+  after = { "which-key" },
   setup = function()
     require("which-key").add({
       { "<leader>a", group = "Apps/AI" },
@@ -191,6 +194,7 @@ features.add({
 
 features.add({
   "Autocompletion with Blink",
+  id = "blink",
   plugins = {
     {
       "saghen/blink.cmp",
@@ -238,6 +242,7 @@ features.add({
 
 features.add({
   "Enable Snacks.nvim",
+  id = "snacks",
   plugins = {
     {
       "folke/snacks.nvim",
@@ -251,6 +256,7 @@ features.add({
 
 features.add({
   "Fancy dashboard with Snacks",
+  after = { "snacks" },
   plugins = {
     {
       "folke/snacks.nvim",
@@ -265,6 +271,7 @@ features.add({
 
 features.add({
   "Better UI elements from Snacks",
+  after = { "snacks" },
   plugins = {
     {
       "folke/snacks.nvim",
@@ -284,8 +291,9 @@ features.add({
   },
 })
 
-require("features").add({
+features.add({
   "Enable fancy fuzzy finders",
+  after = { "which-key", "snacks" },
   plugins = {
     {
       "folke/snacks.nvim",
@@ -350,6 +358,7 @@ require("features").add({
 
 features.add({
   "Discover top-level keybindings",
+  after = { "which-key" },
   setup = function()
     require("which-key").add({
       {
@@ -372,6 +381,7 @@ features.add({
 
 features.add({
   "Search lines by `C-SPC C-SPC` and files by `SPC SPC`",
+  after = { "which-key", "snacks" },
   setup = function()
     require("which-key").add({
       {
@@ -394,6 +404,7 @@ features.add({
 
 features.add({
   "Search commands by <leader>:",
+  after = { "which-key", "snacks" },
   setup = function()
     require("which-key").add({
       {
@@ -409,6 +420,7 @@ features.add({
 
 features.add({
   "Use Snacks.debug",
+  after = { "snacks" },
   setup = function()
     _G.dd = function(...)
       Snacks.debug.inspect(...)
@@ -422,6 +434,7 @@ features.add({
 
 features.add({
   "Add Snacks.nvim toggles",
+  after = { "snacks" },
   setup = function()
     Snacks.toggle.option("spell"):map("<leader>ts")
     Snacks.toggle.indent():map("<leader>ti")
@@ -439,6 +452,7 @@ features.add({
 
 features.add({
   "Rename a file with Snacks",
+  after = { "which-key", "snacks" },
   setup = function()
     require("which-key").add({
       {
@@ -493,6 +507,7 @@ features.add({
 
 features.add({
   "Buffer Navigation & Deletion",
+  after = { "which-key", "snacks" },
   setup = function()
     require("which-key").add({
       {
@@ -532,6 +547,7 @@ features.add({
 
 features.add({
   "Fancy global statusline",
+  id = "lualine",
   plugins = {
     {
       "nvim-lualine/lualine.nvim",
@@ -560,8 +576,9 @@ features.add({
 
 require("ai")
 
-require("features").add({
+features.add({
   "Show file name in a buffer corner",
+  after = { "kanagawa" },
   plugins = {
     {
       "b0o/incline.nvim",
@@ -764,6 +781,7 @@ features.add({
 
 features.add({
   "LSP code actions & rename",
+  after = { "which-key", "snacks" },
   plugins = {
     {
       "aznhe21/actions-preview.nvim",
@@ -819,6 +837,7 @@ features.add({
 
 features.add({
   "Git hunks/diffs in-buffer navigation and control",
+  after = { "which-key" },
   plugins = {
     { "lewis6991/gitsigns.nvim" },
   },
@@ -1072,6 +1091,7 @@ features.add({
 
 features.add({
   "Explore diagnostics/location/quickfix/lsp lists (trouble.nvim)",
+  after = { "which-key" },
   plugins = {
     {
       "folke/trouble.nvim",
@@ -1140,6 +1160,7 @@ features.add({
 
 features.add({
   "Control LSP status",
+  after = { "which-key" },
   setup = function()
     require("which-key").add({
       { "<leader>ul",  group = "LSP" },
@@ -1174,6 +1195,7 @@ features.add({
 
 features.add({
   "Copy current relative file path with line number",
+  after = { "which-key" },
   setup = function()
     local copy_relative_path_with_linum = function()
       local path = vim.fn.expand("%:.")
@@ -1209,34 +1231,8 @@ features.add({
 })
 
 features.add({
-  "Model Communication Protocol (MCP)",
-  plugins = {
-    {
-      "ravitemer/mcphub.nvim",
-      dependencies = {
-        "nvim-lua/plenary.nvim", -- Required for Job and HTTP requests
-      },
-      -- uncomment the following line to load hub lazily
-      --cmd = "MCPHub",  -- lazy load
-      build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
-      -- uncomment this if you don't want mcp-hub to be available globally or can't use -g
-      -- build = "bundled_build.lua",  -- Use this and set use_bundled_binary = true in opts  (see Advanced configuration)
-      opts = {},
-    },
-  },
-  setup = function()
-    require("which-key").add({
-      {
-        "<leader>am",
-        "<cmd>MCPHub<cr>",
-        desc = "MCP Hub",
-      },
-    })
-  end,
-})
-
-features.add({
   "Fancy Markdown rendering despite being in a terminal",
+  after = { "blink" },
   plugins = {
     {
       "MeanderingProgrammer/render-markdown.nvim",
@@ -1279,6 +1275,7 @@ features.add({
 
 features.add({
   "File Explorer (snacks.nvim)",
+  after = { "which-key", "snacks" },
   plugins = {
     {
       "folke/snacks.nvim",
@@ -1313,6 +1310,7 @@ features.add({
 
 features.add({
   "Jump Between Implementation and Test",
+  after = { "which-key" },
   setup = function()
     local file_patterns = {
       elixir = {
@@ -1405,6 +1403,7 @@ features.add({
 
 features.add({
   "List recent notifications",
+  after = { "which-key", "snacks" },
   plugins = {
     {
       "folke/snacks.nvim",
@@ -1428,6 +1427,7 @@ features.add({
 
 features.add({
   "Formatters and Linters",
+  after = { "which-key" },
   plugins = {
     {
       "nvimtools/none-ls.nvim",
@@ -1481,6 +1481,7 @@ features.add({
 
 features.add({
   "Fidget notifications (used for LSP and CodeCompanion at the moment)",
+  id = "fidget",
   plugins = {
     {
       "j-hui/fidget.nvim",
@@ -1559,10 +1560,11 @@ features.add({
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
 -- TODO: jump between tabs by g1, g2, g3, etc
 -- TODO: add Snack.image support
--- TODO: switch to CodeCompanion and adopt mcp - ____IN PROGRESS____
 -- TODO: improve Copilot highlighting
 -- TODO: fix autocompletion behavior in command mode
 -- TODO: disable trailing spaces warnings in insert mode
 -- TODO: zoom-in/out for windows (so I don't have to open a new tab)
 
 features.load()
+
+
