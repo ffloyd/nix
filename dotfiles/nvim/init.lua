@@ -1557,6 +1557,18 @@ features.add({
   end,
 })
 
+features.add({
+  "Proper highliting for xrl and yrl files",
+  setup = function()
+    vim.filetype.add({
+      extension = {
+        xrl = 'erlang',
+        yrl = 'erlang'
+      }
+    })
+  end
+})
+
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
 -- TODO: jump between tabs by g1, g2, g3, etc
 -- TODO: add Snack.image support
@@ -1566,5 +1578,3 @@ features.add({
 -- TODO: zoom-in/out for windows (so I don't have to open a new tab)
 
 features.load()
-
-
