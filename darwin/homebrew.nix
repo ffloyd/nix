@@ -6,19 +6,28 @@
   homebrew = {
     enable = true;
 
+    onActivation.cleanup = "uninstall";
+
     taps = [
       "homebrew/bundle"
+      "kegworks-app/kegworks"
+      "streetpea/streetpea"
+      "jwbargsten/misc"
     ];
 
     brews = [
+      "defbro"
     ];
 
     casks = [
       # Essential
       "arc"
+      "firefox@developer-edition"
+      "zen"
       "readdle-spark"
       "notion-calendar"
       "raycast"
+      "anytype"
 
       # Proton family
       "proton-mail"
@@ -29,6 +38,7 @@
       "notion"
       "linear-linear"
       "xmind"
+      "freeplane"
 
       # Social
       "telegram"
