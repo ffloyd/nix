@@ -1598,6 +1598,32 @@ features.add({
   end,
 })
 
+features.add({
+  "Show diagnostics in virtual text",
+  after = { "snacks" },
+  setup = function()
+    -- Enable virtual lines by default
+    vim.diagnostic.config({
+      virtual_lines = false,
+    })
+
+    -- Create toggle for diagnostics virtual text
+    Snacks.toggle
+        .new({
+          name = "Diagnostics Virtual Text",
+          get = function()
+            return vim.diagnostic.config().virtual_lines and true or false
+          end,
+          set = function(state)
+            vim.diagnostic.config({
+              virtual_lines = state,
+            })
+          end,
+        })
+        :map("<leader>td")
+  end
+})
+
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
 -- TODO: jump between tabs by g1, g2, g3, etc
 -- TODO: add Snack.image support
