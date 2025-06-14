@@ -1569,6 +1569,35 @@ features.add({
   end
 })
 
+features.add({
+  "Delete file and close buffer",
+  after = { "which-key" },
+  setup = function()
+    require("which-key").add({
+      {
+        "<leader>bd",
+        function()
+          local file = vim.fn.expand("%:p")
+          if vim.fn.filereadable(file) == 1 then
+            vim.ui.select({ "Yes", "No" }, {
+              prompt = "Delete " .. file .. " and close buffer?",
+            }, function(choice)
+              if choice == "Yes" then
+                vim.cmd("bd!")
+                vim.fn.delete(file)
+                vim.notify("Deleted: " .. file, vim.log.levels.INFO)
+              end
+            end)
+          else
+            vim.notify("File does not exist: " .. file, vim.log.levels.WARN)
+          end
+        end,
+        desc = "Delete File and Close Buffer",
+      }
+    })
+  end,
+})
+
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
 -- TODO: jump between tabs by g1, g2, g3, etc
 -- TODO: add Snack.image support
