@@ -57,6 +57,8 @@
 
   fonts.packages = globals.getFonts pkgs;
 
+  system.primaryUser = private.darwinUsername;
+
   # enable Rosetta 2
   system.activationScripts.extraActivation.text = ''
     softwareupdate --install-rosetta --agree-to-license

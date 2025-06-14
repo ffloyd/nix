@@ -37,7 +37,7 @@
 
   programs.zsh = {
     shellAliases = {
-      os-rebuild = "darwin-rebuild switch --flake ~/nix";
+      os-rebuild = "sudo darwin-rebuild switch --flake /Users/${private.darwinUsername}/nix";
       hm-rebuild = "home-manager switch --flake ~/nix";
       wakeonlan-rig = ''
         curl -X POST -u ${private.routerUsername}:${private.routerPassword} http://${private.routerHost}/rest/tool/wol --data '{"mac": "${private.gamingRigMacAddress}", "interface": "bridge"}' -H "content-type: application/json"

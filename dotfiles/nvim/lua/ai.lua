@@ -84,6 +84,11 @@ features.add({
               env = {
                 api_key = "cmd:pass openai/api_key"
               },
+            }),
+            tavily = require("codecompanion.adapters").extend("tavily", {
+              env = {
+                api_key = "cmd:pass tavily/api_key"
+              },
             })
           },
           extensions = {
@@ -281,4 +286,3 @@ features.add({
     })
   end,
 })
-
