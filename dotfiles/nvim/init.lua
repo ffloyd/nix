@@ -102,17 +102,18 @@ features.add({
   after = { "which-key" },
   setup = function()
     require("which-key").add({
+      { "<leader>?", group = "Help" },
       { "<leader>a", group = "Apps/AI" },
       { "<leader>b", group = "Buffer" },
       { "<leader>e", group = "Editor Helpers" },
-      { "<leader>g", group = "Git/VCS" },
       { "<leader>f", group = "Finders" },
+      { "<leader>g", group = "Git/VCS" },
+      { "<leader>l", group = "Lang Tools" },
       { "<leader>s", group = "Search/Replace" },
-      { "<leader>T", group = "Tabs" },
       { "<leader>t", group = "Toggle" },
+      { "<leader>T", group = "Tabs" },
       { "<leader>u", group = "Utils" },
       { "<leader>x", group = "eXplore" },
-      { "<leader>?", group = "Help" },
     })
   end,
 })

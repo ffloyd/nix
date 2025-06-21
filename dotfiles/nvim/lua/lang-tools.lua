@@ -3,7 +3,7 @@
 local features = require("features")
 
 features.add({
-  "Fetch default configurations for LSP servers (with respect to blink.cmp)",
+  "Enable & configure LSP servers",
   after = { "blink" },
   plugins = {
     {
@@ -27,6 +27,7 @@ features.add({
           'nixd',
           'rust_analyzer',
           'svelte',
+          'tailwindcss',
           'terraformls',
           'ts_ls',
         })
@@ -51,9 +52,8 @@ features.add({
   },
 })
 
-
 features.add({
-  "Formatters and Linters via null-ls",
+  "Enable formatters & linters via null-ls",
   after = { "which-key" },
   plugins = {
     {
@@ -81,21 +81,85 @@ features.add({
       end,
     },
   },
-  setup = function()
-    require("which-key").add({
-      {
-        "<leader>ef",
-        function()
-          vim.lsp.buf.format()
-        end,
-        desc = "Format Buffer",
-      },
-    })
-  end,
 })
 
 features.add({
-  "Make LSP actions more discoverable",
+  "Expose core LSP commands using fancy wrappers when possible",
+  after = { "which-key", "snacks" },
+  plugins = {
+    {
+      "aznhe21/actions-preview.nvim",
+      opts = {
+        backend = { "snacks" },
+      },
+    }
+  },
+  setup = function()
+    local list_workspace_folders = function()
+      local unique_folders = {}
+      for _, folder in ipairs(vim.lsp.buf.list_workspace_folders()) do
+        unique_folders[folder] = true
+      end
+
+      if vim.tbl_count(unique_folders) == 0 then
+        vim.notify("No workspace folders found", vim.log.levels.WARN)
+        return
+      end
+
+      local msg = "Workspace Folders:\n\n"
+      for folder in pairs(unique_folders) do
+        msg = msg .. string.format("%s\n", folder)
+      end
+      vim.notify(msg, vim.log.levels.INFO)
+    end
+
+    Snacks.toggle.inlay_hints():map("<leader>tI")
+
+    require("which-key").add({
+      { "<leader>ln",  vim.lsp.buf.rename,                      desc = "Rename Symbol" },
+      { "<leader>lf",  vim.lsp.buf.format,                      desc = "Format Buffer" },
+
+      -- Code lenses
+      { "<leader>lx",  vim.lsp.codelens.refresh,                desc = "Refresh Code Lenses" },
+      { "<leader>lX",  vim.lsp.codelens.run,                    desc = "Run Code Lens" },
+
+      -- Call hierarchy commands
+      { "<leader>lc",  vim.lsp.buf.incoming_calls,              desc = "Incoming Calls" },
+      { "<leader>lC",  vim.lsp.buf.outgoing_calls,              desc = "Outgoing Calls" },
+      { "<leader>lT",  vim.lsp.buf.typehierarchy,               desc = "Type Hierarchy" },
+
+      -- Workspace commands
+      { "<leader>lw",  group = "Workspace Folders" },
+      { "<leader>lwa", vim.lsp.buf.add_workspace_folder,        desc = "Add Workspace Folder" },
+      { "<leader>lwr", vim.lsp.buf.remove_workspace_folder,     desc = "Remove Workspace Folder" },
+      { "<leader>lwl", list_workspace_folders,                  desc = "List Workspace Folders" },
+
+      -- Apply LSP actions with preview
+      { "<leader>la",  require("actions-preview").code_actions, desc = "Code Actions" },
+
+      -- Snacks-powered LSP pickers
+      { "<leader>ld",  Snacks.picker.lsp_definitions,           desc = "Definitions" },
+      { "<leader>lD",  Snacks.picker.lsp_declarations,          desc = "Declarations" },
+      { "<leader>li",  Snacks.picker.lsp_implementations,       desc = "Implementations", },
+      { "<leader>lr",  Snacks.picker.lsp_references,            desc = "References", },
+      { "<leader>lt",  Snacks.picker.lsp_type_definitions,      desc = "Type Definitions" },
+      { "<leader>ll",  Snacks.picker.lsp_symbols,               desc = "Local Symbols" },
+      { "<leader>lL",  Snacks.picker.lsp_workspace_symbols,     desc = "Workspace Symbols" },
+
+      -- LSP Server Control
+      { "<leader>ls",  group = "LSP Server" },
+      { "<leader>lsc", Snacks.picker.lsp_config,                desc = "Configs" },
+      { "<leader>lsl", "<cmd>LspLog<cr>",                       desc = "Logs" },
+      { "<leader>lsr", "<cmd>LspRestart<cr>",                   desc = "Restart" },
+      { "<leader>lss", "<cmd>LspStart<cr>",                     desc = "Start" },
+      { "<leader>lsx", "<cmd>LspStop<cr>",                      desc = "Stop" },
+    })
+  end
+})
+
+features.add({
+  "Indicate presence of LSP actions",
+  after = { "which-key", "snacks" },
   plugins = {
     {
       "kosayoda/nvim-lightbulb",
@@ -141,122 +205,48 @@ features.add({
             lightbulb_enabled = state
           end,
         })
-        :map("<leader>ta")
+        :map("<leader>lA")
   end,
 })
 
 features.add({
-  "LSP code actions & rename",
+  "LSP navigation between references",
   after = { "which-key", "snacks" },
-  plugins = {
-    {
-      "aznhe21/actions-preview.nvim",
-      opts = {
-        backend = { "snacks" },
-      },
-    },
-  },
-  setup = function()
-    require("which-key").add({
-      {
-        "<leader>ea",
-        function()
-          require("actions-preview").code_actions()
-        end,
-        desc = "LSP Code Actions",
-      },
-      {
-        "<leader>er",
-        function()
-          vim.lsp.buf.rename()
-        end,
-        desc = "LSP Rename",
-      },
-    })
-  end,
-})
-
-features.add({
-  "Control LSP status",
-  after = { "which-key" },
-  setup = function()
-    require("which-key").add({
-      { "<leader>ul",  group = "LSP" },
-      { "<leader>ull", "<cmd>LspInfo<cr>",    desc = "LSP info" },
-      { "<leader>ulL", "<cmd>LspLog<cr>",     desc = "LSP log" },
-      { "<leader>uls", "<cmd>LspStart<cr>",   desc = "LSP start" },
-      { "<leader>ulx", "<cmd>LspStop<cr>",    desc = "LSP stop" },
-      { "<leader>ulr", "<cmd>LspRestart<cr>", desc = "LSP restart" },
-    })
-  end,
-})
-
-features.add({
-  "LSP navigation",
-  plugins = {
-    { "folke/snacks.nvim" },
-  },
   setup = function()
     Snacks.toggle.words():map("<leader>tW")
 
+    local jump_next = function()
+      Snacks.words.jump(vim.v.count1, true)
+    end
+
+    local jump_prev = function()
+      Snacks.words.jump(-vim.v.count1, true)
+    end
+
     require("which-key").add({
-      {
-        "<M-n>",
-        function()
-          Snacks.words.jump(vim.v.count1, true)
-        end,
-        desc = "Next Reference",
-      },
-      {
-        "<M-p>",
-        function()
-          Snacks.words.jump(-vim.v.count1, true)
-        end,
-        desc = "Previous Reference",
-      },
-      {
-        "gd",
-        function()
-          Snacks.picker.lsp_definitions()
-        end,
-        desc = "LSP Definitions",
-      },
-      {
-        "gD",
-        function()
-          Snacks.picker.lsp_declarations()
-        end,
-        desc = "LSP Declarations",
-      },
-      {
-        "gI",
-        function()
-          Snacks.picker.lsp_implementations()
-        end,
-        desc = "LSP Implementations",
-      },
-      {
-        "gr",
-        function()
-          Snacks.picker.lsp_references()
-        end,
-        nowait = true,
-        desc = "LSP References",
-      },
-      {
-        "gy",
-        function()
-          Snacks.picker.lsp_type_definitions()
-        end,
-        desc = "LSP Type Definitions",
-      },
-      {
-        "<leader>fs",
-        function()
-          Snacks.picker.lsp_symbols()
-        end,
-        desc = "LSP Symbols",
-      },
+      { "<M-n>", jump_next, desc = "Next Reference" },
+      { "<M-p>", jump_prev, desc = "Previous Reference" },
     })
   end,
+})
+
+features.add({
+  "Switch LSP-backed folding and formatting when possible",
+  setup = function()
+    vim.api.nvim_create_autocmd('LspAttach', {
+      callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        local win = vim.api.nvim_get_current_win()
+        local bufnr = vim.api.nvim_get_current_buf()
+
+        if client and client:supports_method('textDocument/foldingRange') then
+          vim.wo[win][0].foldexpr = 'v:lua.vim.lsp.foldexpr()'
+        end
+
+        if client and client:supports_method('textDocument/formatting') then
+          vim.bo[bufnr].formatexpr = 'v:lua.vim.lsp.formatexpr()'
+        end
+      end,
+    })
+  end
 })
