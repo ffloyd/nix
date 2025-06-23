@@ -110,8 +110,8 @@ features.add({
       { "<leader>g", group = "Git/VCS" },
       { "<leader>l", group = "Lang Tools" },
       { "<leader>s", group = "Search/Replace" },
-      { "<leader>t", group = "Toggle" },
-      { "<leader>T", group = "Tabs" },
+      { "<leader>T", group = "Toggle" },
+      { "<leader>t", group = "Tabs" },
       { "<leader>u", group = "Utils" },
       { "<leader>x", group = "eXplore" },
     })
@@ -397,9 +397,9 @@ features.add({
   "Add Snacks.nvim toggles",
   after = { "snacks" },
   setup = function()
-    Snacks.toggle.option("spell"):map("<leader>ts")
-    Snacks.toggle.indent():map("<leader>ti")
-    Snacks.toggle.line_number():map("<leader>tn")
+    Snacks.toggle.option("spell"):map("<leader>Ts")
+    Snacks.toggle.indent():map("<leader>Ti")
+    Snacks.toggle.line_number():map("<leader>Tn")
   end,
 })
 
@@ -593,37 +593,37 @@ features.add({
   setup = function()
     require("which-key").add({
       {
-        "<leader>Tn",
+        "<leader>tn",
         "<cmd>tabnext<cr>",
         desc = "Next Tab",
       },
       {
-        "<leader>Tp",
+        "<leader>tp",
         "<cmd>tabprevious<cr>",
         desc = "Previous Tab",
       },
       {
-        "<leader>Tl",
+        "<leader>tl",
         "<cmd>+tabmove<cr>",
         desc = "Move Tab Right",
       },
       {
-        "<leader>Th",
+        "<leader>th",
         "<cmd>-tabmove<cr>",
         desc = "Move Tab Left",
       },
       {
-        "<leader>Tt",
+        "<leader>tt",
         "<cmd>$tabnew<cr>",
         desc = "New Tab",
       },
       {
-        "<leader>Tk",
+        "<leader>tk",
         "<cmd>tabclose<cr>",
         desc = "Close Tab",
       },
       {
-        "<leader>Tr",
+        "<leader>tr",
         function()
           local newname = vim.fn.input("Rename tab to: ")
           require("tabby").tab_rename(newname)
@@ -631,7 +631,7 @@ features.add({
         desc = "Rename Tab",
       },
       {
-        "<leader>To",
+        "<leader>to",
         "<cmd>tabonly<cr>",
         desc = "Close Other Tabs",
       },
@@ -689,7 +689,7 @@ features.add({
             require("gitsigns").toggle_signs(state)
           end,
         })
-        :map("<leader>tg")
+        :map("<leader>Tg")
   end,
 })
 
@@ -788,7 +788,7 @@ features.add({
             require("gitsigns").toggle_current_line_blame(state)
           end,
         })
-        :map("<leader>tb")
+        :map("<leader>Tb")
 
     require("which-key").add({
       {
@@ -942,8 +942,8 @@ features.add({
 features.add({
   "Toggle word/line wrapping",
   setup = function()
-    Snacks.toggle.option("wrap", { global = false }):map("<leader>tl")
-    Snacks.toggle.option("linebreak", { global = false }):map("<leader>tw")
+    Snacks.toggle.option("wrap", { global = false }):map("<leader>Tl")
+    Snacks.toggle.option("linebreak", { global = false }):map("<leader>Tw")
   end,
 })
 
@@ -1302,7 +1302,7 @@ features.add({
             enabled = state
           end,
         })
-        :map("<leader>tf")
+        :map("<leader>Tf")
   end,
 })
 
@@ -1363,7 +1363,7 @@ features.add({
             vim.o.list = state
           end,
         })
-        :map("<leader>tS")
+        :map("<leader>TS")
   end,
 })
 
@@ -1389,12 +1389,34 @@ features.add({
             })
           end,
         })
-        :map("<leader>td")
+        :map("<leader>Td")
+  end
+})
+
+features.add({
+  "Jump between tabs by numner",
+  after = { "which-key" },
+  setup = function()
+    require("which-key").add({
+      { "<leader>t1", "<cmd>1tabnext<cr>", desc = "Tab 1" },
+      { "g1",         "<cmd>1tabnext<cr>", desc = "Tab 1" },
+      { "<leader>t2", "<cmd>2tabnext<cr>", desc = "Tab 2" },
+      { "g2",         "<cmd>2tabnext<cr>", desc = "Tab 2" },
+      { "<leader>t3", "<cmd>3tabnext<cr>", desc = "Tab 3" },
+      { "g3",         "<cmd>3tabnext<cr>", desc = "Tab 3" },
+      { "<leader>t4", "<cmd>4tabnext<cr>", desc = "Tab 4" },
+      { "g4",         "<cmd>4tabnext<cr>", desc = "Tab 4" },
+      { "<leader>t5", "<cmd>5tabnext<cr>", desc = "Tab 5" },
+      { "g5",         "<cmd>5tabnext<cr>", desc = "Tab 5" },
+      { "<leader>t6", "<cmd>6tabnext<cr>", desc = "Tab 6" },
+      { "g6",         "<cmd>6tabnext<cr>", desc = "Tab 6" },
+      { "<leader>t7", "<cmd>7tabnext<cr>", desc = "Tab 7" },
+      { "g7",         "<cmd>7tabnext<cr>", desc = "Tab 7" },
+    })
   end
 })
 
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
--- TODO: jump between tabs by g1, g2, g3, etc
 -- TODO: add Snack.image support
 -- TODO: improve Copilot highlighting
 -- TODO: fix autocompletion behavior in command mode

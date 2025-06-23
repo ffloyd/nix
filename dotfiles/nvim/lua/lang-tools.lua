@@ -113,15 +113,15 @@ features.add({
       vim.notify(msg, vim.log.levels.INFO)
     end
 
-    Snacks.toggle.inlay_hints():map("<leader>tI")
+    Snacks.toggle.inlay_hints():map("<leader>TI")
 
     require("which-key").add({
       { "<leader>ln",  vim.lsp.buf.rename,                      desc = "Rename Symbol" },
       { "<leader>lf",  vim.lsp.buf.format,                      desc = "Format Buffer" },
 
       -- Code lenses
-      { "<leader>lx",  vim.lsp.codelens.refresh,                desc = "Refresh Code Lenses" },
-      { "<leader>lX",  vim.lsp.codelens.run,                    desc = "Run Code Lens" },
+      { "<leader>ll",  vim.lsp.codelens.refresh,                desc = "Refresh Code Lenses" },
+      { "<leader>lL",  vim.lsp.codelens.run,                    desc = "Run Code Lens" },
 
       -- Call hierarchy commands
       { "<leader>lc",  vim.lsp.buf.incoming_calls,              desc = "Incoming Calls" },
@@ -143,8 +143,8 @@ features.add({
       { "<leader>li",  Snacks.picker.lsp_implementations,       desc = "Implementations", },
       { "<leader>lr",  Snacks.picker.lsp_references,            desc = "References", },
       { "<leader>lt",  Snacks.picker.lsp_type_definitions,      desc = "Type Definitions" },
-      { "<leader>ll",  Snacks.picker.lsp_symbols,               desc = "Local Symbols" },
-      { "<leader>lL",  Snacks.picker.lsp_workspace_symbols,     desc = "Workspace Symbols" },
+      { "<leader>ls",  Snacks.picker.lsp_symbols,               desc = "Local Symbols" },
+      { "<leader>lS",  Snacks.picker.lsp_workspace_symbols,     desc = "Workspace Symbols" },
 
       -- LSP Server Control
       { "<leader>ls",  group = "LSP Server" },
@@ -213,7 +213,7 @@ features.add({
   "LSP navigation between references",
   after = { "which-key", "snacks" },
   setup = function()
-    Snacks.toggle.words():map("<leader>tW")
+    Snacks.toggle.words():map("<leader>TW")
 
     local jump_next = function()
       Snacks.words.jump(vim.v.count1, true)
