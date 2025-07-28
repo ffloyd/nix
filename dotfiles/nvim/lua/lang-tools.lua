@@ -116,10 +116,18 @@ features.add({
     Snacks.toggle.inlay_hints():map("<leader>TI")
 
     require("which-key").add({
+      -- Snacks-powered LSP pickers
+      { "<leader>ld",  Snacks.picker.lsp_definitions,           desc = "Definitions" },
+      { "<leader>lD",  Snacks.picker.lsp_declarations,          desc = "Declarations" },
+      { "<leader>li",  Snacks.picker.lsp_implementations,       desc = "Implementations", },
+      { "<leader>lr",  Snacks.picker.lsp_references,            desc = "References", },
+      { "<leader>lt",  Snacks.picker.lsp_type_definitions,      desc = "Type Definitions" },
+      { "<leader>ls",  Snacks.picker.lsp_symbols,               desc = "Local Symbols" },
+      { "<leader>lS",  Snacks.picker.lsp_workspace_symbols,     desc = "Workspace Symbols" },
+
+      -- LSP commands
       { "<leader>ln",  vim.lsp.buf.rename,                      desc = "Rename Symbol" },
       { "<leader>lf",  vim.lsp.buf.format,                      desc = "Format Buffer" },
-
-      -- Code lenses
       { "<leader>ll",  vim.lsp.codelens.refresh,                desc = "Refresh Code Lenses" },
       { "<leader>lL",  vim.lsp.codelens.run,                    desc = "Run Code Lens" },
 
@@ -136,15 +144,6 @@ features.add({
 
       -- Apply LSP actions with preview
       { "<leader>la",  require("actions-preview").code_actions, desc = "Code Actions" },
-
-      -- Snacks-powered LSP pickers
-      { "<leader>ld",  Snacks.picker.lsp_definitions,           desc = "Definitions" },
-      { "<leader>lD",  Snacks.picker.lsp_declarations,          desc = "Declarations" },
-      { "<leader>li",  Snacks.picker.lsp_implementations,       desc = "Implementations", },
-      { "<leader>lr",  Snacks.picker.lsp_references,            desc = "References", },
-      { "<leader>lt",  Snacks.picker.lsp_type_definitions,      desc = "Type Definitions" },
-      { "<leader>ls",  Snacks.picker.lsp_symbols,               desc = "Local Symbols" },
-      { "<leader>lS",  Snacks.picker.lsp_workspace_symbols,     desc = "Workspace Symbols" },
 
       -- LSP Server Control
       { "<leader>ls",  group = "LSP Server" },

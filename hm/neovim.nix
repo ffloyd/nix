@@ -47,13 +47,8 @@ in
         # required by snacks.nvim dashboard
         pkgs.dwt1-shell-color-scripts
 
-        # required by https://github.com/Robitx/gp.nvim
-        (pkgs.sox.override {enableLame = true;})
-        pkgs.curl
-
-        # required by Copilot Chat
-        pkgs.lynx
-        pkgs.luajitPackages.tiktoken_core
+        # required by snacks.nvim image viewer
+        pkgs.imagemagick
 
         # globally installed language servers
         # (when possible I prefer keep them in projects' Nix devshells)
@@ -70,6 +65,9 @@ in
         pkgs.editorconfig-checker
         pkgs.hadolint
         pkgs.statix
+
+        # globally installed AI tools
+        pkgs.claude-code
       ];
 
       home.file = {
@@ -95,9 +93,6 @@ in
       };
     }
     (lib.mkIf pkgs.stdenv.isDarwin {
-      home.packages = [
-        # required by https://github.com/yetone/avante.nvim
-        pkgs.pngpaste
-      ];
+      home.packages = [];
     })
   ]

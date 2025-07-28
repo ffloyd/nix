@@ -50,6 +50,7 @@ vim.g.maplocalleader = "\\"
 local features = require("features")
 
 require("ai")
+require("folkevim")
 require("lang-tools")
 
 features.add({
@@ -201,121 +202,6 @@ features.add({
   },
 })
 
-features.add({
-  "Enable Snacks.nvim",
-  id = "snacks",
-  plugins = {
-    {
-      "folke/snacks.nvim",
-      priority = 1000,
-      lazy = false,
-      opts = {},
-    },
-  },
-})
----@module "snacks"
-
-features.add({
-  "Fancy dashboard with Snacks",
-  after = { "snacks" },
-  plugins = {
-    {
-      "folke/snacks.nvim",
-      opts = function(_, opts)
-        opts.dashboard = {
-          example = "advanced",
-        }
-      end,
-    },
-  },
-})
-
-features.add({
-  "Better UI elements from Snacks",
-  after = { "snacks" },
-  plugins = {
-    {
-      "folke/snacks.nvim",
-      opts = function(_, opts)
-        opts.statuscolumn = {
-          enabled = true,
-          folds = {
-            open = true,
-            git_hl = true,
-          },
-        }
-        opts.input = { enabled = true }
-        opts.notifier = { enabled = true }
-        opts.picker = { enabled = true, ui_select = true }
-      end,
-    },
-  },
-})
-
-features.add({
-  "Enable fancy fuzzy finders",
-  after = { "which-key", "snacks" },
-  plugins = {
-    {
-      "folke/snacks.nvim",
-    },
-  },
-  setup = function()
-    require("which-key").add({
-      -- Top-level finders
-      {
-        "<leader>fb",
-        function()
-          Snacks.picker.buffers()
-        end,
-        desc = "Buffer",
-      },
-      {
-        "<leader>fc",
-        function()
-          ---@diagnostic disable-next-line: assign-type-mismatch
-          Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
-        end,
-        desc = "Config File",
-      },
-      {
-        "<leader>ff",
-        function()
-          Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") })
-        end,
-        desc = "File (current buffer directory)",
-      },
-      {
-        "<leader>fg",
-        function()
-          Snacks.picker.grep()
-        end,
-        desc = "Grep Files",
-      },
-      {
-        "<leader>fG",
-        function()
-          Snacks.picker.git_files()
-        end,
-        desc = "Git File",
-      },
-      {
-        "<leader>fl",
-        function()
-          Snacks.picker.lines()
-        end,
-        desc = "Line",
-      },
-      {
-        "<leader>fr",
-        function()
-          Snacks.picker.recent()
-        end,
-        desc = "Recent",
-      },
-    })
-  end,
-})
 
 features.add({
   "Discover top-level keybindings",
@@ -341,89 +227,10 @@ features.add({
 })
 
 features.add({
-  "Search lines by `C-SPC C-SPC` and files by `SPC SPC`",
-  after = { "which-key", "snacks" },
-  setup = function()
-    require("which-key").add({
-      {
-        "<C-Space><C-Space>",
-        function()
-          Snacks.picker.lines()
-        end,
-        desc = "Find Line",
-      },
-      {
-        "<Space><Space>",
-        function()
-          Snacks.picker.files()
-        end,
-        desc = "Find File",
-      },
-    })
-  end,
-})
-
-features.add({
-  "Search commands by <leader>:",
-  after = { "which-key", "snacks" },
-  setup = function()
-    require("which-key").add({
-      {
-        "<leader>:",
-        function()
-          Snacks.picker.command_history()
-        end,
-        desc = "Command History",
-      },
-    })
-  end,
-})
-
-features.add({
-  "Use Snacks.debug",
-  after = { "snacks" },
-  setup = function()
-    _G.dd = function(...)
-      Snacks.debug.inspect(...)
-    end
-    _G.bt = function()
-      Snacks.debug.backtrace()
-    end
-    vim.print = _G.dd
-  end,
-})
-
-features.add({
-  "Add Snacks.nvim toggles",
-  after = { "snacks" },
-  setup = function()
-    Snacks.toggle.option("spell"):map("<leader>Ts")
-    Snacks.toggle.indent():map("<leader>Ti")
-    Snacks.toggle.line_number():map("<leader>Tn")
-  end,
-})
-
-features.add({
   "Do not fold when open a file",
   setup = function()
     -- this soulution will require to use `zR` once before using `zm/zr`.
     vim.o.foldlevel = 99
-  end,
-})
-
-features.add({
-  "Rename a file with Snacks",
-  after = { "which-key", "snacks" },
-  setup = function()
-    require("which-key").add({
-      {
-        "<leader>br",
-        function()
-          Snacks.rename.rename_file()
-        end,
-        desc = "Rename File",
-      },
-    })
   end,
 })
 
@@ -634,35 +441,6 @@ features.add({
         "<leader>to",
         "<cmd>tabonly<cr>",
         desc = "Close Other Tabs",
-      },
-    })
-  end,
-})
-
-features.add({
-  "Toggle terminal",
-  plugins = {
-    {
-      "folke/snacks.nvim",
-      opts = function(_, opts)
-        ---@type snacks.terminal.Config
-        opts.terminal = {}
-      end,
-    },
-  },
-  setup = function()
-    require("which-key").add({
-      {
-        "<leader>at",
-        function()
-          Snacks.terminal.toggle(nil, {
-            start_insert = true,
-            auto_close = true,
-            -- to have a more consistent experience when jumping between windows and tabs
-            auto_insert = false,
-          })
-        end,
-        desc = "Terminal",
       },
     })
   end,
@@ -1117,41 +895,6 @@ features.add({
 })
 
 features.add({
-  "File Explorer (snacks.nvim)",
-  after = { "which-key", "snacks" },
-  plugins = {
-    {
-      "folke/snacks.nvim",
-      opts = function(_, opts)
-        ---@type snacks.explorer.Config
-        opts.explorer = {
-          replace_netrw = true,
-        }
-
-        opts.picker = opts.picker or {}
-        opts.picker.sources = opts.picker.sources or {}
-        opts.picker.sources.explorer = {
-          layout = { preset = "default", preview = false },
-          auto_close = true,
-          jump = { close = true },
-        }
-      end,
-    },
-  },
-  setup = function()
-    require("which-key").add({
-      {
-        "<leader>ue",
-        function()
-          Snacks.explorer.open()
-        end,
-        desc = "Explorer (snacks.nvim)",
-      },
-    })
-  end,
-})
-
-features.add({
   "Jump Between Implementation and Test",
   after = { "which-key" },
   setup = function()
@@ -1239,30 +982,6 @@ features.add({
         "<leader>et",
         jump_between_implementation_and_test,
         desc = "Jump Between Implementation and Test",
-      },
-    })
-  end,
-})
-
-features.add({
-  "List recent notifications",
-  after = { "which-key", "snacks" },
-  plugins = {
-    {
-      "folke/snacks.nvim",
-      opts = function(_, opts)
-        opts.notifier = { enabled = true }
-      end,
-    },
-  },
-  setup = function()
-    require("which-key").add({
-      {
-        "<leader>un",
-        function()
-          Snacks.notifier.show_history()
-        end,
-        desc = "List Notifications",
       },
     })
   end,

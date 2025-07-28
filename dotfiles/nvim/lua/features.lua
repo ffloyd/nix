@@ -232,4 +232,38 @@ function M.report_order()
   vim.notify(msg, vim.log.levels.INFO)
 end
 
+--- Returns a function that updates a specific section opts section.
+---
+--- If the value is a table it will merge the new values into the existing section.
+--- It's designed to be used for lazy.nvim's plugin configurations.
+---
+--- @param section string The configuration section to update
+--- @param config any The values to merge into the section
+--- @return fun(any, table) # A configuration update function compatible with lazy.nvim's opts
+function M.merger(section, config)
+  return function(_, opts)
+    if not opts[section] then
+      opts[section] = {}
+    end
+
+    if type(config) ~= "table" or type(opts[section]) ~= "table" then
+      opts[section] = config
+      return
+    end
+
+    opts[section] = vim.tbl_deep_extend('force', opts[section], config)
+  end
+end
+
+--- Combines multiple configuration updaters functions into a single function
+--- @param merger_functions function[] Array of configuration update functions to combine
+--- @return function # A combined configuration update function compatible with lazy.nvim's opts
+function M.combine(merger_functions)
+  return function(self, opts)
+    for _, merger in ipairs(merger_functions) do
+      merger(self, opts)
+    end
+  end
+end
+
 return M

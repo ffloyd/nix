@@ -25,6 +25,7 @@
     LIGHTCYAN = "\033[1;36m";
     WHITE = "\033[1;37m";
   };
+  customZshFunctionsFileName = "zshrc.functions";
 in {
   programs.eza = {
     enable = true;
@@ -70,7 +71,7 @@ in {
       };
 
       initExtra = ''
-        source ~/.zshrc.functions
+        source ~/.${customZshFunctionsFileName}
 
         # keybinding adjustments
         # Home key - does not work by default
@@ -89,14 +90,16 @@ in {
       '';
     }
     (lib.mkIf stdenv.isDarwin {
+      # we need -u to disable security check that camplains about homebrew's `workbrew` user being owner of completion related brew files.
+      completionInit = "autoload -U compinit && compinit -u";
       initExtraBeforeCompInit = ''
-        FPATH="$(/opt/homebrew/bin/brew --prefix)/share/zsh/site-functions:''${FPATH}"
+        FPATH="$(/opt/workbrew/bin/brew --prefix)/share/zsh/site-functions:''${FPATH}"
       '';
-      initExtra = "eval \"$(/opt/homebrew/bin/brew shellenv)\"";
+      initExtra = "eval \"$(/opt/workbrew/bin/brew shellenv)\"";
     })
   ];
 
   home.file = {
-    ".zshrc.functions".source = mkOutOfStoreSymlink "${config.home.homeDirectory}/nix/dotfiles/zshrc.functions";
+    ".${customZshFunctionsFileName}".source = mkOutOfStoreSymlink "${config.home.homeDirectory}/nix/dotfiles/${customZshFunctionsFileName}";
   };
 }

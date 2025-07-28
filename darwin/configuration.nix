@@ -8,7 +8,8 @@
   imports = [
     ./homebrew.nix
     ./caddy.nix
-    ./livebook.nix
+    # I do not use it now, but I did a lot of work to make it work, so I keep it here
+    # ./livebook.nix
   ];
 
   # The platform the configuration will be used on.

@@ -1,28 +1,40 @@
 {
   pkgs,
   inputs,
+  private,
   ...
 }: {
+  nix-homebrew = {
+    enable = false;
+
+    # User owning the Homebrew prefix
+    user = private.darwinUsername;
+
+    # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
+    enableRosetta = true;
+  };
+
   homebrew = {
     enable = true;
+
+    brewPrefix = "/opt/workbrew/bin";
 
     onActivation.cleanup = "uninstall";
 
     taps = [
-      "homebrew/bundle"
       "kegworks-app/kegworks"
       "streetpea/streetpea"
       "jwbargsten/misc"
     ];
 
     brews = [
-      "defbro"
+      "jwbargsten/misc/defbro"
     ];
 
+    # commented out casks are already installed on machine and cannot be adopted by homebrew
     casks = [
       # Essential
       "arc"
-      "firefox@developer-edition"
       "zen"
       "readdle-spark"
       "notion-calendar"
@@ -37,8 +49,8 @@
       "loom"
       "notion"
       "linear-linear"
-      "xmind"
-      "freeplane"
+      # "xmind"
+      # "freeplane"
 
       # Social
       "telegram"
@@ -52,17 +64,20 @@
       "tableplus"
 
       # Tools
-      "send-to-kindle"
+      # "send-to-kindle"
       "domzilla-caffeine"
       "launchcontrol"
-      "winbox"
+      # "winbox"
+
+      # Web Site Development
+      "screaming-frog-seo-spider"
 
       # Entertaiment
       "spotify"
       "steam"
       "vlc"
       "kegworks" # wrapper for Windows games (for HOMM3 for example)
-      "streetpea/streetpea/chiaki-ng" # stream games from my PS4
+      # "streetpea/streetpea/chiaki-ng" # stream games from my PS4
       "moonlight" # stream games from my gaming rig
     ];
   };

@@ -15,6 +15,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+
     foundryvtt = {
       url = "github:reckenrode/nix-foundryvtt";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,6 +28,7 @@
     nixpkgs,
     home-manager,
     nix-darwin,
+    nix-homebrew,
     foundryvtt,
     ...
   } @ inputs: let
@@ -61,6 +64,7 @@
       specialArgs = {inherit inputs globals private;};
 
       modules = [
+        nix-homebrew.darwinModules.nix-homebrew
         ./darwin/configuration.nix
       ];
     };
