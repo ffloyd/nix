@@ -1,0 +1,13 @@
+{
+  "bar.customModules.storage.paths": [
+    "/"
+  ],
+  "theme.font.name": "IosevkaTerm Nerd Font Mono",
+  "theme.font.label": "IosevkaTerm Nerd Font Mono",
+  "scalingPriority": "both",
+  "bar.launcher.autoDetectIcon": true,
+  "menus.clock.time.military": false,
+  "menus.clock.weather.location": "Berlin",
+  "menus.clock.weather.unit": "metric",
+  "menus.transition": "crossfade"
+}

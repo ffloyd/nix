@@ -21,6 +21,15 @@
       url = "github:reckenrode/nix-foundryvtt";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    walker = {
+      url = "github:abenz1267/walker";
+    };
   };
 
   outputs = {
@@ -30,6 +39,8 @@
     nix-darwin,
     nix-homebrew,
     foundryvtt,
+    zen-browser,
+    walker,
     ...
   } @ inputs: let
     # These attribute sets are passed to all modules here, both NixOS and
@@ -46,14 +57,31 @@
       specialArgs = {inherit inputs globals private;};
 
       modules = [
-        ./nixos/configuration.nix
+        home-manager.nixosModules.home-manager
         foundryvtt.nixosModules.foundryvtt
 
-        home-manager.nixosModules.home-manager
+        ./nixos/configuration.nix
+
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {inherit globals private;};
+
+          home-manager.sharedModules = [
+            zen-browser.homeModules.beta
+            walker.homeManagerModules.default
+          ];
+
+          nix.settings = {
+            substituters = [
+              "https://walker.cachix.org"
+              "https://walker-git.cachix.org"
+            ];
+            trusted-public-keys = [
+              "walker.cachix.org-1:fG8q+uAaMqhsMxWjwvk0IMb4mFPFLqHjuvfwQxE4oJM="
+              "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
+            ];
+          };
 
           home-manager.users.${private.nixOsUsername} = import ./nixos/home.nix;
         }

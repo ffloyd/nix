@@ -17,6 +17,8 @@
     ../hm/neovim.nix
     ../hm/terminal.nix
     ../hm/webos.nix
+    ../hm/hyprland.nix
+    ../hm/zen.nix
   ];
 
   # This value determines the Home Manager release that your configuration is
@@ -32,14 +34,9 @@
   # environment.
   home.packages = with pkgs; [
     # essential GUI apps
-    _1password-gui
     chromium
     telegram-desktop
     spotify
-
-    # GNOME adjustment
-    gnome-tweaks
-    gnomeExtensions.appindicator
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -54,19 +51,6 @@
     #   echo "Hello, ${config.home.username}!"
     # '')
   ];
-
-  # Gnome settings
-  dconf = {
-    enable = true;
-
-    settings."org/gnome/Console" = {
-      audible-bell = false;
-      use-system-font = false;
-      custom-font = "IosevkaTerm Nerd Font Mono 10";
-    };
-
-    settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
-  };
 
   programs.zsh.shellAliases = {
     reboot-to-windows = "sudo systemctl reboot --boot-loader-entry=windows_11.conf";

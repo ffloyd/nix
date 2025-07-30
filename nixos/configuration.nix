@@ -12,11 +12,12 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     # and rest of my modules
+    ./services/hyprland.nix
     ./services/caddy.nix
-    ./services/foundryvtt.nix
-    ./services/livebook.nix
-    ./services/ollama.nix
-    ./services/open-webui.nix
+    # ./services/foundryvtt.nix
+    # ./services/livebook.nix
+    # ./services/ollama.nix
+    # ./services/open-webui.nix
     ./services/wakeonlan.nix
   ];
 
@@ -38,6 +39,9 @@
   networking.hostName = private.nixOsHost; # Define your hostname.
   networking.networkmanager.enable = true;
 
+  # Enable bluetooth
+  hardware.bluetooth.enable = true;
+
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
@@ -58,17 +62,6 @@
     LC_PAPER = "de_DE.UTF-8";
     LC_TELEPHONE = "de_DE.UTF-8";
     LC_TIME = "de_DE.UTF-8";
-  };
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver = {
-    enable = true;
-    desktopManager.gnome.enable = true;
-
-    displayManager.gdm = {
-      enable = true;
-      autoSuspend = false;
-    };
   };
 
   # NVIDIA

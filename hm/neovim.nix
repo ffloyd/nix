@@ -92,7 +92,7 @@ in
         vi-config = "cd ${config.home.homeDirectory}/.config/nvim && nvim init.lua";
       };
     }
-    (lib.mkIf pkgs.stdenv.isDarwin {
-      home.packages = [];
+    (lib.mkIf pkgs.stdenv.isLinux {
+      home.packages = [pkgs.gcc];
     })
   ]
