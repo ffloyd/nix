@@ -7,9 +7,10 @@ This repository contains my personal configuration for NixOS and MacOS. It's a [
 | `flake.nix`    | The main entry point, defines configuration for two machines: x86_64-linux NixOS and aarch64-darwin MacOS.                                                              |
 | `globals.nix`  | An attrs set with some global values. Propogated to all modules.                                                                                                        |
 | `private.nix`  | An attrs set with some global values that are personal data. Encrypted by `git-crypt`. Propogated to all modules.                                                       |
+| `hosts/*`      | Entrypoints for each host. Each host is a folder with required top-level files. `hardware-configuration.nix` is a hardware configuration and also encrypted by `git-crypt`. |
 | `hm/*.nix`     | [home-manager](https://github.com/nix-community/home-manager) configuration modules that shared between NixOS and MacOS.                                                |
-| `nixos/*.nix`  | NixOS configuration modules. `home.nix` is a top-level home-manager module. `hardware-configuration.nix` is a hardware configuration and also encrypted by `git-crypt`. |
-| `darwin/*.nix` | [nix-darwin](https://github.com/LnL7/nix-darwin) configuration modules. `home.nix` is a top-level home-manager module.                                                  |
+| `nixos/*.nix`  | NixOS configuration modules. |
+| `darwin/*.nix` | [nix-darwin](https://github.com/LnL7/nix-darwin) configuration modules. |
 | `dotfiles/*`   | These files are linked directly, not through Nix store. It allows to edit them in place without creating a new generation for each change.                              |
 
 The reposiory should be cloned into `nix` folder in the user's home folder.

@@ -2,24 +2,14 @@
   config,
   pkgs,
   private,
+  username,
+  hostname,
   ...
 }: {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = private.nixOsUsername;
-  home.homeDirectory = "/home/${private.nixOsUsername}";
-
-  imports = [
-    ../hm/zsh.nix
-    ../hm/git.nix
-    ../hm/devtools.nix
-    ../hm/gpg.nix
-    ../hm/neovim.nix
-    ../hm/terminal.nix
-    ../hm/webos.nix
-    ../hm/hyprland.nix
-    ../hm/zen.nix
-  ];
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release

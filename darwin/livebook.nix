@@ -1,9 +1,9 @@
 {
   pkgs,
-  private,
+  username,
   ...
 }: let
-  workDir = "/Users/${private.darwinUsername}/Livebooks";
+  workDir = "/Users/${username}/Livebooks";
   context = with pkgs; [cmake git];
   contextPath = pkgs.lib.strings.concatStringsSep ":" (map (p: "${p}/bin") context);
 in {

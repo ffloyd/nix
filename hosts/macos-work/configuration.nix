@@ -3,15 +3,9 @@
   inputs,
   globals,
   private,
+  username,
   ...
 }: {
-  imports = [
-    ./homebrew.nix
-    ./caddy.nix
-    # I do not use it now, but I did a lot of work to make it work, so I keep it here
-    # ./livebook.nix
-  ];
-
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfree = true;
@@ -23,7 +17,7 @@
   environment.darwinConfig = "$HOME/nix/flake.nix";
 
   # Set trusted users for nix-daemon
-  nix.settings.trusted-users = ["root" private.darwinUsername];
+  nix.settings.trusted-users = ["root" username];
 
   # enable local linux builder
   # nix.linux-builder = {
@@ -43,9 +37,9 @@
   # Allow ZSH from Nix as a default shell
   environment.shells = [pkgs.zsh];
 
-  users.users.${private.darwinUsername} = {
+  users.users.${username} = {
     # we need it to enable home-manager
-    home = "/Users/${private.darwinUsername}";
+    home = "/Users/${username}";
     shell = pkgs.zsh;
   };
 
@@ -58,7 +52,7 @@
 
   fonts.packages = globals.getFonts pkgs;
 
-  system.primaryUser = private.darwinUsername;
+  system.primaryUser = username;
 
   # enable Rosetta 2
   system.activationScripts.extraActivation.text = ''

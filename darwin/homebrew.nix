@@ -1,22 +1,8 @@
-{
-  pkgs,
-  inputs,
-  private,
-  ...
-}: {
-  nix-homebrew = {
-    enable = false;
-
-    # User owning the Homebrew prefix
-    user = private.darwinUsername;
-
-    # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
-    enableRosetta = true;
-  };
-
+_: {
   homebrew = {
     enable = true;
 
+    # Enforced by employer
     brewPrefix = "/opt/workbrew/bin";
 
     onActivation.cleanup = "uninstall";

@@ -1,23 +1,13 @@
 {
-  config,
   pkgs,
   private,
+  username,
   ...
 }: {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = private.darwinUsername;
-  home.homeDirectory = "/Users/${private.darwinUsername}";
-
-  imports = [
-    ../hm/devtools.nix
-    ../hm/git.nix
-    ../hm/gpg.nix
-    ../hm/neovim.nix
-    ../hm/terminal.nix
-    ../hm/webos.nix
-    ../hm/zsh.nix
-  ];
+  home.username = username;
+  home.homeDirectory = "/Users/${username}";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -37,7 +27,7 @@
 
   programs.zsh = {
     shellAliases = {
-      os-rebuild = "sudo darwin-rebuild switch --flake /Users/${private.darwinUsername}/nix";
+      os-rebuild = "sudo darwin-rebuild switch --flake /Users/${username}/nix";
       hm-rebuild = "home-manager switch --flake ~/nix";
       wakeonlan-rig = ''
         curl -X POST -u ${private.routerUsername}:${private.routerPassword} http://${private.routerHost}/rest/tool/wol --data '{"mac": "${private.gamingRigMacAddress}", "interface": "bridge"}' -H "content-type: application/json"

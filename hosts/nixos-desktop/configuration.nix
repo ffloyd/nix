@@ -6,20 +6,11 @@
   pkgs,
   globals,
   private,
+  username,
+  hostname,
   ...
 }: {
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    # and rest of my modules
-    ./services/hyprland.nix
-    ./services/caddy.nix
-    # ./services/foundryvtt.nix
-    # ./services/livebook.nix
-    # ./services/ollama.nix
-    # ./services/open-webui.nix
-    ./services/wakeonlan.nix
-  ];
+  imports = [./hardware-configuration.nix];
 
   # nix settings
   nix.settings.experimental-features = globals.nixExperimentalFeatures;
@@ -36,7 +27,7 @@
   };
 
   # Enable networking
-  networking.hostName = private.nixOsHost; # Define your hostname.
+  networking.hostName = hostname; # Define your hostname.
   networking.networkmanager.enable = true;
 
   # Enable bluetooth
@@ -95,7 +86,7 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${private.nixOsUsername} = {
+  users.users.${username} = {
     isNormalUser = true;
     description = private.fullName;
     extraGroups = ["networkmanager" "wheel"];

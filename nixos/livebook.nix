@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  private,
+  username,
   ...
 }: let
   inherit (pkgs.cudaPackages) cudatoolkit;
@@ -31,7 +31,7 @@ in {
   };
 
   # prevent starting on other users (like gdm, etc)
-  systemd.user.services.livebook.unitConfig.ConditionUser = private.nixOsUsername;
+  systemd.user.services.livebook.unitConfig.ConditionUser = username;
 
   services.caddy.virtualHosts."livebook.rig.lan".extraConfig = ''
     reverse_proxy localhost:${toString config.services.livebook.environment.LIVEBOOK_PORT}
