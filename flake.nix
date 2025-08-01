@@ -4,6 +4,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     # https://nix-community.github.io/home-manager/index.xhtml#ch-nix-flakes
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -28,11 +30,17 @@
     walker = {
       url = "github:abenz1267/walker";
     };
+
+    claude-desktop = {
+      url = "github:k3d3/claude-desktop-linux-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
     self,
     nixpkgs,
+    nixos-hardware,
     home-manager,
     nix-darwin,
     foundryvtt,
@@ -44,13 +52,14 @@
     private = import ./private.nix;
     nixosSystem = host: nixosModules: hmModules: let
       inherit (private.hosts.${host}) username hostname;
+      context = {
+        inherit inputs globals private username hostname;
+      };
     in {
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
-        specialArgs = {
-          inherit inputs globals private username hostname;
-        };
+        specialArgs = context;
 
         modules =
           nixosModules
@@ -63,9 +72,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = {
-                inherit globals private username hostname;
-              };
+              home-manager.extraSpecialArgs = context;
 
               home-manager.sharedModules = [
                 zen-browser.homeModules.beta
@@ -83,22 +90,24 @@
                 ];
               };
 
-              home-manager.users.${username} =
-                import ./hosts/${host}/home.nix
-                // {
+              home-manager.users.${username} = nixpkgs.lib.mkMerge [
+                (import ./hosts/${host}/home.nix)
+                {
                   imports = hmModules;
-                };
+                }
+              ];
             }
           ];
       };
     };
     macosSystem = host: darwinModules: hmModules: let
       inherit (private.hosts.${host}) username hostname;
+      context = {
+        inherit inputs globals private username hostname;
+      };
     in {
       darwinConfigurations.${hostname} = nix-darwin.lib.darwinSystem {
-        specialArgs = {
-          inherit inputs globals private username hostname;
-        };
+        specialArgs = context;
 
         modules =
           [
@@ -112,9 +121,7 @@
           localSystem = "aarch64-darwin";
           config.allowUnfree = true;
         };
-        extraSpecialArgs = {
-          inherit globals private username hostname;
-        };
+        extraSpecialArgs = context;
 
         modules = [./hosts/${host}/home.nix] ++ hmModules;
       };
@@ -127,10 +134,6 @@
     // (nixosSystem "nixos-desktop" [
         ./nixos/hyprland.nix
         ./nixos/caddy.nix
-        # ./nixos/foundryvtt.nix
-        # ./nixos/livebook.nix
-        # ./nixos/ollama.nix
-        # ./nixos/open-webui.nix
         ./nixos/wakeonlan.nix
       ] [
         ./hm/zsh.nix
@@ -141,6 +144,21 @@
         ./hm/terminal.nix
         ./hm/webos.nix
         ./hm/hyprland.nix
+        ./hm/zen.nix
+      ])
+    // (nixosSystem "nixos-laptop" [
+        nixos-hardware.nixosModules.framework-amd-ai-300-series
+        ./nixos/hyprland.nix
+      ] [
+        ./hm/hyprland.nix
+        ./hm/apps.nix
+        ./hm/zsh.nix
+        ./hm/git.nix
+        ./hm/devtools.nix
+        ./hm/gpg.nix
+        ./hm/neovim.nix
+        ./hm/terminal.nix
+        ./hm/webos.nix
         ./hm/zen.nix
       ])
     // (macosSystem "macos-work" [
