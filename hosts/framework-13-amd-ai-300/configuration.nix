@@ -84,6 +84,11 @@
     ];
   };
 
+  # Unresolved Plymouth issues at the moment of writing:
+  #
+  # - Plymouth sometimes fails and boot happens in text mode
+  # - When external monitor is connected, Plymouth is rendered on it with bad placement
+
   #
   # Firmware updates
   #

@@ -4,6 +4,10 @@
   config,
   ...
 }: {
+  imports = [
+    inputs.foundryvtt.nixosModules.foundryvtt
+  ];
+
   services.foundryvtt = {
     enable = true;
     package = inputs.foundryvtt.packages.${pkgs.system}.foundryvtt_12.overrideAttrs {

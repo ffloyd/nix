@@ -70,7 +70,7 @@ in {
         p10k-reconfigure = "POWERLEVEL9K_CONFIG_FILE=~/nix/hm/zsh/p10k.zsh p10k configure";
       };
 
-      initExtra = ''
+      initContent = ''
         source ~/.${customZshFunctionsFileName}
 
         # keybinding adjustments
@@ -92,10 +92,14 @@ in {
     (lib.mkIf stdenv.isDarwin {
       # we need -u to disable security check that camplains about homebrew's `workbrew` user being owner of completion related brew files.
       completionInit = "autoload -U compinit && compinit -u";
-      initExtraBeforeCompInit = ''
-        FPATH="$(/opt/workbrew/bin/brew --prefix)/share/zsh/site-functions:''${FPATH}"
-      '';
-      initExtra = "eval \"$(/opt/workbrew/bin/brew shellenv)\"";
+      initContent = let
+        zshConfigBeforeCompInit = lib.mkOrder 550 ''
+          FPATH="$(/opt/workbrew/bin/brew --prefix)/share/zsh/site-functions:''${FPATH}"
+        '';
+
+        zshConfig = lib.mkOrder 1000 "eval \"$(/opt/workbrew/bin/brew shellenv)\"";
+      in
+        lib.mkMerge [zshConfigBeforeCompInit zshConfig];
     })
   ];
 

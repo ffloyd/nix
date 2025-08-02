@@ -9,7 +9,7 @@ lib.mkMerge [
       enable = true;
     };
 
-    programs.zsh.initExtra = ''
+    programs.zsh.initContent = ''
       gpg-export-secrets() {
         gpg --export-secret-keys > ''${1:?provide a file name}
       }
@@ -39,7 +39,7 @@ lib.mkMerge [
       enableSshSupport = true;
       enableZshIntegration = true;
 
-      pinentryPackage = pkgs.pinentry-gnome3;
+      pinentry.package = pkgs.pinentry-gnome3;
     };
   })
 ]

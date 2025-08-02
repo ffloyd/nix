@@ -32,7 +32,7 @@
   };
 
   # load gh copilot aliases
-  programs.zsh.initExtra = ''
+  programs.zsh.initContent = ''
     eval "$(gh copilot alias zsh)"
   '';
 

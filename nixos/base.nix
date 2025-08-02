@@ -34,7 +34,7 @@
   # System-wide fonts
   #
   fonts = {
-    enableDefaultFonts = true;
+    enableDefaultPackages = true;
     packages = globals.getFonts pkgs;
   };
 

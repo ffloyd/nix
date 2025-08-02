@@ -1,6 +1,6 @@
 {
-  pkgs,
   inputs,
+  pkgs,
   ...
 }: {
   home.packages = [
@@ -11,7 +11,6 @@
     pkgs.protonvpn-gui
 
     pkgs.telegram-desktop
-    pkgs.thunderbird
 
     inputs.claude-desktop.packages.${pkgs.system}.claude-desktop-with-fhs
   ];
