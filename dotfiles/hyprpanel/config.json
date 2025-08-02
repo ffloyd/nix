@@ -404,7 +404,62 @@
   "bar.workspaces.showApplicationIcons": true,
   "bar.workspaces.numbered_active_indicator": "underline",
   "theme.bar.buttons.windowtitle.enableBorder": false,
-  "theme.notification.opacity": 80,
+  "theme.notification.opacity": 90,
   "menus.clock.time.hideSeconds": true,
-  "scalingPriority": "hyprland"
+  "scalingPriority": "hyprland",
+  "bar.layouts": {
+    "0": {
+      "left": [
+        "dashboard",
+        "workspaces",
+        "windowtitle"
+      ],
+      "middle": [
+        "media"
+      ],
+      "right": [
+        "volume",
+        "network",
+        "bluetooth",
+        "battery",
+        "hyprsunset",
+        "systray",
+        "clock",
+        "notifications"
+      ]
+    },
+    "1": {
+      "left": [
+        "dashboard",
+        "workspaces",
+        "windowtitle"
+      ],
+      "middle": [
+        "media"
+      ],
+      "right": [
+        "volume",
+        "clock",
+        "notifications"
+      ]
+    },
+    "2": {
+      "left": [
+        "dashboard",
+        "workspaces",
+        "windowtitle"
+      ],
+      "middle": [
+        "media"
+      ],
+      "right": [
+        "volume",
+        "clock",
+        "notifications"
+      ]
+    }
+  },
+  "bar.customModules.hyprsunset.temperature": "4500k",
+  "bar.customModules.hyprsunset.label": false,
+  "theme.bar.buttons.bluetooth.enableBorder": false
 }

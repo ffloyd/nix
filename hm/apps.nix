@@ -8,6 +8,7 @@
 
     pkgs.proton-pass
     pkgs.protonmail-desktop
+    pkgs.protonvpn-gui
 
     pkgs.telegram-desktop
     pkgs.thunderbird

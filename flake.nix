@@ -38,9 +38,7 @@
   };
 
   outputs = {
-    self,
     nixpkgs,
-    nixos-hardware,
     home-manager,
     nix-darwin,
     foundryvtt,
@@ -50,7 +48,8 @@
   } @ inputs: let
     globals = import ./globals.nix;
     private = import ./private.nix;
-    nixosSystem = host: nixosModules: hmModules: let
+    nixosSystem = host: params: let
+      inherit (params) nixosModules hmModules;
       inherit (private.hosts.${host}) username hostname;
       context = {
         inherit inputs globals private username hostname;
@@ -100,7 +99,8 @@
           ];
       };
     };
-    macosSystem = host: darwinModules: hmModules: let
+    macosSystem = host: params: let
+      inherit (params) darwinModules hmModules;
       inherit (private.hosts.${host}) username hostname;
       context = {
         inherit inputs globals private username hostname;
@@ -126,51 +126,65 @@
         modules = [./hosts/${host}/home.nix] ++ hmModules;
       };
     };
+    inherit (nixpkgs.lib) recursiveUpdate;
+    inherit (nixpkgs.lib.lists) foldl';
   in
-    {
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
-      formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
-    }
-    // (nixosSystem "nixos-desktop" [
-        ./nixos/hyprland.nix
-        ./nixos/caddy.nix
-        ./nixos/wakeonlan.nix
-      ] [
-        ./hm/zsh.nix
-        ./hm/git.nix
-        ./hm/devtools.nix
-        ./hm/gpg.nix
-        ./hm/neovim.nix
-        ./hm/terminal.nix
-        ./hm/webos.nix
-        ./hm/hyprland.nix
-        ./hm/zen.nix
-      ])
-    // (nixosSystem "nixos-laptop" [
-        nixos-hardware.nixosModules.framework-amd-ai-300-series
-        ./nixos/hyprland.nix
-      ] [
-        ./hm/hyprland.nix
-        ./hm/apps.nix
-        ./hm/zsh.nix
-        ./hm/git.nix
-        ./hm/devtools.nix
-        ./hm/gpg.nix
-        ./hm/neovim.nix
-        ./hm/terminal.nix
-        ./hm/webos.nix
-        ./hm/zen.nix
-      ])
-    // (macosSystem "macos-work" [
-        ./darwin/homebrew.nix
-        ./darwin/caddy.nix
-      ] [
-        ./hm/devtools.nix
-        ./hm/git.nix
-        ./hm/gpg.nix
-        ./hm/neovim.nix
-        ./hm/terminal.nix
-        ./hm/webos.nix
-        ./hm/zsh.nix
-      ]);
+    foldl' recursiveUpdate {} [
+      {
+        formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
+        formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
+      }
+      (nixosSystem "framework-13-amd-ai-300" {
+        nixosModules = [
+          ./nixos/base.nix
+          ./nixos/hyprland.nix
+        ];
+        hmModules = [
+          ./hm/hyprland.nix
+          ./hm/apps.nix
+          ./hm/zsh.nix
+          ./hm/git.nix
+          ./hm/devtools.nix
+          ./hm/gpg.nix
+          ./hm/neovim.nix
+          ./hm/terminal.nix
+          ./hm/webos.nix
+          ./hm/zen.nix
+        ];
+      })
+      (nixosSystem "nixos-desktop" {
+        nixosModules = [
+          ./nixos/base.nix
+          ./nixos/hyprland.nix
+          ./nixos/caddy.nix
+          ./nixos/wakeonlan.nix
+        ];
+        hmModules = [
+          ./hm/zsh.nix
+          ./hm/git.nix
+          ./hm/devtools.nix
+          ./hm/gpg.nix
+          ./hm/neovim.nix
+          ./hm/terminal.nix
+          ./hm/webos.nix
+          ./hm/hyprland.nix
+          ./hm/zen.nix
+        ];
+      })
+      (macosSystem "macos-work" {
+        darwinModules = [
+          ./darwin/homebrew.nix
+          ./darwin/caddy.nix
+        ];
+        hmModules = [
+          ./hm/devtools.nix
+          ./hm/git.nix
+          ./hm/gpg.nix
+          ./hm/neovim.nix
+          ./hm/terminal.nix
+          ./hm/webos.nix
+          ./hm/zsh.nix
+        ];
+      })
+    ];
 }
