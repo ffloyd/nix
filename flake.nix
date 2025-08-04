@@ -43,20 +43,34 @@
     nix-darwin,
     ...
   } @ inputs: let
+    # Values that are used in multiple modules
     globals = import ./globals.nix;
+    # Private data, like usernames, hostnames, etc.
+    # (encrypted with git-crypt)
     private = import ./private.nix;
 
+    # mkMerge cannot merge flake outputs,
+    # and `//` operator cannot do deep merge,
+    # so we need to use `recursiveUpdate` to merge flake outputs,
+    # but it takes two arguments. foldl' makes it work with lists.
     inherit (nixpkgs.lib) recursiveUpdate;
     inherit (nixpkgs.lib.lists) foldl';
     mergeOutputs = foldl' recursiveUpdate {};
 
+    # Waiting for nix to build for every change in dotfiles is annoying.
+    # To opt-out of this, we can create direct symlinks to dotfiles bypassing the store.
+    # The trick relies on home-manager's `mkOutOfStoreSymlink` function.
     mkDotfilesLink = hmConfig: path:
       hmConfig.lib.file.mkOutOfStoreSymlink "${hmConfig.home.homeDirectory}/nix/dotfiles/${path}";
 
+    # These attributes are passed to all NixOS, nix-darwin and home-manager modules.
     commonContext = {
       inherit inputs globals private mkDotfilesLink;
     };
 
+    # Creates NixOS system configurations for a given host.
+    # Also creates home-manager configuration for the user on this host.
+    # For simplicity, home-manager configuration is merged inside NixOS configuration.
     nixosSystem = host: params: let
       inherit (params) nixosModules hmModules;
       inherit (private.hosts.${host}) username hostname;
@@ -93,6 +107,11 @@
       };
     };
 
+    # Creates macOS system configurations for a given host
+    # along with home-manager configuration.
+    #
+    # In macOS, nix-darwin modules are rarely updated, but their application takes noticeable time,
+    # so we have separate setup for nix-darwin and home-manager.
     macosSystem = host: params: let
       inherit (params) darwinModules hmModules;
       inherit (private.hosts.${host}) username hostname;
