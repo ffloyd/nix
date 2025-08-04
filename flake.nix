@@ -193,7 +193,6 @@
           ./hm/gpg.nix
           ./hm/neovim.nix
           ./hm/terminal.nix
-          ./hm/webos.nix
           ./hm/zsh.nix
         ];
       })

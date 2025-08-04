@@ -8,8 +8,6 @@ _: {
     onActivation.cleanup = "uninstall";
 
     taps = [
-      "kegworks-app/kegworks"
-      "streetpea/streetpea"
       "jwbargsten/misc"
     ];
 
@@ -21,27 +19,17 @@ _: {
     casks = [
       # Essential
       "arc"
-      "zen"
-      "readdle-spark"
       "notion-calendar"
       "raycast"
       "anytype"
 
       # Proton family
-      "proton-mail"
-      "proton-pass"
+      "proton-drive"
 
       # Work-related
       "loom"
       "notion"
       "linear-linear"
-      # "xmind"
-      # "freeplane"
-
-      # Social
-      "telegram"
-      "whatsapp"
-      "discord"
 
       # Dev Tools
       "dash"
@@ -55,16 +43,9 @@ _: {
       "launchcontrol"
       # "winbox"
 
-      # Web Site Development
-      "screaming-frog-seo-spider"
-
       # Entertaiment
       "spotify"
-      "steam"
       "vlc"
-      "kegworks" # wrapper for Windows games (for HOMM3 for example)
-      # "streetpea/streetpea/chiaki-ng" # stream games from my PS4
-      "moonlight" # stream games from my gaming rig
     ];
   };
 }
