@@ -1135,6 +1135,69 @@ features.add({
   end
 })
 
+features.add({
+  "IexTests integration - Run Elixir tests in IEx from Neovim",
+  plugins = {
+    -- consider extracting this to a separate fieature
+    {
+      "waiting-for-dev/ergoterm.nvim",
+      config = function()
+        require("ergoterm").setup()
+      end
+    }
+  },
+  setup = function()
+    local terms = require("ergoterm.terminal")
+    local iex_tests_term = terms.Terminal:new({
+      cmd = "iex -S mix",
+      name = "IexTests",
+      layout = "right",
+      selectable = false,
+      env = {
+        MIX_ENV = "test"
+      }
+    })
+
+    require("which-key").add({
+      {
+        "<leader>aii",
+        function()
+          iex_tests_term:toggle()
+        end,
+        desc = "Toggle IEx Tests Terminal",
+      },
+      {
+        "<leader>ait",
+        function()
+          iex_tests_term:start()
+          local file_path = vim.fn.expand("%")
+          local line_number = vim.fn.line(".")
+          iex_tests_term:send({ 'IexTests.test("' .. file_path .. ':' .. line_number .. '")' }, { action = "visible" })
+        end,
+        desc = "Test Current Line in IEx",
+      },
+      {
+        "<leader>aiT",
+        function()
+          iex_tests_term:start()
+          local file_path = vim.fn.expand("%")
+          iex_tests_term:send({ 'IexTests.test("' .. file_path .. '")' }, { action = "visible" })
+        end,
+        desc = "Test Current File in IEx",
+      },
+      {
+        "<leader>aid",
+        function()
+          iex_tests_term:start()
+          local directory_path = vim.fn.expand("%:p:h")
+          iex_tests_term:send({ 'IexTests.test("' .. directory_path .. '")' }, { action = "visible" })
+        end,
+        desc = "Test Current File in IEx",
+      },
+    })
+  end
+})
+
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
 -- TODO: add Snack.image support
 -- TODO: improve Copilot highlighting
