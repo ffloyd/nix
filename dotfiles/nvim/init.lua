@@ -1198,6 +1198,54 @@ features.add({
   end
 })
 
+features.add({
+  "Work with PG SQL databases",
+  after = { "which-key", "blink" },
+  plugins = {
+    {
+      "kristijanhusak/vim-dadbod-ui",
+      dependencies = {
+        { "tpope/vim-dadbod",                     lazy = true },
+        { "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true },
+        {
+          "saghen/blink.cmp",
+          opts = function(_, opts)
+            opts.sources = opts.sources or {}
+            opts.sources.per_filetype = opts.sources.per_filetype or {}
+            opts.sources.per_filetype.sql = { "snippets", "dadbod", "buffer" }
+
+            opts.providers = opts.sources.providers or {}
+            opts.providers.dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" }
+          end,
+        }
+      },
+      cmd = {
+        "DBUI",
+        "DBUIToggle",
+        "DBUIAddConnection",
+        "DBUIFindBuffer",
+      },
+      init = function()
+        vim.g.db_ui_use_nerd_fonts = 1
+      end
+    }
+  },
+  setup = function()
+    require("which-key").add({
+      {
+        "<leader>ad ",
+        "<cmd>DBUIToggle<cr>",
+        desc = "Toggle Database UI",
+      },
+      {
+        "<leader>ada",
+        "<cmd>DBUIAddConnection<cr>",
+        desc = "Add Database Connection",
+      }
+    })
+  end
+})
+
 -- TODO: togglable LSP symbols path in incline, statusline or popup like with " gb"
 -- TODO: add Snack.image support
 -- TODO: improve Copilot highlighting

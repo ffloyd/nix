@@ -30,6 +30,7 @@ _: {
       "loom"
       "notion"
       "linear-linear"
+      "livebook"
 
       # Dev Tools
       "dash"
