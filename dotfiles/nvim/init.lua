@@ -1207,6 +1207,7 @@ features.add({
       dependencies = {
         { "tpope/vim-dadbod",                     lazy = true },
         { "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true },
+        -- support for Blink autocompletion
         {
           "saghen/blink.cmp",
           opts = function(_, opts)
@@ -1217,6 +1218,15 @@ features.add({
             opts.providers = opts.sources.providers or {}
             opts.providers.dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" }
           end,
+        },
+        -- make result discoverable in a browser
+        {
+          'napisani/nvim-dadbod-bg',
+          build = './install.sh',
+          -- (optional) the default port is 4546
+          config = function()
+            vim.g.nvim_dadbod_bg_port = '4546'
+          end
         }
       },
       cmd = {
@@ -1241,6 +1251,13 @@ features.add({
         "<leader>ada",
         "<cmd>DBUIAddConnection<cr>",
         desc = "Add Database Connection",
+      },
+      {
+        "<leader>ado",
+        function()
+          vim.cmd('exec "!open \'' .. "http://localhost:4546" .. '\'"')
+        end,
+        desc = "Open Last Result in Browser",
       }
     })
   end
