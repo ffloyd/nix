@@ -22,6 +22,7 @@ features.add({
           'jsonls',
           'gopls',
           'html',
+          'hyprls',
           'lexical',
           'lua_ls',
           'nixd',

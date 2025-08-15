@@ -11,10 +11,6 @@
   background = ./hyprland/bg.jpg;
 in {
   imports = [
-    inputs.sddm-sugar-candy-nix.nixosModules.default
-  ];
-
-  config = lib.mkMerge [
     #
     # Display manager configuration
     #
@@ -55,6 +51,9 @@ in {
         home.packages = [
           pkgs.wl-clipboard
           pkgs.hyprsysteminfo
+
+          # language server
+          pkgs.hyprls
         ];
 
         xdg.configFile."hypr/hyprland.conf".source = mkDotfilesLink hmConfig "hyprland.conf";
@@ -115,6 +114,7 @@ in {
     #
     # Theming
     #
+    inputs.sddm-sugar-candy-nix.nixosModules.default
     {
       nixpkgs = {
         overlays = [
