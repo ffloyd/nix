@@ -461,5 +461,6 @@
   },
   "bar.customModules.hyprsunset.temperature": "4500k",
   "bar.customModules.hyprsunset.label": false,
-  "theme.bar.buttons.bluetooth.enableBorder": false
+  "theme.bar.buttons.bluetooth.enableBorder": false,
+  "wallpaper.image": "/home/ffloyd/nix/dotfiles/hypr/bg.jpg"
 }

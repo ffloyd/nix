@@ -38,7 +38,6 @@
   ];
 
   programs.zsh.shellAliases = {
-    reboot-to-windows = "sudo systemctl reboot --boot-loader-entry=windows_11.conf";
     os-rebuild = "sudo nixos-rebuild switch --flake ~/nix";
     os-rebuild-boot = "sudo nixos-rebuild boot --flake ~/nix --install-bootloader";
     os-gc = "sudo nix-collect-garbage -d";

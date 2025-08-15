@@ -29,6 +29,31 @@
   hardware.framework.laptop13.audioEnhancement.enable = true;
 
   #
+  # Enable all firmware (including unfree, etc.)
+  #
+  hardware.enableAllFirmware = true;
+
+  #
+  # Adjust internal keyboard behavior
+  #
+  services.keyd = {
+    enable = true;
+    keyboards.default = {
+      ids = ["0001:0001:70533846"];
+      settings = {
+        main = {
+          # left alt <-> left cmd
+          # this is also done physically on the keyboard
+          leftalt = "leftmeta";
+          leftmeta = "leftalt";
+          # capslock -> (held) ctrl, (tap) ESC
+          capslock = "overloadt2(control, esc, 150)";
+        };
+      };
+    };
+  };
+
+  #
   # Decrypt LUKS partitions on boot
   #
   boot.initrd.luks.devices."luks-584448a8-c11d-4f10-828a-31a1267eef0f".device = "/dev/disk/by-uuid/584448a8-c11d-4f10-828a-31a1267eef0f";
@@ -75,12 +100,9 @@
   boot.initrd.systemd.enable = true;
   boot.plymouth = {
     enable = true;
-    theme = "rings";
-    themePackages = with pkgs; [
-      # By default we would install all themes
-      (adi1090x-plymouth-themes.override {
-        selected_themes = ["rings"];
-      })
+    theme = "nixos-bgrt";
+    themePackages = [
+      pkgs.nixos-bgrt-plymouth
     ];
   };
 
