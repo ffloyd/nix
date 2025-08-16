@@ -6,6 +6,7 @@
   lib,
   private,
   config,
+  mkDotfilesLink,
   ...
 }: let
   inherit (config.lib.file) mkOutOfStoreSymlink;
@@ -65,9 +66,6 @@ in
         pkgs.editorconfig-checker
         pkgs.hadolint
         pkgs.statix
-
-        # globally installed AI tools
-        pkgs.claude-code
       ];
 
       home.file = {
@@ -92,7 +90,22 @@ in
         vi-config = "cd ${config.home.homeDirectory}/.config/nvim && nvim init.lua";
       };
     }
+
     (lib.mkIf pkgs.stdenv.isLinux {
       home.packages = [pkgs.gcc];
     })
+
+    #
+    # Claude Code setup
+    #
+    {
+      home.packages = [
+        pkgs.claude-code
+      ];
+
+      home.file = {
+        ".claude/commands".source = mkDotfilesLink config "claude/commands";
+        ".claude/settings.json".source = mkDotfilesLink config "claude/settings.json";
+      };
+    }
   ]

@@ -35,6 +35,7 @@
 
       environment.systemPackages = [
         inputs.nix-inspect.packages.${pkgs.system}.default
+        pkgs.nix-tree
       ];
     }
 
