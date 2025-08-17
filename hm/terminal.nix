@@ -25,9 +25,4 @@ in {
   programs.zsh.shellAliases = {
     # TODO: alias for kitty config?
   };
-
-  programs.yazi = {
-    enable = true;
-    enableZshIntegration = true;
-  };
 }

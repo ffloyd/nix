@@ -75,6 +75,20 @@ in {
     }
 
     #
+    # File manager
+    #
+    {
+      home-manager.users.${username}.programs.yazi = {
+        enable = true;
+        enableZshIntegration = true;
+        package = pkgs.yazi.override {
+          # support for rar files
+          _7zz = pkgs._7zz-rar;
+        };
+      };
+    }
+
+    #
     # Hyprpaper
     #
     {
