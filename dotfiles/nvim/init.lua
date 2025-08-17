@@ -54,8 +54,8 @@ require("folkevim")
 require("lang-tools")
 
 features.add({
-  "Use a colorscheme that inspired by the Kanagawa wave",
-  id = "kanagawa",
+  "Environment-specific Colorscheme",
+  id = "colorscheme",
   plugins = {
     {
       "rebelot/kanagawa.nvim",
@@ -74,9 +74,20 @@ features.add({
         },
       },
     },
+    {
+      "ellisonleao/gruvbox.nvim",
+      priority = 1000,
+      config = true,
+      opts = { contrast = "soft" }
+    }
   },
   setup = function()
-    vim.cmd.colorscheme("kanagawa-wave")
+    -- I use Kanagawa only in work environment
+    if vim.loop.os_uname().sysname == "Darwin" then
+      vim.cmd.colorscheme("kanagawa-wave")
+    else
+      vim.cmd.colorscheme("gruvbox")
+    end
   end,
 })
 
@@ -344,7 +355,7 @@ features.add({
 
 features.add({
   "Show file name in a buffer corner",
-  after = { "kanagawa" },
+  after = { "colorscheme" },
   plugins = {
     {
       "b0o/incline.nvim",
@@ -358,7 +369,9 @@ features.add({
         },
         render = function(props)
           local devicons = require("nvim-web-devicons")
-          local bg_color = require("kanagawa.colors").setup().theme.ui.bg_p1
+          -- local bg_color = require("kanagawa.colors").setup().theme.ui.bg_p1
+          local bg_color = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
+
 
           local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
           if filename == "" then
