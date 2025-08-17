@@ -34,8 +34,13 @@ in {
         xwayland.enable = true;
       };
 
-      # Hint Electron apps to use Wayland
-      environment.sessionVariables.NIXOS_OZONE_WL = "1";
+      environment.sessionVariables = {
+        # Hint Electron apps to use Wayland
+        NIXOS_OZONE_WL = "1";
+        # Bigger cursor size for my hidpi displays
+        XCURSOR_SIZE = "24";
+        HYPRCURSOR_SIZE = "24";
+      };
 
       xdg.portal = {
         enable = true;
@@ -43,14 +48,13 @@ in {
       };
 
       home-manager.users.${username} = {
-        # Hint Electron apps to use Wayland
-        # (in addition to similar setting on NixOS config level)
-        home.sessionVariables.NIXOS_OZONE_WL = "1";
-
         # Essential Hyprland/Wayland packages
         home.packages = [
           pkgs.wl-clipboard
+          pkgs.brightnessctl
+          pkgs.playerctl
           pkgs.hyprsysteminfo
+          pkgs.wev
 
           # language server
           pkgs.hyprls
@@ -58,6 +62,16 @@ in {
 
         xdg.configFile."hypr/hyprland.conf".source = mkDotfilesLink hmConfig "hyprland.conf";
       };
+    }
+
+    #
+    # Keyring setup
+    #
+    # Some apps (like Anytype) require a keyring to store secrets
+    {
+      services.gnome.gnome-keyring.enable = true;
+      security.pam.services.sddm-greeter.enableGnomeKeyring = true;
+      security.pam.services.sddm-autologin.enableGnomeKeyring = true;
     }
 
     #
