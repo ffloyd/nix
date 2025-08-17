@@ -32,10 +32,11 @@ in {
     enableZshIntegration = true;
   };
 
-  programs.bat = {
-    enable = true;
-    config.theme = "Nord";
-  };
+  programs.bat = lib.mkMerge [
+    {enable = true;}
+    # on NixOS I use Stlyx
+    (lib.mkIf stdenv.isDarwin {config.theme = "Nord";})
+  ];
 
   programs.z-lua = {
     enable = true;

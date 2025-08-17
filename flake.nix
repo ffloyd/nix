@@ -43,6 +43,11 @@
 
     nix-inspect.url = "github:bluskript/nix-inspect";
     nixos-cli.url = "github:nix-community/nixos-cli";
+
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {

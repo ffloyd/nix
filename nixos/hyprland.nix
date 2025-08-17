@@ -142,12 +142,38 @@ in {
     #
     # Theming
     #
+    inputs.stylix.nixosModules.stylix
     inputs.sddm-sugar-candy-nix.nixosModules.default
     {
       nixpkgs = {
         overlays = [
           inputs.sddm-sugar-candy-nix.overlays.default
         ];
+      };
+
+      stylix = {
+        enable = true;
+        autoEnable = false;
+
+        base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+        image = background;
+
+        fonts = {
+          monospace = {
+            name = "IosevkaTerm Nerd Font Mono";
+            package = pkgs.nerd-fonts.iosevka-term;
+          };
+          serif = {
+            name = "Iosevka Nerd Font Propo";
+            package = pkgs.nerd-fonts.iosevka;
+          };
+          sansSerif = config.stylix.fonts.serif;
+          emoji = config.stylix.fonts.serif;
+        };
+
+        targets = {
+          qt.enable = true;
+        };
       };
 
       services.displayManager.sddm.sugarCandyNix = {
@@ -165,8 +191,29 @@ in {
       };
 
       home-manager.users.${username} = {
+        stylix.targets = {
+          bat.enable = true;
+          btop.enable = true;
+          fzf.enable = true;
+          qt.enable = true;
+          yazi.enable = true;
+
+          zen-browser = {
+            enable = true;
+            profileNames = ["Default Profile"];
+          };
+        };
+
+        dconf.settings = {
+          "org/gnome/desktop/interface" = {
+            color-scheme = "prefer-dark";
+          };
+        };
+
         gtk = {
           enable = true;
+          gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
+          gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
           theme = {
             name = "Gruvbox-Orange-Dark";
             package = pkgs.gruvbox-gtk-theme.override {

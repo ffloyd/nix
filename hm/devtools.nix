@@ -11,11 +11,12 @@
     # nix-related helpers
     nix-tree
 
-    btop
     gawk
     jq
     wget
   ];
+
+  programs.btop.enable = true;
 
   programs.direnv = {
     enable = true;

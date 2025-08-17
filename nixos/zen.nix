@@ -4,7 +4,7 @@
   ...
 }: {
   home-manager.sharedModules = [
-    inputs.zen-browser.homeModules.beta
+    inputs.zen-browser.homeModules.twilight
   ];
 
   home-manager.users.${username} = {
