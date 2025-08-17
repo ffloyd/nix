@@ -14,5 +14,9 @@ tools: Glob, Grep, LS, Read, Bash(git status --porcelain), Bash(git diff --cache
 ## Task
 
 - categorize changes (feat, fix, docs, style, refactor, test, chore, etc.)
-- create a commit message following conventional commit format with respect to existing commit messages
+- create a commit message
+    - follow conventional commit format
+    - respect to existing commit messages
+    - prefer 1-line messages when it's enough
+    - use short, focused messages
 - execute the commit with the finalized message
