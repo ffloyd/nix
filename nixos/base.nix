@@ -23,6 +23,8 @@
         enable = true;
         config = {
           config_location = "/home/${username}/nix";
+          use_nvd = true;
+          apply.use_nom = true;
         };
       };
 
@@ -36,6 +38,8 @@
       environment.systemPackages = [
         inputs.nix-inspect.packages.${pkgs.system}.default
         pkgs.nix-tree
+        pkgs.nix-output-monitor
+        pkgs.nvd
       ];
     }
 
