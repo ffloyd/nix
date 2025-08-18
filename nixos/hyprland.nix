@@ -1,7 +1,6 @@
 {
   inputs,
   pkgs,
-  lib,
   config,
   username,
   mkDotfilesLink,
@@ -197,6 +196,7 @@ in {
           fzf.enable = true;
           qt.enable = true;
           yazi.enable = true;
+          spotify-player.enable = true;
 
           zen-browser = {
             enable = true;
