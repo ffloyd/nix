@@ -238,6 +238,7 @@ in {
 
         home.packages = [
           pkgs.hyprsunset
+          pkgs.libreoffice
         ];
 
         xdg.configFile."hyprpanel".source = mkDotfilesLink hmConfig "hyprpanel";

@@ -414,9 +414,7 @@
         "workspaces",
         "windowtitle"
       ],
-      "middle": [
-        "media"
-      ],
+      "middle": [],
       "right": [
         "volume",
         "network",
