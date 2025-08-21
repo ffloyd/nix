@@ -238,6 +238,8 @@ in {
 
         home.packages = [
           pkgs.hyprsunset
+          pkgs.adwaita-icon-theme
+
           pkgs.libreoffice
         ];
 
