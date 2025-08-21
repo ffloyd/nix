@@ -35,7 +35,12 @@
           for remote in $remotes;
           do
           name=$(/usr/bin/env echo "$remote" | /usr/bin/env sed "s/://g")
-          ${pkgs.rclone}/bin/rclone --config=${home}/.config/rclone/rclone.conf --vfs-cache-mode writes --ignore-checksum mount "$remote" "$name" &
+          ${pkgs.rclone}/bin/rclone \
+            --config=${home}/.config/rclone/rclone.conf \
+            --vfs-cache-mode full \
+            --file-perms 0600 \
+            --dir-perms 0700 \
+            mount "$remote" "$name" &
           done
         ''}";
 
