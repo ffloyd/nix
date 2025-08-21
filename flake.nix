@@ -166,6 +166,7 @@
           ./nixos/hyprland.nix
           ./nixos/zen.nix
           ./nixos/spotify.nix
+          ./nixos/proton.nix
         ];
         hmModules = [
           ./hm/apps.nix
