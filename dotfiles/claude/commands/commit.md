@@ -9,7 +9,7 @@ allowed-tools: Glob, Grep, LS, Read, Bash(git status --porcelain), Bash(git diff
 - staged changes: !`git diff --cached`
 - recent commit messages: !`git log -n 10 --pretty=format:"%s"`
 - read modified files if necessary
-- ignore unstaged or untracked changes
+- DO NOT use `git add`, ignore unstaged or untracked changes
 
 ## Task
 
