@@ -14,18 +14,39 @@ in {
     #
     # Display manager configuration
     #
+    inputs.sddm-sugar-candy-nix.nixosModules.default
     {
+      nixpkgs = {
+        overlays = [
+          inputs.sddm-sugar-candy-nix.overlays.default
+        ];
+      };
+
       # TODO: fix small cursor size
       # TODO: fix silent fingerprint scanning
       services.displayManager.sddm = {
         enable = true;
         wayland.enable = true;
         # package = pkgs.kdePackages.sddm; # qt6 sddm version
+
+        sugarCandyNix = {
+          enable = true;
+
+          # https://github.com/Zhaith-Izaliel/sddm-sugar-candy-nix?tab=readme-ov-file#configuration
+          settings = {
+            Background = background;
+            Font = "Iosevka Nerd Font Propo";
+            FontSize = "24";
+            HaveFormBackground = true;
+            PartialBlur = true;
+            FormPosition = "left";
+          };
+        };
       };
     }
 
     #
-    # Hyprland
+    # Hyprland & Wayland configuration
     #
     {
       programs.hyprland = {
@@ -47,6 +68,8 @@ in {
         extraPortals = with pkgs; [xdg-desktop-portal-hyprland];
       };
 
+      stylix.targets.qt.enable = true;
+
       home-manager.users.${username} = {
         # Essential Hyprland/Wayland packages
         home.packages = [
@@ -61,6 +84,28 @@ in {
         ];
 
         xdg.configFile."hypr/hyprland.conf".source = mkDotfilesLink hmConfig "hyprland.conf";
+
+        stylix.targets.qt.enable = true;
+        dconf.settings = {
+          "org/gnome/desktop/interface" = {
+            color-scheme = "prefer-dark";
+          };
+        };
+
+        gtk = {
+          enable = true;
+          gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
+          gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
+          theme = {
+            name = "Gruvbox-Orange-Dark";
+            package = pkgs.gruvbox-gtk-theme.override {
+              colorVariants = ["dark"];
+              iconVariants = ["Dark"];
+              sizeVariants = ["standard"];
+              themeVariants = ["default" "orange"];
+            };
+          };
+        };
       };
     }
 
@@ -128,92 +173,6 @@ in {
       };
     }
 
-    #
-    # Theming
-    #
-    inputs.stylix.nixosModules.stylix
-    inputs.sddm-sugar-candy-nix.nixosModules.default
-    {
-      nixpkgs = {
-        overlays = [
-          inputs.sddm-sugar-candy-nix.overlays.default
-        ];
-      };
-
-      stylix = {
-        enable = true;
-        autoEnable = false;
-
-        base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
-        image = background;
-
-        fonts = {
-          monospace = {
-            name = "IosevkaTerm Nerd Font Mono";
-            package = pkgs.nerd-fonts.iosevka-term;
-          };
-          serif = {
-            name = "Iosevka Nerd Font Propo";
-            package = pkgs.nerd-fonts.iosevka;
-          };
-          sansSerif = config.stylix.fonts.serif;
-          emoji = config.stylix.fonts.serif;
-        };
-
-        targets = {
-          qt.enable = true;
-        };
-      };
-
-      services.displayManager.sddm.sugarCandyNix = {
-        enable = true;
-
-        # https://github.com/Zhaith-Izaliel/sddm-sugar-candy-nix?tab=readme-ov-file#configuration
-        settings = {
-          Background = background;
-          Font = "Iosevka Nerd Font Propo";
-          FontSize = "24";
-          HaveFormBackground = true;
-          PartialBlur = true;
-          FormPosition = "left";
-        };
-      };
-
-      home-manager.users.${username} = {
-        stylix.targets = {
-          btop.enable = true;
-          qt.enable = true;
-          yazi.enable = true;
-          spotify-player.enable = true;
-
-          zen-browser = {
-            enable = true;
-            profileNames = ["Default Profile"];
-          };
-        };
-
-        dconf.settings = {
-          "org/gnome/desktop/interface" = {
-            color-scheme = "prefer-dark";
-          };
-        };
-
-        gtk = {
-          enable = true;
-          gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
-          gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
-          theme = {
-            name = "Gruvbox-Orange-Dark";
-            package = pkgs.gruvbox-gtk-theme.override {
-              colorVariants = ["dark"];
-              iconVariants = ["Dark"];
-              sizeVariants = ["standard"];
-              themeVariants = ["default" "orange"];
-            };
-          };
-        };
-      };
-    }
 
     #
     # Topbar & OSD: Hyprpanel

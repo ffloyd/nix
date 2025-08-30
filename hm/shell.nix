@@ -118,6 +118,9 @@
         };
       };
     }
+    (lib.mkIf pkgs.stdenv.isLinux {
+      stylix.targets.yazi.enable = true;
+    })
 
     #
     # zsh + workbrew (macOS only)

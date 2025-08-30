@@ -8,10 +8,14 @@
     (import ./spotify/overlay.nix)
   ];
 
-  home-manager.users.${username}.programs.spotify-player = {
-    enable = true;
-    settings = {
-      client_id_command = "pass spotify/app_client_id";
+  home-manager.users.${username} = {
+    programs.spotify-player = {
+      enable = true;
+      settings = {
+        client_id_command = "pass spotify/app_client_id";
+      };
     };
+
+    stylix.targets.spotify-player.enable = true;
   };
 }

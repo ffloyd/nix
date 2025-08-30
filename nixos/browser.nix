@@ -22,5 +22,10 @@
         AutofillCreditCardEnabled = false;
       };
     };
+
+    stylix.targets.zen-browser = {
+      enable = true;
+      profileNames = ["Default Profile"];
+    };
   };
 }
