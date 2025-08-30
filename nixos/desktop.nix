@@ -68,8 +68,6 @@ in {
         extraPortals = with pkgs; [xdg-desktop-portal-hyprland];
       };
 
-      stylix.targets.qt.enable = true;
-
       home-manager.users.${username} = {
         # Essential Hyprland/Wayland packages
         home.packages = [
@@ -84,8 +82,25 @@ in {
         ];
 
         xdg.configFile."hypr/hyprland.conf".source = mkDotfilesLink hmConfig "hyprland.conf";
+      };
+    }
 
+    #
+    # Qt theming
+    #
+    {
+      stylix.targets.qt.enable = true;
+
+      home-manager.users.${username} = {
         stylix.targets.qt.enable = true;
+      };
+    }
+
+    #
+    # GTK theming
+    #
+    {
+      home-manager.users.${username} = {
         dconf.settings = {
           "org/gnome/desktop/interface" = {
             color-scheme = "prefer-dark";
