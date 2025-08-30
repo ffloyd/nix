@@ -58,6 +58,7 @@
   } @ inputs: let
     # Values that are used in multiple modules
     globals = import ./globals.nix;
+
     # Private data, like usernames, hostnames, etc.
     # (encrypted with git-crypt)
     private = import ./private.nix;
@@ -65,7 +66,7 @@
     # mkMerge cannot merge flake outputs,
     # and `//` operator cannot do deep merge,
     # so we need to use `recursiveUpdate` to merge flake outputs,
-    # but it takes two arguments. foldl' makes it work with lists.
+    # but it merges only 2 attrsets. `foldl'` makes it work with lists.
     inherit (nixpkgs.lib) recursiveUpdate;
     inherit (nixpkgs.lib.lists) foldl';
     mergeOutputs = foldl' recursiveUpdate {};
@@ -81,9 +82,11 @@
       inherit inputs globals private mkDotfilesLink;
     };
 
-    # Creates NixOS system configurations for a given host.
+    # A function that creates NixOS system configurations for a given host.
     # Also creates home-manager configuration for the user on this host.
     # For simplicity, home-manager configuration is merged inside NixOS configuration.
+    #
+    # Also it passes `username` and `hostname` from private data to the arguments of all modules.
     nixosSystem = host: params: let
       inherit (params) nixosModules hmModules;
       inherit (private.hosts.${host}) username hostname;
@@ -101,7 +104,7 @@
         modules =
           nixosModules
           ++ [
-            ./hosts/${host}/configuration.nix
+            ./hosts/${host}/nixos.nix
 
             home-manager.nixosModules.home-manager
             {
@@ -110,7 +113,6 @@
               home-manager.extraSpecialArgs = context;
 
               home-manager.users.${username} = nixpkgs.lib.mkMerge [
-                (import ./hosts/${host}/home.nix)
                 {
                   imports = hmModules;
                 }
@@ -121,7 +123,7 @@
     };
 
     # Creates macOS system configurations for a given host
-    # along with home-manager configuration.
+    # alongside with home-manager configuration.
     #
     # In macOS, nix-darwin modules are rarely updated, but their application takes noticeable time,
     # so we have separate setup for nix-darwin and home-manager.
@@ -139,7 +141,7 @@
 
         modules =
           [
-            ./hosts/${host}/configuration.nix
+            ./hosts/${host}/nix-darwin.nix
           ]
           ++ darwinModules;
       };
@@ -151,7 +153,7 @@
         };
         extraSpecialArgs = context;
 
-        modules = [./hosts/${host}/home.nix] ++ hmModules;
+        modules = [./hosts/${host}/home-manager.nix] ++ hmModules;
       };
     };
   in
@@ -163,52 +165,43 @@
       (nixosSystem "framework-13-amd-ai-300" {
         nixosModules = [
           ./nixos/base.nix
-          ./nixos/hyprland.nix
-          ./nixos/zen.nix
+          ./nixos/desktop.nix
+          ./nixos/browser.nix
           ./nixos/spotify.nix
-          ./nixos/rclone.nix
+          ./nixos/remote-fs.nix
         ];
         hmModules = [
-          ./hm/apps.nix
-          ./hm/zsh.nix
-          ./hm/git.nix
-          ./hm/devtools.nix
-          ./hm/gpg.nix
-          ./hm/neovim.nix
           ./hm/terminal.nix
-          ./hm/webos.nix
+          ./hm/shell.nix
+          ./hm/gpg.nix
+          ./hm/development-environment.nix
         ];
       })
       (nixosSystem "nixos-desktop" {
         nixosModules = [
           ./nixos/base.nix
-          ./nixos/hyprland.nix
-          ./nixos/zen.nix
-          ./nixos/caddy.nix
+          ./nixos/desktop.nix
+          ./nixos/browser.nix
+          ./nixos/local-reverse-proxy.nix
           ./nixos/wakeonlan.nix
         ];
         hmModules = [
-          ./hm/zsh.nix
-          ./hm/git.nix
-          ./hm/devtools.nix
-          ./hm/gpg.nix
-          ./hm/neovim.nix
           ./hm/terminal.nix
-          ./hm/webos.nix
+          ./hm/shell.nix
+          ./hm/gpg.nix
+          ./hm/development-environment.nix
         ];
       })
       (macosSystem "macos-work" {
         darwinModules = [
-          ./darwin/homebrew.nix
-          ./darwin/caddy.nix
+          ./darwin/workbrew.nix
+          ./darwin/local-reverse-proxy.nix
         ];
         hmModules = [
-          ./hm/devtools.nix
-          ./hm/git.nix
-          ./hm/gpg.nix
-          ./hm/neovim.nix
           ./hm/terminal.nix
-          ./hm/zsh.nix
+          ./hm/shell.nix
+          ./hm/gpg.nix
+          ./hm/development-environment.nix
         ];
       })
     ];

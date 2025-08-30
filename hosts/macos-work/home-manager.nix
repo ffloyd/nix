@@ -1,3 +1,8 @@
+# Machine-specific home-manager configuration for work MacBook
+#
+# Objective: Centralize machine-specific configurations while keeping the rest of the config clean
+# of device-specific workarounds. Machine-specific tweaks may exist in other modules when extraction
+# here would be inconvenient, but this file should contain the majority of hardware-dependent configuration.
 {
   pkgs,
   private,
@@ -17,13 +22,6 @@
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
   home.stateVersion = "23.11"; # Please read the comment before changing.
-
-  # The home.packages option allows you to install Nix packages into your
-  # environment.
-  home.packages = with pkgs; [
-    # for remote gaming
-    wakeonlan # wake on LAN my gaming rig
-  ];
 
   programs.zsh = {
     shellAliases = {

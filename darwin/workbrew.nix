@@ -1,8 +1,9 @@
+# Objective: to install apps that cannot be properly or conviniently installed via nixpkgs
 _: {
   homebrew = {
     enable = true;
 
-    # Enforced by employer
+    # Workbrew is enforced by employer
     brewPrefix = "/opt/workbrew/bin";
 
     onActivation.cleanup = "uninstall";

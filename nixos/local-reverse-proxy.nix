@@ -1,3 +1,4 @@
+# Objective: Set up a local reverse HTTPS proxy for development with custom local domains
 {pkgs, ...}: {
   services.caddy = {
     enable = true;

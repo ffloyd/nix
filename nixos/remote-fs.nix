@@ -1,11 +1,19 @@
+# Objective: convienient access to reomote filesystems and file storages
 {
   config,
   pkgs,
   username,
   ...
-}: {
+}:
+{
   home-manager.users.${username} = {
     home.packages = [pkgs.rclone];
+
+    programs.zsh.shellAliases = {
+      os-rmounts-status = "systemctl --user status rclone-mounts";
+      os-rmounts-restart = "systemctl --user restart rclone-mounts";
+      os-rmounts-config = "rclone config";
+    };
 
     systemd.user.services.rclone-mounts = {
       Unit = {

@@ -1,3 +1,4 @@
+# Objective: provide a desktop environment tailored for my workflows
 {
   inputs,
   pkgs,
@@ -7,7 +8,7 @@
   ...
 }: let
   hmConfig = config.home-manager.users.${username};
-  background = ./hyprland/bg.jpg;
+  background = ./desktop/bg.jpg;
 in {
   imports = [
     #
@@ -53,7 +54,7 @@ in {
           pkgs.brightnessctl
           pkgs.playerctl
           pkgs.hyprsysteminfo
-          pkgs.wev
+          pkgs.wev # Wayland event viewer
 
           # language server
           pkgs.hyprls
@@ -64,31 +65,20 @@ in {
     }
 
     #
-    # Keyring setup
+    # Keyring
     #
     # Some apps (like Anytype) require a keyring to store secrets
     {
       services.gnome.gnome-keyring.enable = true;
       security.pam.services.sddm-greeter.enableGnomeKeyring = true;
       security.pam.services.sddm-autologin.enableGnomeKeyring = true;
+
+      # An app to inspect keyring
+      home-manager.users.${username}.home.packages = [pkgs.seahorse];
     }
 
     #
-    # File manager
-    #
-    {
-      home-manager.users.${username}.programs.yazi = {
-        enable = true;
-        enableZshIntegration = true;
-        package = pkgs.yazi.override {
-          # support for rar files
-          _7zz = pkgs._7zz-rar;
-        };
-      };
-    }
-
-    #
-    # Hyprpaper
+    # Wallpaper via Hyprpaper
     #
     {
       home-manager.users.${username}.services.hyprpaper = {
@@ -107,7 +97,7 @@ in {
     }
 
     #
-    # Walker
+    # App Launcher: Walker
     #
     {
       home-manager.sharedModules = [
@@ -191,9 +181,7 @@ in {
 
       home-manager.users.${username} = {
         stylix.targets = {
-          bat.enable = true;
           btop.enable = true;
-          fzf.enable = true;
           qt.enable = true;
           yazi.enable = true;
           spotify-player.enable = true;
@@ -228,7 +216,7 @@ in {
     }
 
     #
-    # PLAYGROUND
+    # Topbar & OSD: Hyprpanel
     #
     {
       home-manager.users.${username} = {
@@ -239,11 +227,40 @@ in {
         home.packages = [
           pkgs.hyprsunset
           pkgs.adwaita-icon-theme
-
-          pkgs.libreoffice
         ];
 
         xdg.configFile."hyprpanel".source = mkDotfilesLink hmConfig "hyprpanel";
+      };
+    }
+
+    #
+    # Disk Control
+    #
+    {
+      home-manager.users.${username}.home.packages = with pkgs; [
+        gnome-disk-utility # to manage disks and partitions
+        woeusb # to create Windows installation USB drives
+      ];
+    }
+
+    #
+    # Essential Apps
+    #
+    {
+      home-manager.users.${username} = {
+        home.packages = [
+          pkgs.libreoffice
+
+          pkgs.anytype
+
+          pkgs.proton-pass
+          pkgs.protonmail-desktop
+          pkgs.protonvpn-gui
+
+          pkgs.telegram-desktop
+
+          inputs.claude-desktop.packages.${pkgs.system}.claude-desktop-with-fhs
+        ];
       };
     }
   ];

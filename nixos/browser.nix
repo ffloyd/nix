@@ -1,10 +1,11 @@
+# Objective: browser of choice
 {
   inputs,
   username,
   ...
 }: {
   home-manager.sharedModules = [
-    inputs.zen-browser.homeModules.twilight
+    inputs.zen-browser.homeModules.beta
   ];
 
   home-manager.users.${username} = {

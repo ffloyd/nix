@@ -1,3 +1,4 @@
+# Objective: ensure Wake on LAN is enabled after each shutdown/reboot
 {pkgs, ...}: {
   # Make sure Wake on LAN is enabled after each shutdown/reboot
   systemd.services.wol = {

@@ -1,3 +1,4 @@
+# Objective: run a local VTT server of choice (https://vtt.local)
 {
   pkgs,
   inputs,
@@ -15,7 +16,7 @@
       build = "331";
     };
 
-    hostName = "vtt.ffloyd.space";
+    hostName = "vtt.local";
 
     minifyStaticFiles = true;
     upnp = false;

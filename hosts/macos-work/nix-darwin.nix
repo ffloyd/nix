@@ -1,8 +1,12 @@
+# Machine-specific nix-darwin configuration for work MacBook
+#
+# Objective: Centralize machine-specific nix-darwin configurations while keeping the rest of the config clean
+# of device-specific workarounds. Machine-specific tweaks may exist in other modules when extraction
+# here would be inconvenient, but this file should contain the majority of nix-darwin hardware-dependent configuration.
 {
   pkgs,
   inputs,
   globals,
-  private,
   username,
   ...
 }: {

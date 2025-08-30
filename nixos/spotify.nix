@@ -1,3 +1,4 @@
+# Objective: to run Spotify, but not the official client!
 {
   username,
   ...

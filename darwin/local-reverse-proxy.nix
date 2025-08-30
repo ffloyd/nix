@@ -1,3 +1,4 @@
+# Objective: Set up a local reverse HTTPS proxy for development with custom local domains
 {
   pkgs,
   lib,
@@ -7,7 +8,6 @@
   inherit (pkgs) caddy dnsmasq;
   addresses = {
     test = "127.0.0.1";
-    "lb.here" = "127.0.0.1";
   };
   dnsmasqPort = 53;
   dnsmasqBind = "127.0.0.1";
@@ -53,10 +53,6 @@ in
       environment.etc."Caddyfile".text = ''
         {
           local_certs
-        }
-
-        https://lb.here {
-          reverse_proxy localhost:8080
         }
 
         ${private.workProjectsCaddyfile}

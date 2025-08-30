@@ -1,5 +1,5 @@
 #
-# I want this options to be set on all my NixOS machines.
+# Objective: a canvinient foundation applicable to both PC & server
 #
 {
   inputs,
@@ -38,9 +38,20 @@
       environment.systemPackages = [
         inputs.nix-inspect.packages.${pkgs.system}.default
         pkgs.nix-tree
+
+        # used by nixos-cli:
         pkgs.nix-output-monitor
         pkgs.nvd
       ];
+
+      home-manager.users.${username}.programs.zsh.shellAliases = {
+        # os-rebuild = "sudo nixos-rebuild switch --flake ~/nix";
+        # os-rebuild-boot = "sudo nixos-rebuild boot --flake ~/nix --install-bootloader";
+        # os-gc = "sudo nix-collect-garbage -d";
+        os-rebuild = "nixos apply";
+        os-rebuild-boot = "nixos apply --no-activate --install-bootloader";
+        os-gc = "nixos generation delete --min 5 --all";
+      };
     }
 
     #
