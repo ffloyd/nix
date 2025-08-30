@@ -42,7 +42,14 @@
     {
       # Apply audio enchancement made by community
       # Original audio sound on Framework 13 is awful =(
-      hardware.framework.laptop13.audioEnhancement.enable = true;
+      hardware.framework.laptop13.audioEnhancement = {
+        enable = true;
+
+        # use
+        # $ pw-dump | grep "node.name.*alsa_output"
+        # to find the new correct device name if it stopped working after some update
+        rawDeviceName = "alsa_output.pci-0000_c1_00.6.HiFi__Speaker__sink";
+      };
 
       # Firmware updates
       hardware.enableAllFirmware = true;
