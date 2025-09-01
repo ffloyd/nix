@@ -13,11 +13,11 @@ allowed-tools: Glob, Grep, LS, Read, Bash(git status --porcelain), Bash(git diff
 
 ## Task
 
-- categorize changes (feat, fix, docs, style, refactor, test, chore, etc.)
-- create a commit message
+1. categorize changes (feat, fix, docs, style, refactor, test, chore, etc.)
+2. create a commit message
     - follow conventional commit format
     - respect to existing commit messages
     - prefer 1-line messages when it's enough
     - use short, focused messages
-- ask for confirmation before committing
-- execute the commit with the finalized message
+3. MANDATORY: Ask for explicit user confirmation and wait for their response before executing git commit. Never commit without explicit user approval.
+4. execute the commit with the finalized message
