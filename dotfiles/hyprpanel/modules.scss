@@ -1,0 +1,12 @@
+/* ######################################
+ * #  Claude Code Usage Module Styling  #
+ * ###################################### */
+@include styleModule(
+    // class name
+    'cmodule-ccusage',
+    // styling properties
+    (
+        'icon-color': #b8bb26, // Gruvbox light green
+        'text-color': #b8bb26,
+    )
+);

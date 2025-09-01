@@ -1,20 +1,52 @@
 {
+  "bar.layouts": {
+    "*": {
+      "left": [
+        "dashboard",
+        "workspaces",
+        "windowtitle"
+      ],
+      "middle": [],
+      "right": [
+        "volume",
+        "network",
+        "bluetooth",
+        "battery",
+        "hyprsunset",
+        "systray",
+        "custom/ccusage",
+        "clock",
+        "notifications"
+      ]
+    }
+  },
+  "theme.osd.scaling": 80,
+  "theme.font.size": "1rem",
+  "bar.launcher.autoDetectIcon": true,
+  "theme.font.name": "Iosevka Nerd Font Propo",
+  "theme.font.label": "Iosevka Nerd Font Propo",
+  "menus.clock.weather.location": "Berlin",
+  "menus.clock.weather.unit": "metric",
+  "bar.workspaces.ignored": "-\\d+",
+  "scalingPriority": "hyprland",
+  "bar.customModules.hyprsunset.temperature": "4500k",
+  "bar.customModules.hyprsunset.label": false,
+  "bar.workspaces.show_icons": false,
+  "bar.workspaces.show_numbered": false,
+  "bar.workspaces.showWsIcons": true,
+  "bar.workspaces.showApplicationIcons": true,
+  "bar.workspaces.numbered_active_indicator": "underline",
+  "bar.network.showWifiInfo": true,
+  "theme.bar.outer_spacing": "0.25em",
+  "menus.volume.raiseMaximumVolume": true,
+  "theme.bar.buttons.radius": "0.85em",
+  "bar.network.truncation_size": 15,
+  "theme.bar.menus.enableShadow": true,
+  "bar.bluetooth.label": false,
+  "bar.battery.label": true,
   "bar.customModules.storage.paths": [
     "/"
   ],
-  "theme.font.name": "Iosevka Nerd Font Propo",
-  "theme.font.label": "Iosevka Nerd Font Propo",
-  "bar.launcher.autoDetectIcon": true,
-  "menus.clock.time.military": true,
-  "menus.clock.weather.location": "Berlin",
-  "menus.clock.weather.unit": "metric",
-  "theme.matugen_settings.mode": "dark",
-  "theme.matugen_settings.scheme_type": "tonal-spot",
-  "theme.matugen_settings.variation": "standard_1",
-  "theme.bar.buttons.style": "default",
-  "theme.font.size": "1rem",
-  "theme.bar.menus.enableShadow": false,
-  "theme.osd.scaling": 80,
   "theme.bar.menus.menu.notifications.scrollbar.color": "#83a598",
   "theme.bar.menus.menu.notifications.pager.label": "#a89984",
   "theme.bar.menus.menu.notifications.pager.button": "#83a598",
@@ -311,6 +343,7 @@
   "theme.bar.buttons.hover": "#504945",
   "theme.bar.buttons.icon_background": "#242438",
   "theme.bar.buttons.background": "#282828",
+  "theme.bar.buttons.style": "default",
   "theme.bar.background": "#1d2021",
   "theme.osd.label": "#83a598",
   "theme.osd.icon": "#1d2021",
@@ -360,9 +393,9 @@
   "theme.bar.border.color": "#83a598",
   "theme.bar.menus.menu.media.timestamp": "#ebdbb2",
   "theme.bar.buttons.borderColor": "#83a598",
-  "theme.bar.buttons.modules.hyprsunset.icon_background": "#282828",
-  "theme.bar.buttons.modules.hyprsunset.background": "#282828",
   "theme.bar.buttons.modules.hyprsunset.icon": "#fabd2f",
+  "theme.bar.buttons.modules.hyprsunset.background": "#282828",
+  "theme.bar.buttons.modules.hyprsunset.icon_background": "#282828",
   "theme.bar.buttons.modules.hyprsunset.text": "#fabd2f",
   "theme.bar.buttons.modules.hyprsunset.border": "#fabd2f",
   "theme.bar.buttons.modules.hypridle.icon": "#83a598",
@@ -374,8 +407,8 @@
   "theme.bar.menus.menu.bluetooth.scroller.color": "#83a598",
   "theme.bar.buttons.modules.cava.text": "#8ec07c",
   "theme.bar.buttons.modules.cava.background": "#282828",
-  "theme.bar.buttons.modules.cava.icon": "#8ec07c",
   "theme.bar.buttons.modules.cava.icon_background": "#282828",
+  "theme.bar.buttons.modules.cava.icon": "#8ec07c",
   "theme.bar.buttons.modules.cava.border": "#8ec07c",
   "theme.bar.buttons.modules.microphone.border": "#b8bb26",
   "theme.bar.buttons.modules.microphone.background": "#282828",
@@ -384,82 +417,7 @@
   "theme.bar.buttons.modules.microphone.icon_background": "#282828",
   "theme.bar.buttons.modules.worldclock.text": "#d3869b",
   "theme.bar.buttons.modules.worldclock.background": "#282828",
-  "theme.bar.buttons.modules.worldclock.icon": "#d3869b",
   "theme.bar.buttons.modules.worldclock.icon_background": "#d3869b",
-  "theme.bar.buttons.modules.worldclock.border": "#d3869b",
-  "bar.network.truncation_size": 10,
-  "theme.bar.buttons.network.spacing": "0.5em",
-  "bar.network.showWifiInfo": true,
-  "theme.bar.buttons.notifications.enableBorder": false,
-  "theme.bar.buttons.notifications.spacing": "0.5em",
-  "theme.font.style": "normal",
-  "notifications.position": "top right",
-  "menus.volume.raiseMaximumVolume": true,
-  "theme.bar.menus.menu.notifications.scaling": 100,
-  "theme.bar.menus.menu.dashboard.scaling": 90,
-  "theme.bar.outer_spacing": "1em",
-  "bar.workspaces.show_icons": false,
-  "bar.workspaces.show_numbered": false,
-  "bar.workspaces.showWsIcons": true,
-  "bar.workspaces.showApplicationIcons": true,
-  "bar.workspaces.numbered_active_indicator": "underline",
-  "theme.bar.buttons.windowtitle.enableBorder": false,
-  "theme.notification.opacity": 90,
-  "menus.clock.time.hideSeconds": true,
-  "scalingPriority": "hyprland",
-  "bar.layouts": {
-    "0": {
-      "left": [
-        "dashboard",
-        "workspaces",
-        "windowtitle"
-      ],
-      "middle": [],
-      "right": [
-        "volume",
-        "network",
-        "bluetooth",
-        "battery",
-        "hyprsunset",
-        "systray",
-        "clock",
-        "notifications"
-      ]
-    },
-    "1": {
-      "left": [
-        "dashboard",
-        "workspaces",
-        "windowtitle"
-      ],
-      "middle": [
-        "media"
-      ],
-      "right": [
-        "volume",
-        "clock",
-        "notifications"
-      ]
-    },
-    "2": {
-      "left": [
-        "dashboard",
-        "workspaces",
-        "windowtitle"
-      ],
-      "middle": [
-        "media"
-      ],
-      "right": [
-        "volume",
-        "clock",
-        "notifications"
-      ]
-    }
-  },
-  "bar.customModules.hyprsunset.temperature": "4500k",
-  "bar.customModules.hyprsunset.label": false,
-  "theme.bar.buttons.bluetooth.enableBorder": false,
-  "wallpaper.image": "/home/ffloyd/nix/dotfiles/hypr/bg.jpg",
-  "bar.workspaces.ignored": "-\\d+"
+  "theme.bar.buttons.modules.worldclock.icon": "#d3869b",
+  "theme.bar.buttons.modules.worldclock.border": "#d3869b"
 }

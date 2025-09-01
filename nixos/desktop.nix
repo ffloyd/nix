@@ -201,6 +201,10 @@ in {
         home.packages = [
           pkgs.hyprsunset
           pkgs.adwaita-icon-theme
+
+          # for LLM usage statistics widget
+          inputs.ccusage-rs.packages.${pkgs.system}.default
+          pkgs.jq
         ];
 
         xdg.configFile."hyprpanel".source = mkDotfilesLink hmConfig "hyprpanel";
