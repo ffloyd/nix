@@ -65,6 +65,11 @@
 
       # Bluetooth
       hardware.bluetooth.enable = true;
+
+      # hardware-specific software
+      home-manager.users.${username}.home.packages = with pkgs; [
+        nvtopPackages.amd
+      ];
     }
 
     #
