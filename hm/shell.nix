@@ -3,6 +3,7 @@
   lib,
   config,
   mkDotfilesLink,
+  targetOS,
   ...
 }: {
   imports = [
@@ -47,7 +48,7 @@
         enableZshIntegration = true;
       };
     }
-    (lib.mkIf pkgs.stdenv.isLinux {
+    (lib.optionalAttrs (targetOS == "nixos") {
       stylix.targets.fzf.enable = true;
     })
 
@@ -68,7 +69,7 @@
       programs.btop.enable = true;
       programs.htop.enable = true;
     }
-    (lib.mkIf pkgs.stdenv.isLinux {
+    (lib.optionalAttrs (targetOS == "nixos") {
       stylix.targets.btop.enable = true;
     })
 
@@ -78,7 +79,7 @@
     {
       programs.bat = lib.mkMerge [
         {enable = true;}
-        (lib.mkIf pkgs.stdenv.isDarwin {config.theme = "Nord";})
+        (lib.optionalAttrs (targetOS == "macos") {config.theme = "Nord";})
       ];
 
       home.packages = with pkgs.bat-extras; [
@@ -89,7 +90,7 @@
         eval "$(batman --export-env)"
       '';
     }
-    (lib.mkIf pkgs.stdenv.isLinux {
+    (lib.optionalAttrs (targetOS == "nixos") {
       stylix.targets.bat.enable = true;
     })
 
@@ -118,14 +119,14 @@
         };
       };
     }
-    (lib.mkIf pkgs.stdenv.isLinux {
+    (lib.optionalAttrs (targetOS == "nixos") {
       stylix.targets.yazi.enable = true;
     })
 
     #
     # zsh + workbrew (macOS only)
     #
-    (lib.mkIf pkgs.stdenv.isDarwin {
+    (lib.optionalAttrs (targetOS == "macos") {
       programs.zsh = {
         # we need -u to disable security check
         # that camplains about homebrew's `workbrew`

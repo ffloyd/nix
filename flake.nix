@@ -100,6 +100,7 @@
         commonContext
         // {
           inherit username hostname;
+          targetOS = "nixos";
         };
     in {
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
@@ -140,6 +141,7 @@
         commonContext
         // {
           inherit username hostname;
+          targetOS = "macos";
         };
     in {
       darwinConfigurations.${hostname} = nix-darwin.lib.darwinSystem {
