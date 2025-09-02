@@ -82,6 +82,9 @@ in {
 
           # Screen sharing
           pkgs.gnome-network-displays
+
+          # GUI system monitor
+          pkgs.gnome-system-monitor
         ];
 
         xdg.configFile."hypr/hyprland.conf".source = mkDotfilesLink hmConfig "hyprland.conf";
