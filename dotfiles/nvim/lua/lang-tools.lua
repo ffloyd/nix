@@ -15,6 +15,10 @@ features.add({
           cmd = { "lexical" },
         })
 
+        vim.lsp.config('elixirls', {
+          cmd = { "elixir-ls" },
+        })
+
         vim.lsp.enable({
           'cssls',
           'dockerls',
@@ -23,7 +27,8 @@ features.add({
           'gopls',
           'html',
           'hyprls',
-          'lexical',
+          -- 'lexical',
+          'elixirls',
           'lua_ls',
           'nixd',
           'rust_analyzer',
