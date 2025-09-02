@@ -44,6 +44,18 @@
   "theme.bar.menus.enableShadow": true,
   "bar.bluetooth.label": false,
   "bar.battery.label": true,
+  "menus.dashboard.controls.enabled": false,
+  "menus.dashboard.directories.enabled": false,
+  "menus.dashboard.shortcuts.left.shortcut1.icon": "",
+  "menus.dashboard.shortcuts.left.shortcut1.tooltip": "Show System Load",
+  "menus.dashboard.shortcuts.left.shortcut1.command": "kitty btop",
+  "menus.dashboard.shortcuts.left.shortcut2.icon": "",
+  "menus.dashboard.shortcuts.left.shortcut2.command": "kitty -d ~/nix - zsh -i -c vi",
+  "menus.dashboard.shortcuts.left.shortcut2.tooltip": "Configure OS",
+  "menus.dashboard.shortcuts.left.shortcut3.icon": "󰍺",
+  "menus.dashboard.shortcuts.left.shortcut3.tooltip": "Miracast",
+  "menus.dashboard.shortcuts.left.shortcut3.command": "gnome-network-displays",
+  "menus.dashboard.shortcuts.left.shortcut4.command": "walker",
   "bar.customModules.storage.paths": [
     "/"
   ],

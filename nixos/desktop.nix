@@ -79,6 +79,9 @@ in {
 
           # language server
           pkgs.hyprls
+
+          # Screen sharing
+          pkgs.gnome-network-displays
         ];
 
         xdg.configFile."hypr/hyprland.conf".source = mkDotfilesLink hmConfig "hyprland.conf";
