@@ -1,5 +1,5 @@
 #
-# Objective: a canvinient foundation applicable to both PC & server
+# Objective: a convinient foundation applicable to both PC & server
 #
 {
   inputs,
@@ -199,6 +199,24 @@
       # I want to be able to manage printers via CUPS web interface
       # without it I can do it, but UI is extremely slow for some reason
       users.users.${username}.extraGroups = ["lpadmin"];
+    }
+
+    #
+    # Flatpack / flathub support
+    #
+    # Some applications are only available as flatpaks
+    # or has a significant version lag on Nixpkgs (like anytype at the time of writing).
+    #
+    # I manage flatpak only for user, not system-wide.
+    #
+    {
+      services.flatpak.enable = true;
+
+      home-manager.users.${username} = {
+        imports = [inputs.nix-flatpak.homeManagerModules.nix-flatpak];
+
+        home.packages = [pkgs.flatpak];
+      };
     }
   ];
 }

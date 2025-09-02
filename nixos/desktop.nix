@@ -229,10 +229,16 @@ in {
     #
     {
       home-manager.users.${username} = {
-        home.packages = [
-          pkgs.libreoffice
+        services.flatpak.packages = [
+          # sometimes it has a big version lag on nixpkgs
+          "io.anytype.anytype"
+        ];
 
-          pkgs.anytype
+        home.packages = [
+          # kind of flatpack GUI
+          pkgs.gnome-software
+
+          pkgs.libreoffice
 
           pkgs.proton-pass
           pkgs.protonmail-desktop
