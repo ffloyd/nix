@@ -1,5 +1,6 @@
 ---
 description: Reviews staged changes and provides detailed analysis before committing.
+allowed-tools: Bash, Git, Glob, Grep, LS, Read
 ---
 
 ## Context
