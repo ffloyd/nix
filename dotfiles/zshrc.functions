@@ -22,3 +22,13 @@ doit() {
     shift  # Shift the arguments to the left, so $@ now contains the remaining arguments
     eval "$cmd $@ && espeak 'Done' || espeak 'Oh fuck, it is failed'"
 }
+
+notify-claude-finished-task() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    osascript -e 'display notification "The current task is done!" with title "Claude"'
+  else
+    notify-send "The current task is done\!" \
+      -t 10000 \
+      -a "Claude"
+  fi
+}

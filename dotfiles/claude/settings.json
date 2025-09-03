@@ -1,4 +1,17 @@
 {
   "includeCoAuthoredBy": false,
-  "model": "opusplan"
+  "model": "opusplan",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "notify-claude-finished-task"
+          }
+        ]
+      }
+    ]
+  }
 }
