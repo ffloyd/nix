@@ -235,6 +235,7 @@ in {
         services.flatpak.packages = [
           # sometimes it has a big version lag on nixpkgs
           "io.anytype.anytype"
+          "com.spotify.Client"
         ];
 
         home.packages = [

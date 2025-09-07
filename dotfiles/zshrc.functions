@@ -27,7 +27,7 @@ notify-claude-finished-task() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
     osascript -e 'display notification "The current task is done!" with title "Claude"'
   else
-    notify-send "The current task is done\!" \
+    notify-send "The current task is done!" \
       -t 10000 \
       -a "Claude"
   fi

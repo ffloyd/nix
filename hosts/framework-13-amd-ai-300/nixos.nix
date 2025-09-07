@@ -39,9 +39,9 @@
     ./hardware-configuration.nix
     # apply community-maintained hardware tweaks for the laptop
     inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
+    # Apply audio enchancement made by community
+    # Original audio sound on Framework 13 is awful =(
     {
-      # Apply audio enchancement made by community
-      # Original audio sound on Framework 13 is awful =(
       hardware.framework.laptop13.audioEnhancement = {
         enable = true;
 
@@ -50,23 +50,36 @@
         # to find the new correct device name if it stopped working after some update
         rawDeviceName = "alsa_output.pci-0000_c1_00.6.HiFi__Speaker__sink";
       };
-
-      # Firmware updates
+    }
+    # Firmware updates
+    {
       hardware.enableAllFirmware = true;
       services.fwupd.enable = true;
       home-manager.users.${username}.programs.zsh.shellAliases = {
         os-firmware-check-updates = "fwupdmgr refresh && fwupdmgr get-updates";
         os-firmware-update = "fwupdmgr update";
       };
-
-      # This is required for proper power management
+    }
+    # This is required for proper power management
+    {
       services.upower.enable = true;
       services.power-profiles-daemon.enable = true;
-
-      # Bluetooth
+    }
+    # Bluetooth
+    {
       hardware.bluetooth.enable = true;
-
-      # hardware-specific software
+    }
+    # Fix cyrrent WiFi issues
+    # I replaced the stock WiFi card with Intel AX210
+    # But it still requires some tweaks to work properly
+    {
+      boot.extraModprobeConfig = ''
+        options iwlwifi power_save=0 swcrypto=0
+      '';
+      # also bt_coex_active=0 can help if this is not enough
+    }
+    # hardware-specific software
+    {
       home-manager.users.${username}.home.packages = with pkgs; [
         nvtopPackages.amd
       ];

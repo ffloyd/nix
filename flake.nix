@@ -177,8 +177,7 @@
           ./nixos/base.nix
           ./nixos/desktop.nix
           ./nixos/browser.nix
-          ./nixos/spotify.nix
-          ./nixos/remote-fs.nix
+          # ./nixos/remote-fs.nix
         ];
         hmModules = [
           ./hm/terminal.nix
