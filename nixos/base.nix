@@ -78,6 +78,14 @@
       networking.networkmanager.enable = true;
 
       services.openssh.enable = true;
+
+      # Firewall setup
+      networking.firewall = {
+        enable = true;
+        allowedTCPPorts = [
+          5173 # Vite dev server
+        ];
+      };
     }
 
     #
