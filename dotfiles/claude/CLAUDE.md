@@ -1,0 +1,16 @@
+- When write comments in code focus on answering "why is it here?" instead of explaining "what is it here?".
+- Always think is some situation expected or not. If situation is unexpected - prefer to use exceptions (raise, throw, etc). If situation is expected - return outcome as a result.
+- If you unsure what's expected and what's not - ask me.
+- Documentation for functions (and similar concepts) should focus on responsiblitites and expectations. Do not merely explain "what function does". Explain "what is function responsible for and what are the function's expectations.
+    - For example, function `make_frienship(user1, user2)` is responsible for making friendship between two users. It expects that both users are valid.
+    - "expectations" are things that function assumes to be true.
+        - "Expeceted to be called when user needs A" - is NOT an expecetation.
+        - "Expects B to be in place" - is an expectation.
+        - If expectations are not met - function raises exception or similar failure allowed to happen.
+    - Follow format:
+        - first paragraph: responsibilities. For example: "Creates a friendship relationship between two users."
+        - second paragraph (optional): expectations if they present. For example: "Expects both users to be valid."
+        - third paragraph (optional): important details. For example: "If users are already friends, does nothing."
+- When writing tests - do the simplest check that exception happens when unexpected situation happens. Do not check what's inside exception. At most check exception type if a custom exception type were introduced.
+- When write tests make visual distiction (empty line or similar) between test setup, action that is subject of the test and validation of outcome.
+- In tests that check against error messages, log outputs ot other strings with content in human language - never do string comparison. Instead, chack that string contains important parts: field names, IDs, error code, etc.

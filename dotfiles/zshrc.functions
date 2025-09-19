@@ -32,3 +32,13 @@ notify-claude-finished-task() {
       -a "Claude"
   fi
 }
+
+pdf-compress-very-much() {
+  local input="$1"
+  local output="$2"
+
+  # /screen  - 72 dpi
+  # /ebook   - 150 dpi <--
+  # /printer - 300 dpi
+  nix-shell -p ghostscript --run "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=output.pdf Mietvertrag_Mozartstr.pdf"
+}

@@ -198,6 +198,7 @@
       home.file = {
         ".claude/commands".source = mkDotfilesLink config "claude/commands";
         ".claude/settings.json".source = mkDotfilesLink config "claude/settings.json";
+        ".claude/CLAUDE.md".source = mkDotfilesLink config "claude/CLAUDE.md";
       };
     }
 

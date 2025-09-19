@@ -68,6 +68,7 @@
     # Bluetooth
     {
       hardware.bluetooth.enable = true;
+      services.blueman.enable = true;
     }
     # Fix cyrrent WiFi issues
     # I replaced the stock WiFi card with Intel AX210
@@ -76,7 +77,6 @@
       boot.extraModprobeConfig = ''
         options iwlwifi power_save=0 swcrypto=0
       '';
-      # also bt_coex_active=0 can help if this is not enough
     }
     # hardware-specific software
     {
