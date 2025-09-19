@@ -14,3 +14,5 @@
 - When writing tests - do the simplest check that exception happens when unexpected situation happens. Do not check what's inside exception. At most check exception type if a custom exception type were introduced.
 - When write tests make visual distiction (empty line or similar) between test setup, action that is subject of the test and validation of outcome.
 - In tests that check against error messages, log outputs ot other strings with content in human language - never do string comparison. Instead, chack that string contains important parts: field names, IDs, error code, etc.
+- In Elixir projects: always wrap calls to non-local functions in `case`, don't use default branch - all expected results should be explicitly matched.
+- In Elixir projects: do offensive Elixir matches and raise exceptions by default. I'll instruct explicitly when I want to process an incoming error tuple.
