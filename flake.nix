@@ -177,6 +177,7 @@
           ./nixos/base.nix
           ./nixos/desktop.nix
           ./nixos/browser.nix
+          ./nixos/gaming.nix
           # ./nixos/remote-fs.nix
         ];
         hmModules = [

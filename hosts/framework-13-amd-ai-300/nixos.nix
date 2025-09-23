@@ -68,7 +68,6 @@
     # Bluetooth
     {
       hardware.bluetooth.enable = true;
-      services.blueman.enable = true;
     }
     # Fix cyrrent WiFi issues
     # I replaced the stock WiFi card with Intel AX210

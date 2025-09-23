@@ -172,7 +172,7 @@
     {
       home.packages = with pkgs; [
         # Language Servers
-        dockerfile-language-server-nodejs
+        dockerfile-language-server
         gopls
         lua-language-server
         nixd
