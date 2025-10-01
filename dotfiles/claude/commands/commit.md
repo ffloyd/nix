@@ -1,6 +1,6 @@
 ---
 description: Commits staged changes with a well-structured message.
-allowed-tools: Glob, Grep, LS, Read, Bash(git status --porcelain), Bash(git diff --cached), Bash(git log -n 10 --pretty=format:"%s"), Bash(git commit:*)
+allowed-tools: Glob, Grep, LS, Read, Bash(git status --porcelain), Bash(git diff --cached), Bash(git log:*), Bash(git commit:*)
 ---
 
 ## Context

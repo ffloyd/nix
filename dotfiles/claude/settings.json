@@ -1,6 +1,15 @@
 {
   "includeCoAuthoredBy": false,
-  "model": "opusplan",
+  "permissions": {
+    "allow": [
+      "mcp__anytype__API-list-spaces",
+      "mcp__anytype__API-search-space",
+      "mcp__anytype__API-list-objects",
+      "mcp__anytype__API-get-object"
+    ],
+    "deny": [],
+    "ask": []
+  },
   "hooks": {
     "Stop": [
       {
@@ -13,15 +22,5 @@
         ]
       }
     ]
-  },
-  "permissions": {
-    "allow": [
-      "mcp__anytype__API-list-spaces",
-      "mcp__anytype__API-search-space",
-      "mcp__anytype__API-list-objects",
-      "mcp__anytype__API-get-object"
-    ],
-    "deny": [],
-    "ask": []
   }
 }

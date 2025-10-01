@@ -1,5 +1,6 @@
 # Objective: This NixOS module sets up a comprehensive development environment shared across all machines, both macOS and NixOS.
 {
+  inputs,
   pkgs,
   lib,
   private,
@@ -192,7 +193,7 @@
     #
     {
       home.packages = [
-        pkgs.claude-code
+        inputs.claude-code.packages.${pkgs.system}.claude-code
       ];
 
       home.file = {
