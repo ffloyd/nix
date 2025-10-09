@@ -63,7 +63,6 @@ in {
           pkgs.brightnessctl
           pkgs.playerctl
           pkgs.hyprsysteminfo
-          pkgs.hyprsunset
           pkgs.wev # Wayland event viewer
 
           # language server
@@ -175,8 +174,38 @@ in {
             general.apps = {
               terminal = ["kitty"];
             };
+
             paths.wallpaperDir = "$HOME/nix/nixos/desktop/";
           };
+        };
+      };
+    }
+
+    #
+    # Warm display colors during dark time
+    #
+    {
+      home-manager.users.${username} = {
+        services.hyprsunset = {
+          enable = true;
+          settings = {
+            profile = [
+              {
+                time = "7:30";
+                identity = true;
+              }
+              {
+                time = "21:00";
+                temperature = 5000;
+                gamma = 0.8;
+              }
+            ];
+          };
+        };
+
+        programs.zsh.shellAliases = {
+          hl-sunset-disable = "systemctl --user stop hyprsunset.service";
+          hl-sunset-enable = "systemctl --user restart hyprsunset.service";
         };
       };
     }
