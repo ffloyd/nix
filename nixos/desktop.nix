@@ -14,32 +14,20 @@ in {
     #
     # Display manager configuration
     #
-    inputs.sddm-sugar-candy-nix.nixosModules.default
     {
-      nixpkgs = {
-        overlays = [
-          inputs.sddm-sugar-candy-nix.overlays.default
-        ];
-      };
+      environment.systemPackages = with pkgs; [
+        sddm-astronaut
+        qt6.qtmultimedia # required for astronaut theme
+      ];
 
-      # TODO: fix small cursor size
-      # TODO: fix silent fingerprint scanning
       services.displayManager.sddm = {
         enable = true;
         wayland.enable = true;
-        # package = pkgs.kdePackages.sddm; # qt6 sddm version
+        theme = "sddm-astronaut-theme";
 
-        sugarCandyNix = {
-          enable = true;
-
-          # https://github.com/Zhaith-Izaliel/sddm-sugar-candy-nix?tab=readme-ov-file#configuration
-          settings = {
-            Background = background;
-            Font = "Iosevka Nerd Font Propo";
-            FontSize = "24";
-            HaveFormBackground = true;
-            PartialBlur = true;
-            FormPosition = "left";
+        settings = {
+          General = {
+            GreeterEnvironment = "QT_SCREEN_SCALE_FACTORS=2,QT_FONT_DPI=192";
           };
         };
       };
@@ -75,6 +63,7 @@ in {
           pkgs.brightnessctl
           pkgs.playerctl
           pkgs.hyprsysteminfo
+          pkgs.hyprsunset
           pkgs.wev # Wayland event viewer
 
           # language server
@@ -85,6 +74,10 @@ in {
 
           # GUI system monitor
           pkgs.gnome-system-monitor
+
+          # Audio control GUI
+          pkgs.pavucontrol
+          pkgs.helvum
         ];
 
         xdg.configFile."hypr/hyprland.conf".source = mkDotfilesLink hmConfig "hyprland.conf";
@@ -163,57 +156,28 @@ in {
     }
 
     #
-    # App Launcher: Walker
+    # Quickshell based shell/bar
     #
     {
       home-manager.sharedModules = [
-        inputs.walker.homeManagerModules.default
+        inputs.caelestia-shell.homeManagerModules.default
       ];
 
-      nix.settings = {
-        substituters = [
-          "https://walker.cachix.org"
-          "https://walker-git.cachix.org"
-        ];
-        trusted-public-keys = [
-          "walker.cachix.org-1:fG8q+uAaMqhsMxWjwvk0IMb4mFPFLqHjuvfwQxE4oJM="
-          "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
-        ];
-      };
-
       home-manager.users.${username} = {
-        programs.walker = {
+        programs.caelestia = {
           enable = true;
-          runAsService = true;
+
+          cli = {
+            enable = true;
+          };
+
+          settings = {
+            general.apps = {
+              terminal = ["kitty"];
+            };
+            paths.wallpaperDir = "$HOME/nix/nixos/desktop/";
+          };
         };
-
-        # disable generation of a config file in order to use direct symlink
-        xdg.configFile."walker/config.toml".enable = false;
-
-        xdg.configFile."walker".source = mkDotfilesLink hmConfig "walker";
-      };
-    }
-
-
-    #
-    # Topbar & OSD: Hyprpanel
-    #
-    {
-      home-manager.users.${username} = {
-        programs.hyprpanel = {
-          enable = true;
-        };
-
-        home.packages = [
-          pkgs.hyprsunset
-          pkgs.adwaita-icon-theme
-
-          # for LLM usage statistics widget
-          inputs.ccusage-rs.packages.${pkgs.system}.default
-          pkgs.jq
-        ];
-
-        xdg.configFile."hyprpanel".source = mkDotfilesLink hmConfig "hyprpanel";
       };
     }
 
@@ -235,12 +199,14 @@ in {
         services.flatpak.packages = [
           # sometimes it has a big version lag on nixpkgs
           "io.anytype.anytype"
-          "com.spotify.Client"
         ];
 
         home.packages = [
           # kind of flatpack GUI
           pkgs.gnome-software
+
+          # Unofficail non-Electron Tidal client
+          pkgs.high-tide
 
           pkgs.libreoffice
 
@@ -249,6 +215,7 @@ in {
           pkgs.protonvpn-gui
 
           pkgs.telegram-desktop
+          pkgs.discord
 
           inputs.claude-desktop.packages.${pkgs.system}.claude-desktop-with-fhs
         ];

@@ -1,9 +1,0 @@
-{
-  "custom/ccusage": {
-    "icon": "󰒋",
-    "execute": "ccusage-rs monthly --json | jq '.monthly[0] | walk(if type == \"number\" then (. * 100 | round / 100) else . end)'",
-    "interval": 10000,
-    "label": "${cost_usd}",
-    "tooltip": "Claude Code usage this month"
-  }
-}

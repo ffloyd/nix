@@ -48,7 +48,20 @@
         # use
         # $ pw-dump | grep "node.name.*alsa_output"
         # to find the new correct device name if it stopped working after some update
-        rawDeviceName = "alsa_output.pci-0000_c1_00.6.HiFi__Speaker__sink";
+        # rawDeviceName = "alsa_output.pci-0000_c1_00.6.HiFi__Speaker__sink";
+
+        # the correct one when UCM is disabled
+        rawDeviceName = "alsa_output.pci-0000_c1_00.6.analog-stereo";
+      };
+    }
+    # Fix not working internal microphone
+    # https://github.com/NixOS/nixos-hardware/issues/1603
+    # https://community.frame.work/t/microphone-not-working-after-nixos-update/74915
+    {
+      services.pipewire.wireplumber.extraConfig.no-ucm = {
+        "monitor.alsa.properties" = {
+          "alsa.use-ucm" = false;
+        };
       };
     }
     # Firmware updates
@@ -154,13 +167,19 @@
       services.keyd = {
         enable = true;
         keyboards.default = {
-          ids = ["0001:0001:70533846"];
+          # they may change after some updates
+          # use `nix-shell -p keyd` and then
+          # `sudo keyd monitor` to find a correct one if it stopped working
+          ids = [
+            "0001:0001:70533846" # internal keyboard (first detected ID)
+            "0001:0001:09b4e68d" # current ID as of 2025-10-09
+          ];
           settings = {
             main = {
               # left alt <-> left cmd
               # this is also done physically on the keyboard
-              leftalt = "leftmeta";
-              leftmeta = "leftalt";
+              leftalt = "layer(meta)";
+              leftmeta = "layer(alt)";
 
               # capslock -> (held) ctrl, (tap) ESC
               capslock = "overloadt2(control, esc, 150)";

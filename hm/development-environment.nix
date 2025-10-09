@@ -194,6 +194,7 @@
     {
       home.packages = [
         inputs.claude-code.packages.${pkgs.system}.claude-code
+        inputs.ccusage-rs.packages.${pkgs.system}.default
       ];
 
       home.file = {
