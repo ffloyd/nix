@@ -83,9 +83,18 @@
     mkDotfilesLink = hmConfig: path:
       hmConfig.lib.file.mkOutOfStoreSymlink "${hmConfig.home.homeDirectory}/nix/dotfiles/${path}";
 
+    # Converts attribute set to shell export statements for environment configuration files.
+    # Values are properly escaped for shell using escapeShellArg.
+    mkEnvExports = envVars:
+      nixpkgs.lib.concatStringsSep "\n" (
+        nixpkgs.lib.mapAttrsToList
+          (name: value: "export ${name}=${nixpkgs.lib.escapeShellArg value}")
+          envVars
+      );
+
     # These attributes are passed to all NixOS, nix-darwin and home-manager modules.
     commonContext = {
-      inherit inputs globals private mkDotfilesLink;
+      inherit inputs globals private mkDotfilesLink mkEnvExports;
     };
 
     # A function that creates NixOS system configurations for a given host.

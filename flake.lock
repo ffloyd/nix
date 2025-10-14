@@ -101,11 +101,19 @@
         "quickshell": "quickshell"
       },
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1760497394,
         "narHash": "sha256-/4Hf/irgPh+gRQAcCNjXyXFcUGOrXMX8+OtOwbscbXk=",
         "owner": "caelestia-dots",
         "repo": "shell",
         "rev": "4cb1048fdd6fa281baa0efa36c8c82ddd2cc43a3",
+=======
+        "lastModified": 1760418315,
+        "narHash": "sha256-U0J1KnoaPniXJ4UnEw9074y16gg3DMESlaZi4t6hmR0=",
+        "owner": "caelestia-dots",
+        "repo": "shell",
+        "rev": "fe4ebb79b6162d7e5e4e9a00d8a39ff10876fb8c",
+>>>>>>> bc80be7 (feat(desktop): migrate environment variables to UWSM declarative configuration)
         "type": "github"
       },
       "original": {
@@ -142,11 +150,19 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1760464919,
         "narHash": "sha256-xjTN6vuVJXEUB+aDZ30Q65xRxNFelmjsOREIqEJ+fdA=",
         "owner": "sadjow",
         "repo": "claude-code-nix",
         "rev": "f8802aa675439a1f41c80eb4cf32c38daac52161",
+=======
+        "lastModified": 1760133724,
+        "narHash": "sha256-5Sivtl/IJxD58hQvdvMsYbb+duNT9yPBO2ocYym91Hc=",
+        "owner": "sadjow",
+        "repo": "claude-code-nix",
+        "rev": "d20862b3a12f0dea60acce7c46fd99d1dedef93b",
+>>>>>>> bc80be7 (feat(desktop): migrate environment variables to UWSM declarative configuration)
         "type": "github"
       },
       "original": {
@@ -433,11 +449,19 @@
         ]
       },
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1760500983,
         "narHash": "sha256-zfY4F4CpeUjTGgecIJZ+M7vFpwLc0Gm9epM/iMQd4w8=",
         "owner": "nix-community",
         "repo": "home-manager",
         "rev": "c53e65ec92f38d30e3c14f8d628ab55d462947aa",
+=======
+        "lastModified": 1760312644,
+        "narHash": "sha256-U9SkK45314urw9P7MmjhEgiQwwD/BTj+T3HTuz1JU1Q=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "e121f3773fa596ecaba5b22e518936a632d72a90",
+>>>>>>> bc80be7 (feat(desktop): migrate environment variables to UWSM declarative configuration)
         "type": "github"
       },
       "original": {
@@ -625,11 +649,19 @@
     },
     "nixpkgs": {
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1760349414,
         "narHash": "sha256-W4Ri1ZwYuNcBzqQQa7NnWfrv0wHMo7rduTWjIeU9dZk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "c12c63cd6c5eb34c7b4c3076c6a99e00fcab86ec",
+=======
+        "lastModified": 1759977445,
+        "narHash": "sha256-LYr4IDfuihCkFAkSYz5//gT2r1ewcWBYgd5AxPzPLIo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "2dad7af78a183b6c486702c18af8a9544f298377",
+>>>>>>> bc80be7 (feat(desktop): migrate environment variables to UWSM declarative configuration)
         "type": "github"
       },
       "original": {
@@ -941,11 +973,19 @@
         "tinted-zed": "tinted-zed"
       },
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1760472212,
         "narHash": "sha256-4C3I/ssFsq8EgaUmZP0xv5V7RV0oCHgL/Rx+MUkuE+E=",
         "owner": "nix-community",
         "repo": "stylix",
         "rev": "8d008296a1b3be9b57ad570f7acea00dd2fc92db",
+=======
+        "lastModified": 1760350849,
+        "narHash": "sha256-JqcM5Pkm5q1c9D5zpINJsN1yCB4Vq1cL12ZuFyo32T4=",
+        "owner": "nix-community",
+        "repo": "stylix",
+        "rev": "7b4957d716f4fb615bf0e37d3b23c112579b1408",
+>>>>>>> bc80be7 (feat(desktop): migrate environment variables to UWSM declarative configuration)
         "type": "github"
       },
       "original": {
@@ -1140,11 +1180,19 @@
         ]
       },
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1760466542,
         "narHash": "sha256-q2QZhrrjHbvW4eFzoEGkj/wUHNU6bVGPyflurx5ka6U=",
         "owner": "0xc000022070",
         "repo": "zen-browser-flake",
         "rev": "3446bcbf5f46ecb18e82244888730c4983c30b22",
+=======
+        "lastModified": 1760426393,
+        "narHash": "sha256-wKiqhDgXwicdVNSJGwJPeTxnNPhzKcy9RqptzFcdFe4=",
+        "owner": "0xc000022070",
+        "repo": "zen-browser-flake",
+        "rev": "0618a22e6fb6f13181807f0e14087192d459b2a0",
+>>>>>>> bc80be7 (feat(desktop): migrate environment variables to UWSM declarative configuration)
         "type": "github"
       },
       "original": {
