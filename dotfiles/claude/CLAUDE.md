@@ -17,3 +17,6 @@
 - In Elixir projects: always wrap calls to non-local functions in `case`, don't use default branch - all expected results should be explicitly matched. When only one expected result - use offensive match like `{:ok, result} = ...`.
 - In Elixir projects: do offensive Elixir matches and raise exceptions by default. I'll instruct explicitly when I want to process an incoming error tuple.
 - In Elixir projects: use offensive matches (`{:ok, result} = ...`) when the error case is truly unexpected and should crash. Use `case` statements only when you need to handle multiple expected outcomes.
+- Do not perform (un)staging and other non-readonly Git operations unless explicilty asked for.
+- Always update documentation after code changes. Documentation is important, do your best to keep it actual.
+- Always think about debugability. Especially when define error messages, log messages, error payloads, validation errors etc. Imagine an engineer seeing this error. Will it be enough to understand what is wrong?

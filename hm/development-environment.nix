@@ -239,10 +239,18 @@
         # secrets management
         (pass.withExtensions (exts: [exts.pass-otp]))
         (lib.mkIf stdenv.isDarwin _1password-cli)
-
-        # give CLI a voice
-        espeak-ng
       ];
     }
+
+    #
+    # TTS: MacOS has `say`, on linux I want a fallback
+    #
+    (lib.mkIf pkgs.stdenv.isLinux {
+      home.packages = with pkgs; [
+        espeak-ng
+      ];
+
+      programs.zsh.shellAliases.say = "espeak-ng";
+    })
   ];
 }

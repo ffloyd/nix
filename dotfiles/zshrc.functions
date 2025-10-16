@@ -20,7 +20,7 @@ WHITE="\033[1;37m";
 doit() {
     local cmd="$1"
     shift  # Shift the arguments to the left, so $@ now contains the remaining arguments
-    eval "$cmd $@ && espeak 'Done' || espeak 'Oh fuck, it is failed'"
+    eval "$cmd $@ && say 'Done' || say 'Oh fuck, it is failed'"
 }
 
 notify-claude-finished-task() {
