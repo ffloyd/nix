@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "zsh -i -c notify-claude-finished-task"
+            "command": "zsh -i -c notify-ai-finished-task"
           }
         ]
       }

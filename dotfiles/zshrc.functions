@@ -23,13 +23,14 @@ doit() {
     eval "$cmd $@ && say 'Done' || say 'Oh fuck, it is failed'"
 }
 
-notify-claude-finished-task() {
+notify-ai-finished-task() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    osascript -e 'display notification "The current task is done!" with title "Claude"'
+    osascript -e 'display notification "The current task is done!" with title "AI Assistant"'
   else
-    notify-send "The current task is done!" \
-      -t 10000 \
-      -a "Claude"
+    caelestia shell toaster success \
+      "AI Assistant" \
+      "Current task has been completed!" \
+      "robot"
   fi
 }
 
