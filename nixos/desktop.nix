@@ -16,15 +16,13 @@ in {
     # Display manager configuration
     #
     {
-      environment.systemPackages = with pkgs; [
-        sddm-astronaut
-        qt6.qtmultimedia # required for astronaut theme
-      ];
-
       services.displayManager.sddm = {
         enable = true;
         wayland.enable = true;
-        theme = "sddm-astronaut-theme";
+        theme = "${pkgs.sddm-astronaut}/share/sddm/themes/sddm-astronaut-theme";
+        extraPackages = with pkgs; [
+          qt6.qtmultimedia # required for astronaut theme
+        ];
 
         # GreeterEnvironment sets variables for the display manager's greeter session (before user login)
         # XCURSOR_SIZE: Cursor size for X11/legacy cursor themes
@@ -70,7 +68,7 @@ in {
           pkgs.gnome-system-monitor
 
           # Audio control GUI
-          pkgs.pavucontrol
+          pkgs.lxqt.pavucontrol-qt
           pkgs.helvum
         ];
 
@@ -108,11 +106,6 @@ in {
           # https://github.com/Smithay/smithay/issues/389
           _JAVA_AWT_WM_NONREPARENTING = "1";
 
-          # Qt theming configuration
-          # Allows consistent theming of Qt5/Qt6 applications using qt6ct
-          # https://github.com/hyprwm/Hyprland/discussions/5030
-          QT_QPA_PLATFORMTHEME = "qt6ct";
-
           # HiDPI display scaling for Qt applications
           # Set to 2 to match the internal monitor's scale factor
           # https://wiki.archlinux.org/title/HiDPI
@@ -123,17 +116,6 @@ in {
           # https://github.com/Vladimir-csp/uwsm
           APP2UNIT_SLICES = "a=app-graphical.slice b=background-graphical.slice s=session-graphical.slice";
         };
-      };
-    }
-
-    #
-    # Qt theming
-    #
-    {
-      stylix.targets.qt.enable = true;
-
-      home-manager.users.${username} = {
-        stylix.targets.qt.enable = true;
       };
     }
 
@@ -161,6 +143,47 @@ in {
               themeVariants = ["default" "orange"];
             };
           };
+
+          iconTheme = {
+            name = "Papirus-Dark";
+            package = pkgs.papirus-icon-theme;
+          };
+        };
+      };
+    }
+
+    #
+    # Qt theming
+    #
+    {
+      home-manager.users.${username} = let
+        themeVariant = "Gruvbox-Dark-Brown";
+        qtctConfig = ''
+          [Appearance]
+          icon_theme=Papirus-Dark
+          style=kvantum-dark
+        '';
+      in {
+        # this sets most of the needed qt env variables
+        # and related packages
+        qt = {
+          enable = true;
+          platformTheme.name = "qtct";
+          style.name = "kvantum";
+        };
+
+        # HomeManager module has nothing to set Kvantum and qt5ct/qt6ct configs
+        # so I need to do it manually
+        xdg.configFile = {
+          "Kvantum/kvantum.kvconfig".text = ''
+            [General]
+            theme=${themeVariant}
+          '';
+
+          "Kvantum/${themeVariant}".source = "${pkgs.gruvbox-kvantum}/share/Kvantum/${themeVariant}";
+
+          "qt5ct/qt5ct.conf".text = qtctConfig;
+          "qt6ct/qt6ct.conf".text = qtctConfig;
         };
       };
     }
