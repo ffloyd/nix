@@ -104,7 +104,9 @@
       neovim-adjusted = pkgs.symlinkJoin {
         name = "neovim-adjusted";
         paths = [
-          pkgs.neovim-unwrapped
+          # I have to use nightly version because of vim.lsp.inline_completion
+          # is not yet available in stable releases.
+          inputs.neovim-nightly-overlay.packages.${pkgs.system}.default
         ];
         nativeBuildInputs = [
           pkgs.makeWrapper
@@ -142,6 +144,10 @@
 
           # required by snacks.nvim image viewer
           imagemagick
+
+          # required by sidekick.nvim
+          copilot-language-server
+          lsof
         ]);
 
       home.file = {
@@ -202,6 +208,24 @@
         ".claude/settings.json".source = mkDotfilesLink config "claude/settings.json";
         ".claude/CLAUDE.md".source = mkDotfilesLink config "claude/CLAUDE.md";
       };
+    }
+
+    #
+    # OpenCode AI assistant
+    #
+    {
+      home.packages = [
+        pkgs.opencode
+      ];
+    }
+
+    #
+    # GitHub CLI AI assistant
+    #
+    {
+      home.packages = with pkgs; [
+        github-copilot-cli
+      ];
     }
 
     #

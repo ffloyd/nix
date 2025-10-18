@@ -179,7 +179,36 @@ features.add({
       ---@module "blink-cmp"
       ---@type blink.cmp.Config
       opts = {
-        keymap = { preset = "super-tab" },
+        -- Completion workflow:
+        -- - Enter: accept Blink suggestion
+        -- - Tab: accept inline completion (from Copilot/LSP)
+        -- - C-e: dismiss Blink popup (only needed if it overlaps inline suggestions
+        --        or if you want to use C-n/C-p for cycling inline completions)
+        -- - C-n/C-p: navigate Blink suggestions, or cycle inline completions
+        keymap = {
+          preset = "enter",
+          ["<Tab>"] = {
+            "snippet_forward",
+            function() -- native inline completions
+              return vim.lsp.inline_completion.get()
+            end,
+            "fallback",
+          },
+          ["C-n"] = {
+            "select_next",
+            function()
+              vim.lsp.inline_completion.select({ count = 1 })
+              return true
+            end
+          },
+          ["C-p"] = {
+            "select_prev",
+            function()
+              vim.lsp.inline_completion.select({ count = -1 })
+              return true
+            end
+          },
+        },
         appearance = {
           use_nvim_cmp_as_default = true,
           nerd_font_variant = "mono",
@@ -340,7 +369,7 @@ features.add({
           lualine_b = { "branch", "diff", "diagnostics" },
           lualine_c = { { "filename", path = 1 } },
           lualine_x = {
-            { "lsp_status", ignore_lsp = { "copilot" } },
+            "lsp_status",
             "encoding",
             "fileformat",
             "filetype",
@@ -1155,12 +1184,12 @@ features.add({
     {
       "waiting-for-dev/ergoterm.nvim",
       config = function()
-        require("ergoterm").setup()
+        require("ergoterm").setup({})
       end
     }
   },
   setup = function()
-    local terms = require("ergoterm.terminal")
+    local terms = require("ergoterm")
     local iex_tests_term = terms.Terminal:new({
       cmd = "iex -S mix",
       name = "IexTests",
@@ -1185,7 +1214,7 @@ features.add({
           iex_tests_term:start()
           local file_path = vim.fn.expand("%")
           local line_number = vim.fn.line(".")
-          iex_tests_term:send({ 'IexTests.test("' .. file_path .. ':' .. line_number .. '")' }, { action = "visible" })
+          iex_tests_term:send({ 'IexTests.test("' .. file_path .. ':' .. line_number .. '")' })
         end,
         desc = "Test Current Line in IEx",
       },
@@ -1194,7 +1223,7 @@ features.add({
         function()
           iex_tests_term:start()
           local file_path = vim.fn.expand("%")
-          iex_tests_term:send({ 'IexTests.test("' .. file_path .. '")' }, { action = "visible" })
+          iex_tests_term:send({ 'IexTests.test("' .. file_path .. '")' })
         end,
         desc = "Test Current File in IEx",
       },
@@ -1203,9 +1232,9 @@ features.add({
         function()
           iex_tests_term:start()
           local directory_path = vim.fn.expand("%:p:h")
-          iex_tests_term:send({ 'IexTests.test("' .. directory_path .. '")' }, { action = "visible" })
+          iex_tests_term:send({ 'IexTests.test("' .. directory_path .. '")' })
         end,
-        desc = "Test Current File in IEx",
+        desc = "Test Current Directory in IEx",
       },
     })
   end

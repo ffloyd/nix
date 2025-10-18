@@ -1,5 +1,7 @@
 -- Objective: integrate LSP, formatters, linters and other language tools in Neovim
 
+---@module "snacks"
+
 local features = require("features")
 
 features.add({
@@ -152,12 +154,12 @@ features.add({
       { "<leader>la",  require("actions-preview").code_actions, desc = "Code Actions" },
 
       -- LSP Server Control
-      { "<leader>ls",  group = "LSP Server" },
-      { "<leader>lsc", Snacks.picker.lsp_config,                desc = "Configs" },
-      { "<leader>lsl", "<cmd>LspLog<cr>",                       desc = "Logs" },
-      { "<leader>lsr", "<cmd>LspRestart<cr>",                   desc = "Restart" },
-      { "<leader>lss", "<cmd>LspStart<cr>",                     desc = "Start" },
-      { "<leader>lsx", "<cmd>LspStop<cr>",                      desc = "Stop" },
+      { "<leader>lx",  group = "LSP Server" },
+      { "<leader>lxc", Snacks.picker.lsp_config,                desc = "Configs" },
+      { "<leader>lxl", "<cmd>LspLog<cr>",                       desc = "Logs" },
+      { "<leader>lxr", "<cmd>LspRestart<cr>",                   desc = "Restart" },
+      { "<leader>lxs", "<cmd>LspStart<cr>",                     desc = "Start" },
+      { "<leader>lxx", "<cmd>LspStop<cr>",                      desc = "Stop" },
     })
   end
 })
@@ -253,5 +255,23 @@ features.add({
         end
       end,
     })
+  end
+})
+
+features.add({
+  "LSP inline-completion toggle",
+  after = { "which-key" },
+  setup = function()
+    vim.lsp.inline_completion.enable()
+
+    Snacks.toggle.new({
+      name = "LSP Inline Completion",
+      get = function()
+        return vim.lsp.inline_completion.is_enabled()
+      end,
+      set = function(state)
+        vim.lsp.inline_completion.enable(state)
+      end
+    }):map("<leader>Tc")
   end
 })

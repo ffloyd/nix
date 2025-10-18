@@ -54,6 +54,8 @@
       url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
   outputs = {
@@ -88,8 +90,8 @@
     mkEnvExports = envVars:
       nixpkgs.lib.concatStringsSep "\n" (
         nixpkgs.lib.mapAttrsToList
-          (name: value: "export ${name}=${nixpkgs.lib.escapeShellArg value}")
-          envVars
+        (name: value: "export ${name}=${nixpkgs.lib.escapeShellArg value}")
+        envVars
       );
 
     # These attributes are passed to all NixOS, nix-darwin and home-manager modules.
