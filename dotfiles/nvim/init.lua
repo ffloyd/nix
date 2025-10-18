@@ -180,19 +180,17 @@ features.add({
       ---@type blink.cmp.Config
       opts = {
         -- Completion workflow:
-        -- - Enter: accept Blink suggestion
-        -- - Tab: accept inline completion (from Copilot/LSP)
+        -- - Tab: accept Blink suggestion, snippet forward jump
+        -- - C-/: accept inline completion (from Copilot/LSP)
         -- - C-e: dismiss Blink popup (only needed if it overlaps inline suggestions
         --        or if you want to use C-n/C-p for cycling inline completions)
         -- - C-n/C-p: navigate Blink suggestions, or cycle inline completions
         keymap = {
-          preset = "enter",
-          ["<Tab>"] = {
-            "snippet_forward",
+          preset = "super-tab",
+          ["<C-/>"] = {
             function() -- native inline completions
               return vim.lsp.inline_completion.get()
             end,
-            "fallback",
           },
           ["C-n"] = {
             "select_next",

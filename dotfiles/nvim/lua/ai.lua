@@ -14,6 +14,8 @@ features.add({
         nes = {
           -- originally 100 which is too fast and triggers too often
           debounce = 500,
+          -- originally had 'User SidekickNesDone', but it fires even in insert mode
+          events = { "ModeChanged *:n", "TextChanged" },
         }
       }
     }
@@ -23,7 +25,7 @@ features.add({
 
     require("which-key").add({
       {
-        "<Tab>",
+        "<C-/>",
         function()
           require("sidekick").nes_jump_or_apply()
         end,

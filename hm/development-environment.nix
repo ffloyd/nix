@@ -148,6 +148,23 @@
           # required by sidekick.nvim
           copilot-language-server
           lsof
+
+          # When it makes sense, I prefer to keep language servers, linters and formatters
+          # in projects' Nix devshells, but these ones are more convenient to have globally installed.
+          #
+          # Language Servers
+          dockerfile-language-server
+          gopls
+          lua-language-server
+          nixd
+          pyright
+          terraform-ls
+          vscode-json-languageserver
+          # and linters/formatters
+          commitlint
+          editorconfig-checker
+          hadolint
+          statix
         ]);
 
       home.file = {
@@ -170,29 +187,6 @@
         vim = "nvim";
       };
     })
-
-    #
-    # Global Language Servers & Formatters
-    #
-    # When possible I prefer keep them in projects' Nix devshells,
-    # but these ones are more convenient to have globally installed.
-    {
-      home.packages = with pkgs; [
-        # Language Servers
-        dockerfile-language-server
-        gopls
-        lua-language-server
-        nixd
-        pyright
-        terraform-ls
-
-        # Formatters
-        commitlint
-        editorconfig-checker
-        hadolint
-        statix
-      ];
-    }
 
     #
     # Claude Code AI assistant
