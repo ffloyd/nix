@@ -28,7 +28,6 @@ features.add({
         dashboard = {
           example = "advanced",
         },
-
       },
     },
   },
