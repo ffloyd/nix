@@ -14,8 +14,6 @@ features.add({
         nes = {
           -- originally 100 which is too fast and triggers too often
           debounce = 500,
-          -- originally had 'User SidekickNesDone', but it fires even in insert mode
-          events = { "ModeChanged *:n", "TextChanged" },
         }
       }
     },
@@ -30,6 +28,9 @@ features.add({
               return ""
             end
 
+            -- Show busy icon if processing
+            -- color will represent the status kind
+            -- so we're aware of all kind + busy state combinations
             if status.busy then
               return ""
             end
@@ -76,10 +77,18 @@ features.add({
 
     require("which-key").add({
       {
-        "<C-/>",
+        "<C-l>",
         function()
           require("sidekick").nes_jump_or_apply()
         end,
+        desc = "Copilot Next Edit Suggestion",
+      },
+      {
+        "<A-l>",
+        function()
+          require("sidekick.nes").update()
+        end,
+        desc = "Copilot Next Edit Suggestion Update",
       },
       {
         "<c-.>",
