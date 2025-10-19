@@ -62,7 +62,30 @@ features.add({
         }),
         merger("input", { enabled = true }),
         merger("notifier", { enabled = true }),
-        merger("picker", { enabled = true, ui_select = true }),
+        merger("picker",
+          --- @type snacks.picker.Config
+          {
+            enabled = true,
+            ui_select = true,
+            actions = {
+              -- Why: Enables sending picker selections to Sidekick AI assistant
+              -- without manual file path copying or content extraction
+              sidekick_send = function(...)
+                return require("sidekick.cli.snacks").send(...)
+              end
+            },
+            win = {
+              input = {
+                keys = {
+                  ["<A-a>"] = {
+                    "sidekick_send",
+                    mode = { "n", "i" }
+                  }
+                }
+              }
+            }
+          }
+        ),
       }),
     },
   },
