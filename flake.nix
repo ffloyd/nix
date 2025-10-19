@@ -27,12 +27,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    claude-desktop = {
-      url = "github:k3d3/claude-desktop-linux-flake";
+    nix-ai-tools = {
+      url = "github:numtide/nix-ai-tools";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    claude-code.url = "github:sadjow/claude-code-nix";
 
     nix-inspect.url = "github:bluskript/nix-inspect";
     nixos-cli.url = "github:nix-community/nixos-cli";
@@ -51,7 +49,8 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
 
     caelestia-shell = {
-      url = "github:caelestia-dots/shell";
+      # master is pretty unstable, so using tagged version
+      url = "github:caelestia-dots/shell/v1.3.2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

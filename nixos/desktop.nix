@@ -311,8 +311,6 @@ in {
 
           pkgs.telegram-desktop
           pkgs.discord
-
-          inputs.claude-desktop.packages.${pkgs.system}.claude-desktop-with-fhs
         ];
       };
     }
