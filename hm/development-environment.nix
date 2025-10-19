@@ -171,9 +171,6 @@
         # Directory for installing NPM packages used by NeoVim plugins
         "${neovim-npm-dir}/.keep".text = "";
 
-        # NeoVim's mcp-hub.nvim may complain that this directory is not exists
-        ".mcp-hub/.keep".text = "";
-
         # Direct symlink to my actual NeoVim configuration
         ".config/nvim".source = mkDotfilesLink config "nvim";
       };
@@ -211,6 +208,8 @@
       home.packages = [
         pkgs.opencode
       ];
+
+      xdg.configFile."opencode".source = mkDotfilesLink config "opencode";
     }
 
     #

@@ -133,5 +133,17 @@ Such behavior is inconvenient when you want to split a module into smaller isola
 
 ## Common tasks
 
-* formatting: `nix fmt`
-* upgrade to new versions: `nix flake update`
+### Validation & Testing (NixOS)
+* Check flake validity: `nix flake check`
+* Test if configuration builds: `nixos-rebuild dry-build --flake .`
+* Preview activation changes: `nixos-rebuild dry-activate --flake .`
+* Format code: `nix fmt`
+* Lint: `statix check`
+
+### Applying Changes (NixOS)
+* Apply configuration: `nixos apply` (or use alias `os-rebuild`)
+* Apply to boot only: `nixos apply --no-activate --install-bootloader` (or alias `os-rebuild-boot`)
+
+### Maintenance
+* Upgrade dependencies: `nix flake update`
+* Clean old generations: `nixos generation delete --min 5 --all` (or alias `os-gc`)
