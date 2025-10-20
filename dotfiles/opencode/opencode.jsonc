@@ -1,4 +1,8 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "gruvbox"
+  "theme": "gruvbox",
+  "keybinds": {
+    "session_child_cycle": "<leader>right",
+    "session_child_cycle_reverse": "<leader>left"
+  }
 }
