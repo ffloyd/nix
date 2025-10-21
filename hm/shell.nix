@@ -161,8 +161,10 @@
     #
     # Separate file for custom zsh functions (direct symlink to dotfiles)
     #
-    (let filename = "zshrc.functions"; in
-      {
+    (
+      let
+        filename = "zshrc.functions";
+      in {
         home.file.".${filename}".source = mkDotfilesLink config filename;
 
         # source the file at the end of zsh init

@@ -30,6 +30,32 @@ Each machine has a different set of modules enabled.
 NixOS hosts use merged configuration that includes both NixOS and Home Manager modules at the same time.
 MacOS hosts use separate configurations for nix-darwin and Home Manager: I change nix-darwin configuration much less frequently, so there is no point to wait for additional 10+ seconds when updating Home Manager part.
 
+## AI Tooling
+
+This repository uses a three-tier system for AI coding assistant configuration (Claude Code and OpenCode):
+
+1. **Shared "as is"** (`dotfiles/ai-shared/`): Content identical for both tools (e.g., coding rules). These files are symlinked directly and are editable without rebuild.
+
+2. **Shared snippets** (`hm/development-environment/ai-tooling/`): Content that needs tool-specific frontmatter (e.g., commit/review instructions). These files are used to generate tool-specific commands/agents and require rebuild to see changes.
+
+3. **Experimental** (tool-specific directories like `dotfiles/claude/commands/`, `dotfiles/opencode/agent/`): Single-tool experimental files. These are symlinked directly and editable, but require rebuild to discover new files.
+
+### Mixed Directories
+
+Home directories like `~/.claude/commands/` and `~/.config/opencode/agent/` contain both generated files (immutable, from Nix store) and experimental files (editable, from dotfiles). This allows stable shared commands to coexist with experimental work-in-progress commands.
+
+### Workflow
+
+1. **Experiment**: Create file in tool-specific directory (e.g., `dotfiles/claude/commands/experimental.md`), rebuild once to create symlink, then edit freely.
+2. **Share**: When stable and needed for both tools:
+   - If content is identical → move to `dotfiles/ai-shared/`
+   - If needs tool-specific adjustments → extract to `hm/development-environment/ai-tooling/`, add generation in `ai-tooling.nix`
+
+### Rebuild Requirements
+
+- **No rebuild needed**: Editing existing files in `dotfiles/ai-shared/` or tool-specific experimental files
+- **Rebuild required**: New experimental files, changes to shared snippets in `hm/development-environment/ai-tooling/`
+
 ## Repository structure
 
 
@@ -40,9 +66,12 @@ MacOS hosts use separate configurations for nix-darwin and Home Manager: I chang
 | `private.nix`  | An attrs set with some global values that are personal data. Encrypted. Propogated to all modules.                                                         |
 | `hosts/*`      | Each host has a folder with machine-specific configuration. `hardware-configuration.nix` is a hardware configuration and also encrypted. |
 | `hm/*.nix`     |  Configuration modules that shared between NixOS and MacOS.                                                  |
+| `hm/development-environment/ai-tooling/` | AI shared snippets for generation (immutable, rebuild required for changes). |
 | `nixos/*.nix`  | NixOS configuration modules. Can include home-manager configurations that are NixOS-specific. |
 | `darwin/*.nix` | nix-darwin configuration modules. |
-| `dotfiles/*`   | These files are linked directly, not through Nix store. It allows to edit them in place without creating a new generation for each change.                              |
+| `dotfiles/ai-shared/` | AI content shared identically between tools (editable, no rebuild needed). |
+| `dotfiles/claude/`, `dotfiles/opencode/` | Tool configuration and experimental AI files (editable, rebuild to discover new files). |
+| `dotfiles/*` (other)   | These files are linked directly, not through Nix store. It allows to edit them in place without creating a new generation for each change.                              |
 
 ## Setup on NixOS
 
@@ -137,7 +166,7 @@ Such behavior is inconvenient when you want to split a module into smaller isola
 * Check flake validity: `nix flake check`
 * Test if configuration builds: `nixos-rebuild dry-build --flake .`
 * Preview activation changes: `nixos-rebuild dry-activate --flake .`
-* Format code: `nix fmt`
+* Format code: `nix fmt .`
 * Lint: `statix check`
 
 ### Applying Changes (NixOS)

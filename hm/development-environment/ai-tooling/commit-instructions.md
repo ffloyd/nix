@@ -1,15 +1,11 @@
----
-description: Commits staged changes with a well-structured message.
-allowed-tools: Glob, Grep, LS, Read, Bash(git status --porcelain), Bash(git diff --cached), Bash(git log:*), Bash(git commit:*)
----
-
 ## Context
 
 - current status: !`git status --porcelain`
 - staged changes: !`git diff --cached`
 - recent commit messages: !`git log -n 10 --pretty=format:"%s"`
 - read modified files if necessary
-- DO NOT use `git add`, ignore unstaged or untracked changes
+- DO NOT use `git add`
+- ignore unstaged or untracked changes
 
 ## Task
 

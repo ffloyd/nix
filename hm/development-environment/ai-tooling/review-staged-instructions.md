@@ -1,8 +1,3 @@
----
-description: Reviews staged changes and provides detailed analysis before committing.
-allowed-tools: Bash, Git, Glob, Grep, LS, Read
----
-
 ## Context
 
 - current status: !`git status --porcelain`
@@ -18,7 +13,7 @@ allowed-tools: Bash, Git, Glob, Grep, LS, Read
 - if unclear, ask user for clarification on specific changes
 - analyze the changes:
     - do they follow best practices?
-    - do they follow rules defined in CLAUDE.md (both general and project-specific)?
+    - do they follow rules defined in coding rules (both general and project-specific)?
     - are they consistent with existing code and architecture?
     - are introduces benefits outweighed by any potential drawbacks?
     - is it something worth doing at all?

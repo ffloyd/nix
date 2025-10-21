@@ -84,6 +84,18 @@
     mkDotfilesLink = hmConfig: path:
       hmConfig.lib.file.mkOutOfStoreSymlink "${hmConfig.home.homeDirectory}/nix/dotfiles/${path}";
 
+    # Creates individual symlinks for each file in a directory.
+    # Allows generated files (Nix store) and experimental files (dotfiles) to coexist.
+    # Filters out .keep placeholder files used to make empty directories trackable in git.
+    mkDotfilesDirectoryEntriesSymlinks = hmConfig: sourceDotfilesDir: targetPrefix: let
+      entries = builtins.readDir ./dotfiles/${sourceDotfilesDir};
+      mkSymlink = name: type:
+        if type == "regular" && name != ".keep"
+        then {"${targetPrefix}/${name}".source = mkDotfilesLink hmConfig "${sourceDotfilesDir}/${name}";}
+        else {};
+    in
+      nixpkgs.lib.mkMerge (nixpkgs.lib.mapAttrsToList mkSymlink entries);
+
     # Converts attribute set to shell export statements for environment configuration files.
     # Values are properly escaped for shell using escapeShellArg.
     mkEnvExports = envVars:
@@ -95,7 +107,7 @@
 
     # These attributes are passed to all NixOS, nix-darwin and home-manager modules.
     commonContext = {
-      inherit inputs globals private mkDotfilesLink mkEnvExports;
+      inherit inputs globals private mkDotfilesLink mkDotfilesDirectoryEntriesSymlinks mkEnvExports;
     };
 
     # A function that creates NixOS system configurations for a given host.

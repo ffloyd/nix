@@ -20,7 +20,7 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 # Agent Guide
 
 ## Build/Test Commands (NixOS)
-- Format: `nix fmt`
+- Format: `nix fmt .`
 - Lint: `statix check` (repeated_keys disabled)
 - Validate flake: `nix flake check`
 - Test build: `nixos-rebuild dry-build --flake .`
@@ -37,3 +37,13 @@ See @README.md for detailed common tasks documentation.
 - Use inline sub-modules in `imports` for feature isolation (Nix forbids duplicate keys)
 - Never perform git staging/commits unless explicitly asked
 - Always update documentation after code changes
+
+## AI Assistant Configuration
+
+This project uses a three-tier system for sharing AI assistant configurations:
+
+1. **Shared "as is"** (`dotfiles/ai-shared/`): Content identical between tools → symlinked directly (editable)
+2. **Shared snippets** (`hm/development-environment/ai-tooling/`): Content with tool-specific frontmatter → Nix-generated (immutable)
+3. **Tool-specific** (`dotfiles/claude/`, `dotfiles/opencode/`): Tool configs, experimental commands/agents → symlinked directly (editable)
+
+See `@/openspec/project.md` for architecture rationale and design decisions.

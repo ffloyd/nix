@@ -123,6 +123,17 @@ Need a fully programmable, modal editor that can be shaped exactly to personal w
 - Lua brings flexibility when no plugin exists for a particular need
 - Direct editing via dotfiles for instant feedback
 
+### Share AI assistant configuration using a three-tier approach
+
+Multiple AI tools (Claude Code, OpenCode) need to share coding rules, commit instructions, and review guidelines without duplicating content or making it hard to experiment with tool-specific features.
+
+- **Shared "as is"** (`dotfiles/ai-shared/`): Content identical between tools (coding rules) → symlinked directly for easy editing
+- **Shared snippets** (`hm/development-environment/ai-tooling/`): Content needing tool-specific frontmatter (commit instructions, review instructions) → Nix-generated with tool-specific wrappers
+- **Tool-specific** (`dotfiles/claude/`, `dotfiles/opencode/`): Tool configurations, experimental commands/agents → symlinked directly, discovered on rebuild
+- Nix generates tool-specific files using `.text` attribute, not `writeText`, for cleaner code
+- `.keep` files in experimental directories ensure they exist but are filtered from symlinks
+- Trade-off: Shared snippets are immutable (need rebuild to edit), but this is acceptable for infrequently-changed instructions
+
 ### Organize Neovim by objectives using a features wrapper
 
 Neovim represents a major portion of this configuration. Traditional plugin-based organization obscures the capabilities being built. Organizing by technical categories (UI, LSP, etc.) doesn't explain why features exist.

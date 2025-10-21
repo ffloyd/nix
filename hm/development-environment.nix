@@ -9,6 +9,8 @@
   ...
 }: {
   imports = [
+    ./development-environment/ai-tooling.nix
+
     #
     # Core Git Setup
     #
@@ -183,65 +185,6 @@
         vi = "nvim";
         vim = "nvim";
       };
-    })
-
-    #
-    # AI coding assistants
-    #
-    (let
-      openspec = pkgs.buildNpmPackage rec {
-        pname = "openspec";
-        version = "0.12.0";
-
-        src = pkgs.fetchFromGitHub {
-          owner = "Fission-AI";
-          repo = "OpenSpec";
-          rev = "v${version}";
-          hash = "sha256-wzdpcvdwzB47Oi/sQzxjgvMbF1RYaz8RyEvm8e6/K3g=";
-        };
-
-        pnpmDeps = pkgs.pnpm.fetchDeps {
-          inherit pname version src;
-          fetcherVersion = 2;
-          hash = "sha256-J+Yc9qwS/+t32qqSywJaZwVuqoffeScOgFW6y6YUhIk=";
-        };
-
-        npmConfigHook = pkgs.pnpm.configHook;
-        npmDeps = pnpmDeps;
-
-        dontNpmPrune = true; # hangs forever on both Linux/darwin
-
-        meta = with lib; {
-          description = "Spec-driven development framework for AI coding assistants";
-          homepage = "https://github.com/Fission-AI/OpenSpec";
-          license = licenses.mit;
-          mainProgram = "openspec";
-          platforms = platforms.all;
-        };
-      };
-    in {
-      home.packages = [
-        # Claude Code AI assistant
-        inputs.nix-ai-tools.packages.${pkgs.system}.claude-code
-        inputs.ccusage-rs.packages.${pkgs.system}.default
-
-        # OpenCode AI assistant
-        inputs.nix-ai-tools.packages.${pkgs.system}.opencode
-
-        # GitHub Copilot CLI
-        inputs.nix-ai-tools.packages.${pkgs.system}.copilot-cli
-
-        # OpenSpec framework
-        openspec
-      ];
-
-      home.file = {
-        ".claude/commands".source = mkDotfilesLink config "claude/commands";
-        ".claude/settings.json".source = mkDotfilesLink config "claude/settings.json";
-        ".claude/CLAUDE.md".source = mkDotfilesLink config "claude/CLAUDE.md";
-      };
-
-      xdg.configFile."opencode".source = mkDotfilesLink config "opencode";
     })
 
     #
