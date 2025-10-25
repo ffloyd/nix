@@ -38,6 +38,29 @@ See @README.md for detailed common tasks documentation.
 - Never perform git staging/commits unless explicitly asked
 - Always update documentation after code changes
 
+## Module Parameters
+
+All modules receive these parameters via `specialArgs`/`extraSpecialArgs`:
+
+**Common context:**
+- `inputs` - Flake inputs
+- `globals` - Global configuration values from `globals.nix`
+- `private` - Encrypted private data from `private.nix`
+- `mkDotfilesLink` - Helper for creating out-of-store symlinks
+- `mkDotfilesDirectoryEntriesSymlinks` - Helper for directory symlinks
+- `mkEnvExports` - Helper for shell export statements
+
+**Per-system context:**
+- `username` - User name from private data
+- `hostname` - Host name from private data
+- `targetOS` - Either "nixos" or "macos"
+- `pkgs-aot` - Ahead-of-time nixpkgs for accessing newer packages
+
+**Standard Nix parameters:**
+- `pkgs` - Main nixpkgs instance
+- `config` - Current system/home configuration
+- `lib` - nixpkgs library functions
+
 ## AI Assistant Configuration
 
 This project uses a three-tier system for sharing AI assistant configurations:

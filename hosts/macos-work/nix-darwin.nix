@@ -10,10 +10,6 @@
   username,
   ...
 }: {
-  # The platform the configuration will be used on.
-  nixpkgs.hostPlatform = "aarch64-darwin";
-  nixpkgs.config.allowUnfree = true;
-
   # Globally installed packages
   environment.systemPackages = [];
 
@@ -34,9 +30,6 @@
   #   # package = pkgs.darwin.linux-builder-x86_64;
   #   # systems = ["x86_64-linux"];
   # };
-
-  # Necessary for using flakes on this system.
-  nix.settings.experimental-features = globals.nixExperimentalFeatures;
 
   # Allow ZSH from Nix as a default shell
   environment.shells = [pkgs.zsh];

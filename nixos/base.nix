@@ -17,9 +17,6 @@
     #
     inputs.nixos-cli.nixosModules.nixos-cli
     {
-      nix.settings.experimental-features = globals.nixExperimentalFeatures;
-      nixpkgs.config.allowUnfree = true;
-
       services.nixos-cli = {
         enable = true;
         config = {

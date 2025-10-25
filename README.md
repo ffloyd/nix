@@ -175,4 +175,21 @@ Such behavior is inconvenient when you want to split a module into smaller isola
 
 ### Maintenance
 * Upgrade dependencies: `nix flake update`
+* Upgrade specific input: `nix flake update nixpkgs-aot`
 * Clean old generations: `nixos generation delete --min 5 --all` (or alias `os-gc`)
+
+### Using pkgs-aot (Ahead-of-Time Packages)
+
+When `nixpkgs-unstable` has build failures blocking full system upgrade, use `pkgs-aot` to access newer package versions selectively.
+
+```nix
+{ pkgs, pkgs-aot, ... }:
+{
+  environment.systemPackages = [
+    pkgs.firefox         # from main nixpkgs
+    pkgs-aot.neovim      # newer version with isolated dependencies (from nixpkgs-aot)
+  ];
+}
+```
+
+**Note:** `pkgs-aot.neovim` uses its complete dependency tree from `nixpkgs-aot` (separate from `pkgs`). Use for self-contained applications, be careful with libraries and global services.

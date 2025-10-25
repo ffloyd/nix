@@ -4,6 +4,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    # Ahead-of-time nixpkgs: can be updated independently for accessing newer packages
+    # without full system upgrade when main nixpkgs has build failures
+    nixpkgs-aot.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     # https://nix-community.github.io/home-manager/index.xhtml#ch-nix-flakes
@@ -105,6 +109,11 @@
         envVars
       );
 
+    # Shared configuration for all nixpkgs instances
+    nixpkgsConfig = {
+      allowUnfree = true;
+    };
+
     # These attributes are passed to all NixOS, nix-darwin and home-manager modules.
     commonContext = {
       inherit inputs globals private mkDotfilesLink mkDotfilesDirectoryEntriesSymlinks mkEnvExports;
@@ -118,15 +127,24 @@
     nixosSystem = host: params: let
       inherit (params) nixosModules hmModules;
       inherit (private.hosts.${host}) username hostname;
+
+      system = "x86_64-linux";
+
+      # Ahead-of-time nixpkgs for accessing newer packages without full system upgrade
+      pkgs-aot = import inputs.nixpkgs-aot {
+        inherit system;
+        config = nixpkgsConfig;
+      };
+
       context =
         commonContext
         // {
-          inherit username hostname;
+          inherit username hostname pkgs-aot;
           targetOS = "nixos";
         };
     in {
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        inherit system;
 
         specialArgs = context;
 
@@ -134,6 +152,10 @@
           nixosModules
           ++ [
             ./hosts/${host}/nixos.nix
+            {
+              nixpkgs.config = nixpkgsConfig;
+              nix.settings.experimental-features = globals.nixExperimentalFeatures;
+            }
 
             home-manager.nixosModules.home-manager
             {
@@ -159,10 +181,25 @@
     macosSystem = host: params: let
       inherit (params) darwinModules hmModules;
       inherit (private.hosts.${host}) username hostname;
+
+      system = "aarch64-darwin";
+
+      # Main nixpkgs instance
+      pkgs = import nixpkgs {
+        inherit system;
+        config = nixpkgsConfig;
+      };
+
+      # Ahead-of-time nixpkgs for accessing newer packages without full system upgrade
+      pkgs-aot = import inputs.nixpkgs-aot {
+        inherit system;
+        config = nixpkgsConfig;
+      };
+
       context =
         commonContext
         // {
-          inherit username hostname;
+          inherit username hostname pkgs-aot;
           targetOS = "macos";
         };
     in {
@@ -172,15 +209,16 @@
         modules =
           [
             ./hosts/${host}/nix-darwin.nix
+            {
+              nixpkgs.pkgs = pkgs;
+              nix.settings.experimental-features = globals.nixExperimentalFeatures;
+            }
           ]
           ++ darwinModules;
       };
 
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {
-          localSystem = "aarch64-darwin";
-          config.allowUnfree = true;
-        };
+        inherit pkgs;
         extraSpecialArgs = context;
 
         modules = [./hosts/${host}/home-manager.nix] ++ hmModules;
