@@ -129,12 +129,16 @@
       inherit (private.hosts.${host}) username hostname;
 
       system = "x86_64-linux";
-
-      # Ahead-of-time nixpkgs for accessing newer packages without full system upgrade
-      pkgs-aot = import inputs.nixpkgs-aot {
+      nixpkgsAttrs = {
         inherit system;
         config = nixpkgsConfig;
       };
+
+      # Main nixpkgs instance
+      pkgs = import nixpkgs nixpkgsAttrs;
+
+      # Ahead-of-time nixpkgs for accessing newer packages without full system upgrade
+      pkgs-aot = import inputs.nixpkgs-aot nixpkgsAttrs;
 
       context =
         commonContext
@@ -153,7 +157,7 @@
           ++ [
             ./hosts/${host}/nixos.nix
             {
-              nixpkgs.config = nixpkgsConfig;
+              nixpkgs.pkgs = pkgs;
               nix.settings.experimental-features = globals.nixExperimentalFeatures;
             }
 
@@ -183,18 +187,16 @@
       inherit (private.hosts.${host}) username hostname;
 
       system = "aarch64-darwin";
+      nixpkgsAttrs = {
+        inherit system;
+        config = nixpkgsConfig;
+      };
 
       # Main nixpkgs instance
-      pkgs = import nixpkgs {
-        inherit system;
-        config = nixpkgsConfig;
-      };
+      pkgs = import nixpkgs nixpkgsAttrs;
 
       # Ahead-of-time nixpkgs for accessing newer packages without full system upgrade
-      pkgs-aot = import inputs.nixpkgs-aot {
-        inherit system;
-        config = nixpkgsConfig;
-      };
+      pkgs-aot = import inputs.nixpkgs-aot nixpkgsAttrs;
 
       context =
         commonContext
