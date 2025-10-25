@@ -2,6 +2,7 @@
 {
   inputs,
   pkgs,
+  pkgs-aot,
   config,
   username,
   mkDotfilesLink,
@@ -301,7 +302,7 @@ in {
           pkgs.gnome-software
 
           # Unofficail non-Electron Tidal client
-          pkgs.high-tide
+          pkgs-aot.high-tide
 
           pkgs.libreoffice
 
