@@ -60,7 +60,7 @@
         ---
         description: Commits staged changes with a well-structured message.
         agent: plan
-        subtask: true
+        subtask: false
         ---
 
         ${commitInstructions}
@@ -70,7 +70,7 @@
         ---
         description: Review staged changes and provide detailed analysis
         agent: plan
-        subtask: true
+        subtask: false
         ---
 
         ${reviewStagedInstructions}
