@@ -58,27 +58,19 @@
 
       commitCommand = ''
         ---
-        description: Create and commit staged changes with well-structured message
-        agent: general
+        description: Commits staged changes with a well-structured message.
+        agent: plan
         subtask: true
         ---
 
         ${commitInstructions}
       '';
 
-      reviewStagedAgent = ''
+      reviewStagedCommand = ''
         ---
         description: Review staged changes and provide detailed analysis
-        mode: subagent
-        tools:
-          write: false
-          edit: false
-        permissions:
-          bash:
-            'git log *': allow
-            'git status *': allow
-            'git diff *': allow
-            '*': ask
+        agent: plan
+        subtask: true
         ---
 
         ${reviewStagedInstructions}
@@ -92,8 +84,9 @@
         {
           "opencode/opencode.jsonc".source = mkDotfilesLink config "opencode/opencode.jsonc";
           "opencode/AGENTS.md".source = mkDotfilesLink config "ai-shared/coding-rules.md";
+
           "opencode/command/commit.md".text = commitCommand;
-          "opencode/agent/review-staged.md".text = reviewStagedAgent;
+          "opencode/command/review-staged.md".text = reviewStagedCommand;
         }
         (mkDotfilesDirectoryEntriesSymlinks config "opencode/command" "opencode/command")
         (mkDotfilesDirectoryEntriesSymlinks config "opencode/agent" "opencode/agent")

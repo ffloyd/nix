@@ -20,6 +20,17 @@ features.add({
     {
       "nvim-lualine/lualine.nvim",
       opts = function(_, opts)
+        local getFgHexColorFromHighlight = function(hlName)
+          local hl = vim.api.nvim_get_hl(0, { name = hlName, link = false })
+
+          if not hl.fg then
+            return nil
+          end
+
+          return string.format("#%06x", hl.fg)
+        end
+
+        -- Copilot status in lualine
         table.insert(opts.sections.lualine_x, 2, {
           function()
             local status = require("sidekick.status").get()
@@ -53,20 +64,26 @@ features.add({
                 or status.kind == "Normal" and "DiagnosticOk"
                 or "Special"
 
-            local hl = vim.api.nvim_get_hl(0, { name = hlName, link = false })
-
-            -- Return nil if no fg color defined, letting lualine use its default
-            if not hl.fg then
-              return nil
-            end
-
-            local fgHex = string.format("#%06x", hl.fg)
-
             -- to always use lualine's background color
-            return { fg = fgHex }
+            return { fg = getFgHexColorFromHighlight(hlName) }
           end,
           cond = function()
             return require("sidekick.status").get() ~= nil
+          end,
+        })
+
+        -- AI CLI status in lualine
+        table.insert(opts.sections.lualine_x, 3, {
+          function()
+            return "󱚣" -- AI CLI session active
+          end,
+
+          cond = function()
+            return #require("sidekick.status").cli() > 0
+          end,
+
+          color = function()
+            return { fg = getFgHexColorFromHighlight("Special") }
           end,
         })
       end

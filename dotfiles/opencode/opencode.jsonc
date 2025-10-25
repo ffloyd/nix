@@ -5,7 +5,23 @@
     "session_child_cycle": "<leader>right",
     "session_child_cycle_reverse": "<leader>left"
   },
+  "permission": {
+    "bash": {
+      "sudo *": "deny",
+      "git status *": "allow",
+      "git diff *": "allow",
+      "git log *": "allow",
+      "ls *": "allow",
+      "pwd": "allow",
+      "cd *": "allow",
+      "*": "ask"
+    }
+  },
   "mcp": {
-
+    "ctx7": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    }
   }
 }

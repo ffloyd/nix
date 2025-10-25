@@ -11,8 +11,8 @@
 
 1. categorize changes (feat, fix, docs, style, refactor, test, chore, etc.)
 2. create a commit message
-    - follow conventional commit format
-    - respect to existing commit messages
+    - follow conventional commit format (deviate only when repository uses different convention)
+    - match the commit message format used by recent commits in the repository
     - prefer 1-line messages when it's enough
     - use short, focused messages
 3. MANDATORY: Ask for explicit user confirmation and wait for their response before executing git commit. Never commit without explicit user approval.
