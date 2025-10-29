@@ -226,6 +226,15 @@
     }
 
     #
+    # Overriding system time in the scope of one command
+    #
+    {
+      home.packages = with pkgs; [
+        libfaketime
+      ];
+    }
+
+    #
     # TTS: MacOS has `say`, on linux I want a fallback
     #
     (lib.mkIf pkgs.stdenv.isLinux {
