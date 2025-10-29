@@ -54,7 +54,7 @@
 
     caelestia-shell = {
       # master is pretty unstable, so using tagged version
-      url = "github:caelestia-dots/shell/v1.3.2";
+      url = "github:caelestia-dots/shell/210e0b6";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -63,6 +63,7 @@
 
   outputs = {
     nixpkgs,
+    nixpkgs-aot,
     home-manager,
     nix-darwin,
     ...
@@ -138,7 +139,7 @@
       pkgs = import nixpkgs nixpkgsAttrs;
 
       # Ahead-of-time nixpkgs for accessing newer packages without full system upgrade
-      pkgs-aot = import inputs.nixpkgs-aot nixpkgsAttrs;
+      pkgs-aot = import nixpkgs-aot nixpkgsAttrs;
 
       context =
         commonContext
@@ -196,7 +197,7 @@
       pkgs = import nixpkgs nixpkgsAttrs;
 
       # Ahead-of-time nixpkgs for accessing newer packages without full system upgrade
-      pkgs-aot = import inputs.nixpkgs-aot nixpkgsAttrs;
+      pkgs-aot = import nixpkgs-aot nixpkgsAttrs;
 
       context =
         commonContext

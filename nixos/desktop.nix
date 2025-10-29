@@ -233,6 +233,10 @@ in {
         programs.caelestia = {
           enable = true;
 
+          # have a problem described here if start it as a systemd service
+          # https://github.com/caelestia-dots/shell/issues/512
+          systemd.enable = false;
+
           cli = {
             enable = true;
           };
@@ -242,7 +246,7 @@ in {
               terminal = ["kitty"];
             };
 
-            paths.wallpaperDir = "$HOME/nix/nixos/desktop/";
+            paths.wallpaperDir = "~/nix/nixos/desktop/";
           };
         };
       };
