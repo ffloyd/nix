@@ -52,12 +52,6 @@
 
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
 
-    caelestia-shell = {
-      # master is pretty unstable, so using tagged version
-      url = "github:caelestia-dots/shell/210e0b6";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
