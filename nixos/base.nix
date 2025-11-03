@@ -49,6 +49,8 @@
         os-rebuild = "nixos apply";
         os-rebuild-boot = "nixos apply --no-activate --install-bootloader";
         os-gc = "nixos generation delete --min 5 --all";
+
+        nixpkgs-search-exec = "nix-env -qaP";
       };
     }
 
@@ -187,7 +189,8 @@
         enable = true;
         drivers = with pkgs; [
           gutenprint
-          gutenprintBin
+          brgenml1lpr
+          brgenml1cupswrapper
         ];
       };
 

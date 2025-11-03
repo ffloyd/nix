@@ -32,12 +32,21 @@
       programs.partition-manager.enable = true;
 
       environment.systemPackages = with pkgs; [
-        kdePackages.kleopatra # GPG key manager
+        kdePackages.ksystemlog # System log viewer (but it works only for user-level logs atm)
+        kdePackages.kjournald # Journal log viewer (simpler than ksystemlog)
+
+        kdePackages.filelight # File light disk usage analyzer
+        kdePackages.kompare # File/folder comparison tool
+        kdePackages.krdc # Remote desktop client
+        kdePackages.isoimagewriter # ISO image writer
+        kdePackages.kgpg # GPG key management
+        kdePackages.kleopatra # Certificate manager and GUI for GPG
+        ktimetracker # Time tracking application
 
         # non-KDE apps, but useful in KDE
-        wl-clipboard  # Wayland clipboard CLI
+        wl-clipboard # Wayland clipboard CLI
         wayland-utils # Wayland utilities
-        hardinfo2     # System profiler and benchmark tool
+        hardinfo2 # System profiler and benchmark tool
       ];
 
       home-manager.users.${username} = {
@@ -58,6 +67,9 @@
     # Essential Apps
     #
     {
+      # to rule all my Mikrotik devices
+      programs.winbox.enable = true;
+
       home-manager.users.${username} = {
         services.flatpak.packages = [
           # sometimes it has a big version lag on nixpkgs

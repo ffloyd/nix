@@ -133,6 +133,22 @@
     # - When external monitor is connected, Plymouth is rendered on it with bad placement
     #   | switching to nixos-bgrt theme fixed it
     {
+      # the latest released version of Plymouth at the moment of writing
+      # sometimes fails to load on boot with amdgpu driver and causes boot to happen in text mode
+      # here I found a workaround: https://github.com/NixOS/nixpkgs/issues/332812
+      nixpkgs.overlays = [
+        (final: prev: {
+          plymouth = prev.plymouth.overrideAttrs ({src, ...}: {
+            version = "24.004.60-unstable-2024-08-28";
+
+            src = src.override {
+              rev = "ea83580a6d66afd2b37877fc75248834fe530d99";
+              hash = "sha256-GQzf756Y26aCXPyZL9r+UW7uo+wu8IXNgMeJkgFGWnA=";
+            };
+          });
+        })
+      ];
+
       # Silent boot: so Framework logo will be replaced with Plymouth seamless
       boot.consoleLogLevel = 0;
       boot.initrd.verbose = false;
