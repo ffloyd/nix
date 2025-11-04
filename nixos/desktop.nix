@@ -51,6 +51,7 @@
 
       home-manager.users.${username} = {
         services.gpg-agent.pinentry.package = pkgs.pinentry-qt;
+        services.kdeconnect.enable = true;
       };
     }
 
