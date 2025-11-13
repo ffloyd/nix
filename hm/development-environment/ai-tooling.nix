@@ -104,19 +104,19 @@
     (let
       openspec = pkgs.buildNpmPackage rec {
         pname = "openspec";
-        version = "0.12.0";
+        version = "0.14.0";
 
         src = pkgs.fetchFromGitHub {
           owner = "Fission-AI";
           repo = "OpenSpec";
           rev = "v${version}";
-          hash = "sha256-wzdpcvdwzB47Oi/sQzxjgvMbF1RYaz8RyEvm8e6/K3g=";
+          hash = "sha256-jURQ/vr1CTzyS9I9/ksyH9JL6BRi/gSmJvYhOpR6jNg=";
         };
 
         pnpmDeps = pkgs.pnpm.fetchDeps {
           inherit pname version src;
           fetcherVersion = 2;
-          hash = "sha256-J+Yc9qwS/+t32qqSywJaZwVuqoffeScOgFW6y6YUhIk=";
+          hash = "sha256-qqIdSF41gv4EDxEKP0sfpW1xW+3SMES9oGf2ru1lUnE=";
         };
 
         npmConfigHook = pkgs.pnpm.configHook;

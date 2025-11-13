@@ -235,6 +235,20 @@
     }
 
     #
+    # Devenv - Nix-based development environment manager
+    #
+    {
+      nix.extraOptions = ''
+        extra-substituters = https://devenv.cachix.org
+        extra-trusted-public-keys = devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=
+      '';
+
+      home.packages = with pkgs; [
+        devenv
+      ];
+    }
+
+    #
     # TTS: MacOS has `say`, on linux I want a fallback
     #
     (lib.mkIf pkgs.stdenv.isLinux {
