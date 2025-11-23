@@ -36,17 +36,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    opencode.url = "github:sst/opencode/v1.0.97";
+
     nix-inspect.url = "github:bluskript/nix-inspect";
     nixos-cli.url = "github:nix-community/nixos-cli";
 
     stylix = {
       url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    ccusage-rs = {
-      # using my fork with flakes support
-      url = "github:ffloyd/ccusage-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

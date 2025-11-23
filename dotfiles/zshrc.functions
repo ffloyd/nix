@@ -27,10 +27,7 @@ notify-ai-finished-task() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
     osascript -e 'display notification "The current task is done!" with title "AI Assistant"'
   else
-    caelestia shell toaster success \
-      "AI Assistant" \
-      "Current task has been completed!" \
-      "robot"
+    notify-send -e -a "AI Assistant" "Current Task is Done!"
   fi
 }
 

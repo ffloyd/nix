@@ -1,9 +1,22 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "gruvbox",
-  "keybinds": {
-    "session_child_cycle": "<leader>right",
-    "session_child_cycle_reverse": "<leader>left"
+  "model": "anthropic/claude-sonnet-4-5",
+  "small_model": "anthropic/claude-haiku-4-5",
+  "provider": {
+    "anthropic": {
+      "models": {
+        "claude-sonnet-4-5-thinking": {
+          "id": "claude-sonnet-4-5",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 16000
+            },
+          }
+        }
+      }
+    }
   },
   "permission": {
     "bash": {
@@ -14,6 +27,9 @@
       "ls *": "allow",
       "pwd": "allow",
       "cd *": "allow",
+      "wc *": "allow",
+      "rg *": "allow",
+      "find *": "allow",
       "*": "ask"
     }
   },
@@ -22,6 +38,11 @@
       "enabled": true,
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
+    },
+    "bgtask": {
+      "enabled": true,
+      "type": "local",
+      "command": ["npx", "-y", "@nanoseil/mcp-bgtask"]
     }
   }
 }

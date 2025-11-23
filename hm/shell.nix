@@ -167,6 +167,10 @@
       in {
         home.file.".${filename}".source = mkDotfilesLink config filename;
 
+        home.packages = with pkgs; [
+          libnotify
+        ];
+
         # source the file at the end of zsh init
         programs.zsh.initContent = lib.mkOrder 2000 ''
           source ~/.${filename}

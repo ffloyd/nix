@@ -93,7 +93,11 @@
     # hardware-specific software
     {
       home-manager.users.${username}.home.packages = with pkgs; [
+        # AMD GPU monitoring tool
         nvtopPackages.amd
+
+        # Wireless network monitoring tool
+        wavemon
       ];
     }
 

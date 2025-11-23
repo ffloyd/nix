@@ -30,7 +30,7 @@ features.add({
           'html',
           'hyprls',
           'lexical',
-          -- 'elixirls',
+          'elixirls',
           'lua_ls',
           'nixd',
           'rust_analyzer',
@@ -38,6 +38,7 @@ features.add({
           'tailwindcss',
           'terraformls',
           'ts_ls',
+          'zls',
         })
       end,
     },

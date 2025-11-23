@@ -1,8 +1,8 @@
 ## Context
 
-- current status: !`git status --porcelain`
-- staged changes: !`git diff --cached`
-- recent commit messages: !`git log -n 10 --pretty=format:"%s"`
+- current status: `git status --porcelain`
+- staged changes: `git diff --cached`
+- recent commit messages: `git log -n 10 --pretty=format:"%s"`
 - read modified and related files if necessary to understand context
 - focus only on staged changes, ignore unstaged or untracked changes
 

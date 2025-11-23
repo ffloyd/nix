@@ -14,7 +14,7 @@
       commitInstructions = builtins.readFile ./ai-tooling/commit-instructions.md;
       reviewStagedInstructions = builtins.readFile ./ai-tooling/review-staged-instructions.md;
 
-      commitCommand = ''
+      commitStagedCommand = ''
         ---
         description: Commits staged changes with a well-structured message.
         allowed-tools: Glob, Grep, LS, Read, Bash(git status --porcelain), Bash(git diff --cached), Bash(git log:*), Bash(git commit:*)
@@ -34,16 +34,12 @@
     in {
       home.packages = [
         inputs.nix-ai-tools.packages.${pkgs.system}.claude-code
-        # To check how much I spend in "pay per token" equivalent
-        # I need it because Claude subscription does not give you a hint if it more
-        # beneficial than pay-per-use approach.
-        inputs.ccusage-rs.packages.${pkgs.system}.default
       ];
 
       home.file = lib.mkMerge [
         {
           ".claude/CLAUDE.md".source = mkDotfilesLink config "ai-shared/coding-rules.md";
-          ".claude/commands/commit.md".text = commitCommand;
+          ".claude/commands/commit-staged.md".text = commitStagedCommand;
           ".claude/commands/review-staged.md".text = reviewStagedCommand;
           ".claude/settings.json".source = mkDotfilesLink config "claude/settings.json";
         }
@@ -56,7 +52,7 @@
       commitInstructions = builtins.readFile ./ai-tooling/commit-instructions.md;
       reviewStagedInstructions = builtins.readFile ./ai-tooling/review-staged-instructions.md;
 
-      commitCommand = ''
+      commitStagedCommand = ''
         ---
         description: Commits staged changes with a well-structured message.
         agent: plan
@@ -75,9 +71,30 @@
 
         ${reviewStagedInstructions}
       '';
+
+      opencode-npm-dir = ".opencode-npm";
+      opencode-npm-dir-full = "${config.home.homeDirectory}/${opencode-npm-dir}";
+      # Many MCP servers are npm packages that need to be installed at runtime.
+      # We wrap opencode to set up an isolated npm prefix directory so plugin
+      # installations don't pollute the global npm prefix or require sudo.
+      opencode-adjusted = pkgs.symlinkJoin {
+        name = "opencode-adjusted";
+        paths = [
+          inputs.opencode.packages.${pkgs.system}.default
+        ];
+        nativeBuildInputs = [
+          pkgs.makeWrapper
+        ];
+        postBuild = ''
+          wrapProgram $out/bin/opencode \
+            --prefix PATH : ${lib.makeBinPath [pkgs.nodejs]} \
+            --prefix PATH : "${opencode-npm-dir-full}/bin" \
+            --set NPM_CONFIG_PREFIX "~/${opencode-npm-dir}"
+        '';
+      };
     in {
       home.packages = [
-        inputs.nix-ai-tools.packages.${pkgs.system}.opencode
+        opencode-adjusted
       ];
 
       xdg.configFile = lib.mkMerge [
@@ -85,11 +102,12 @@
           "opencode/opencode.jsonc".source = mkDotfilesLink config "opencode/opencode.jsonc";
           "opencode/AGENTS.md".source = mkDotfilesLink config "ai-shared/coding-rules.md";
 
-          "opencode/command/commit.md".text = commitCommand;
+          "opencode/command/commit-staged.md".text = commitStagedCommand;
           "opencode/command/review-staged.md".text = reviewStagedCommand;
         }
         (mkDotfilesDirectoryEntriesSymlinks config "opencode/command" "opencode/command")
         (mkDotfilesDirectoryEntriesSymlinks config "opencode/agent" "opencode/agent")
+        (mkDotfilesDirectoryEntriesSymlinks config "opencode/plugin" "opencode/plugin")
       ];
     })
 

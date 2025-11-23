@@ -33,6 +33,10 @@
         ];
       };
 
+      # Allow user to use nix features that require elevated privileges
+      # (e.g., managing binary caches).
+      nix.settings.trusted-users = ["root" username];
+
       environment.systemPackages = [
         inputs.nix-inspect.packages.${pkgs.system}.default
         pkgs.nix-tree
