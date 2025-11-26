@@ -9,6 +9,7 @@
   private,
   username,
   hostname,
+  system,
   ...
 }: {
   imports = [
@@ -38,7 +39,7 @@
       nix.settings.trusted-users = ["root" username];
 
       environment.systemPackages = [
-        inputs.nix-inspect.packages.${pkgs.system}.default
+        inputs.nix-inspect.packages.${system}.default
         pkgs.nix-tree
 
         # used by nixos-cli:

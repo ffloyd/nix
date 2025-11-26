@@ -30,6 +30,8 @@
       "wc *": "allow",
       "rg *": "allow",
       "find *": "allow",
+      "tail *": "allow",
+      "head *": "allow",
       "*": "ask"
     }
   },

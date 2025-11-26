@@ -5,6 +5,7 @@
   lib,
   private,
   config,
+  system,
   mkDotfilesLink,
   ...
 }: {
@@ -15,15 +16,30 @@
     # Core Git Setup
     #
     {
-      programs.ssh.enable = true;
+      programs.ssh = {
+        enable = true;
+        enableDefaultConfig = false;
+        matchBlocks."*" = {
+          forwardAgent = false;
+          addKeysToAgent = "no";
+          compression = false;
+          serverAliveInterval = 0;
+          serverAliveCountMax = 3;
+          hashKnownHosts = false;
+          userKnownHostsFile = "~/.ssh/known_hosts";
+          controlMaster = "no";
+          controlPath = "~/.ssh/master-%r@%n:%p";
+          controlPersist = "no";
+        };
+      };
 
       programs.git = {
         enable = true;
 
-        userName = private.fullName;
-        userEmail = private.personalEmail;
+        settings = {
+          user.name = private.fullName;
+          user.email = private.personalEmail;
 
-        extraConfig = {
           push.autoSetupRemote = true;
           init.defaultBranch = "main";
           credential.helper = pkgs.lib.mkIf pkgs.stdenv.isDarwin "osxkeychain";
@@ -74,8 +90,9 @@
     # Fancy CLI git diffs with delta
     #
     {
-      programs.git.delta = {
+      programs.delta = {
         enable = true;
+        enableGitIntegration = true;
 
         options = lib.mkMerge [
           {
@@ -108,7 +125,7 @@
         paths = [
           # I have to use nightly version because of vim.lsp.inline_completion
           # is not yet available in stable releases.
-          inputs.neovim-nightly-overlay.packages.${pkgs.system}.default
+          inputs.neovim-nightly-overlay.packages.${system}.default
         ];
         nativeBuildInputs = [
           pkgs.makeWrapper
@@ -178,7 +195,7 @@
       };
 
       home.sessionVariables.EDITOR = "nvim";
-      programs.git.extraConfig.core.editor = "nvim";
+      programs.git.settings.core.editor = "nvim";
 
       programs.zsh.shellAliases = {
         vimdiff = "nvim -d";

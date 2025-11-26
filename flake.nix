@@ -134,7 +134,7 @@
       context =
         commonContext
         // {
-          inherit username hostname pkgs-aot;
+          inherit username hostname pkgs-aot system;
           targetOS = "nixos";
         };
     in {
@@ -192,7 +192,7 @@
       context =
         commonContext
         // {
-          inherit username hostname pkgs-aot;
+          inherit username hostname pkgs-aot system;
           targetOS = "macos";
         };
     in {

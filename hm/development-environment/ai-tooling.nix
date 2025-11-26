@@ -4,6 +4,7 @@
   pkgs,
   lib,
   config,
+  system,
   mkDotfilesLink,
   mkDotfilesDirectoryEntriesSymlinks,
   ...
@@ -33,7 +34,7 @@
       '';
     in {
       home.packages = [
-        inputs.nix-ai-tools.packages.${pkgs.system}.claude-code
+        inputs.nix-ai-tools.packages.${system}.claude-code
       ];
 
       home.file = lib.mkMerge [
@@ -80,7 +81,7 @@
       opencode-adjusted = pkgs.symlinkJoin {
         name = "opencode-adjusted";
         paths = [
-          inputs.opencode.packages.${pkgs.system}.default
+          inputs.opencode.packages.${system}.default
         ];
         nativeBuildInputs = [
           pkgs.makeWrapper
@@ -114,7 +115,7 @@
     # GitHub Copilot CLI
     {
       home.packages = [
-        inputs.nix-ai-tools.packages.${pkgs.system}.copilot-cli
+        inputs.nix-ai-tools.packages.${system}.copilot-cli
       ];
     }
 

@@ -3,6 +3,7 @@
   pkgs,
   inputs,
   config,
+  system,
   ...
 }: {
   imports = [
@@ -11,7 +12,7 @@
 
   services.foundryvtt = {
     enable = true;
-    package = inputs.foundryvtt.packages.${pkgs.system}.foundryvtt_12.overrideAttrs {
+    package = inputs.foundryvtt.packages.${system}.foundryvtt_12.overrideAttrs {
       majorVersion = 12;
       build = "331";
     };
