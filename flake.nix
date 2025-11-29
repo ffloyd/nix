@@ -36,7 +36,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    opencode.url = "github:sst/opencode/v1.0.115";
+    opencode.url = "github:sst/opencode/v1.0.120";
 
     nix-inspect.url = "github:bluskript/nix-inspect";
     nixos-cli.url = "github:nix-community/nixos-cli";
