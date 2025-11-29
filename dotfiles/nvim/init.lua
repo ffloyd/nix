@@ -1193,7 +1193,7 @@ features.add({
       cmd = "iex -S mix",
       name = "IexTests",
       layout = "right",
-      selectable = false,
+      auto_list = false,
       env = {
         MIX_ENV = "test"
       }

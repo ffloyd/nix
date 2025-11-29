@@ -62,34 +62,94 @@ features.add({
 })
 
 features.add({
-  "Enable formatters & linters via null-ls",
+  "Formatter support",
   after = { "which-key" },
   plugins = {
     {
-      "nvimtools/none-ls.nvim",
-      opts = function(_, opts)
-        local null_ls = require("null-ls")
-
-        opts.sources = {
-          -- Formatters
-          null_ls.builtins.formatting.nix_flake_fmt,
-          null_ls.builtins.formatting.mix,
-          null_ls.builtins.formatting.terraform_fmt,
-          -- Linters
-          null_ls.builtins.diagnostics.credo,
-          null_ls.builtins.diagnostics.editorconfig_checker,
-          null_ls.builtins.diagnostics.hadolint,
-          null_ls.builtins.diagnostics.statix,
-          null_ls.builtins.diagnostics.terraform_validate,
-          null_ls.builtins.diagnostics.trail_space,
-          null_ls.builtins.diagnostics.zsh,
-          -- Hovers
-          null_ls.builtins.hover.dictionary,
-          null_ls.builtins.hover.printenv,
-        }
-      end,
+      "stevearc/conform.nvim",
+      ---@type conform.setupOpts
+      opts = {
+        format_on_save = {
+          timeout_ms = 500,
+        },
+        default_format_opts = {
+          lsp_format = "fallback",
+        },
+        formatters_by_ft = {
+          elixir = { "mix" },
+          terraform = { "terraform_fmt" },
+          zig = { "zigfmt" },
+        },
+      },
     },
   },
+  setup = function()
+    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+
+    local conform = require("conform")
+    require("which-key").add({
+      {
+        "<leader>lf",
+        function()
+          conform.format({ async = false })
+        end,
+        desc = "Format Buffer"
+      },
+      {
+        "<leader>lF",
+        function()
+          conform.format({ async = true })
+        end,
+        desc = "Format Buffer (async)"
+      },
+      {
+        "<leader>uf", "<cmd>ConformInfo<cr>", desc = "Formatters Info"
+      }
+    })
+  end,
+})
+
+features.add({
+  "Linter support",
+  after = { "which-key", "lualine" },
+  plugins = {
+    { "mfussenegger/nvim-lint" },
+    {
+      "nvim-lualine/lualine.nvim",
+      opts = function(_, opts)
+        table.insert(opts.sections.lualine_x, 2, {
+          function()
+            local linters = require("lint").get_running()
+            if #linters == 0 then
+              return ""
+            end
+            return " " .. table.concat(linters, ", ")
+          end,
+          color = function()
+            return { fg = require("utils").getFgHexColorFromHighlight("DiagnosticWarn") }
+          end
+        })
+      end
+    }
+  },
+  setup = function()
+    local lint = require("lint")
+
+    lint.linters_by_ft = {
+      dockerfile = { "hadolint" },
+      elixir = { "credo" },
+      nix = { "statix" },
+      terraform = { "terraform_validate" },
+      zig = { "zig", "zlint" },
+      zsh = { "zsh" },
+    }
+
+    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+      callback = function()
+        lint.try_lint()
+      end,
+    })
+  end
 })
 
 features.add({
@@ -136,7 +196,6 @@ features.add({
 
       -- LSP commands
       { "<leader>ln",  vim.lsp.buf.rename,                      desc = "Rename Symbol" },
-      { "<leader>lf",  vim.lsp.buf.format,                      desc = "Format Buffer" },
       { "<leader>ll",  vim.lsp.codelens.refresh,                desc = "Refresh Code Lenses" },
       { "<leader>lL",  vim.lsp.codelens.run,                    desc = "Run Code Lens" },
 
@@ -239,20 +298,15 @@ features.add({
 })
 
 features.add({
-  "Switch LSP-backed folding and formatting when possible",
+  "Switch LSP-backed folding when possible",
   setup = function()
     vim.api.nvim_create_autocmd('LspAttach', {
       callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         local win = vim.api.nvim_get_current_win()
-        local bufnr = vim.api.nvim_get_current_buf()
 
         if client and client:supports_method('textDocument/foldingRange') then
           vim.wo[win][0].foldexpr = 'v:lua.vim.lsp.foldexpr()'
-        end
-
-        if client and client:supports_method('textDocument/formatting') then
-          vim.bo[bufnr].formatexpr = 'v:lua.vim.lsp.formatexpr()'
         end
       end,
     })
