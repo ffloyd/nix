@@ -62,7 +62,7 @@ features.add({
 })
 
 features.add({
-  "Formatter support",
+  "Formatting",
   after = { "which-key" },
   plugins = {
     {
@@ -110,7 +110,7 @@ features.add({
 })
 
 features.add({
-  "Linter support",
+  "Linting",
   after = { "which-key", "lualine" },
   plugins = {
     { "mfussenegger/nvim-lint" },
@@ -153,9 +153,29 @@ features.add({
 })
 
 features.add({
-  "Expose core LSP commands using fancy wrappers when possible",
+  "LSP UI/UX",
   after = { "which-key", "snacks" },
   plugins = {
+    {
+      "nvimdev/lspsaga.nvim",
+      dependencies = { "nvim-tree/nvim-web-devicons", "nvim-treesitter/nvim-treesitter" },
+      config = function()
+        require("lspsaga").setup({
+          symbol_in_winbar = {
+            enabled = true,
+            show_file = false,
+          },
+          lightbulb = {
+            enable = true,
+            sign = true,
+            virtual_text = false,
+          },
+          outline = {
+            win_width = 60,
+          }
+        })
+      end,
+    },
     {
       "aznhe21/actions-preview.nvim",
       opts = {
@@ -185,7 +205,8 @@ features.add({
     Snacks.toggle.inlay_hints():map("<leader>TI")
 
     require("which-key").add({
-      -- Snacks-powered LSP pickers
+      -- LSP pickers, Snacks.picker powered when possible
+      -- I avoid lspsaga pickers to have a more consistent experience
       { "<leader>ld",  Snacks.picker.lsp_definitions,           desc = "Definitions" },
       { "<leader>lD",  Snacks.picker.lsp_declarations,          desc = "Declarations" },
       { "<leader>li",  Snacks.picker.lsp_implementations,       desc = "Implementations", },
@@ -193,16 +214,34 @@ features.add({
       { "<leader>lt",  Snacks.picker.lsp_type_definitions,      desc = "Type Definitions" },
       { "<leader>ls",  Snacks.picker.lsp_symbols,               desc = "Local Symbols" },
       { "<leader>lS",  Snacks.picker.lsp_workspace_symbols,     desc = "Workspace Symbols" },
+      { "<leader>lc",  Snacks.picker.lsp_incoming_calls,        desc = "Incoming Calls" },
+      { "<leader>lC",  Snacks.picker.lsp_outgoing_calls,        desc = "Outgoing Calls" },
+      { "<leader>lT",  vim.lsp.buf.typehierarchy,               desc = "Type Hierarchy" },
+
+      -- LSP saga peek commands
+      { "<leader>lp",  group = "LSP Peek" },
+      { "<leader>lpd", "<cmd>Lspsaga peek_definition<cr>",      desc = "Peek Definition" },
+      { "<leader>lpt", "<cmd>Lspsaga peek_type_definition<cr>", desc = "Peek Type Definition" },
+
+      -- LSP saga hover doc
+      { "K",           "<cmd>Lspsaga hover_doc<cr>",            desc = "Hover Documentation" },
+
+      -- LSP saga outline
+      { "<leader>lo",  "<cmd>Lspsaga outline<cr>",              desc = "LSP Outline" },
+
+      -- LSP diagnostic jumping
+      { "]e",          "<cmd>Lspsaga diagnostic_jump_next<cr>", desc = "Next Diagnostic" },
+      { "[e",          "<cmd>Lspsaga diagnostic_jump_prev<cr>", desc = "Previous Diagnostic" },
+      { "<leader>le",  group = "Diagnostics" },
+      { "<leader>lep", "<cmd>Lspsaga diagnostic_jump_prev<cr>", desc = "Previous Diagnostic" },
+      { "<leader>len", "<cmd>Lspsaga diagnostic_jump_next<cr>", desc = "Next Diagnostic" },
 
       -- LSP commands
-      { "<leader>ln",  vim.lsp.buf.rename,                      desc = "Rename Symbol" },
+      { "<leader>ln",  "<cmd>Lspsaga rename ++project<cr>",     desc = "Rename Symbol" },
+
+      -- Code lenses
       { "<leader>ll",  vim.lsp.codelens.refresh,                desc = "Refresh Code Lenses" },
       { "<leader>lL",  vim.lsp.codelens.run,                    desc = "Run Code Lens" },
-
-      -- Call hierarchy commands
-      { "<leader>lc",  vim.lsp.buf.incoming_calls,              desc = "Incoming Calls" },
-      { "<leader>lC",  vim.lsp.buf.outgoing_calls,              desc = "Outgoing Calls" },
-      { "<leader>lT",  vim.lsp.buf.typehierarchy,               desc = "Type Hierarchy" },
 
       -- Workspace commands
       { "<leader>lw",  group = "Workspace Folders" },
@@ -222,58 +261,6 @@ features.add({
       { "<leader>lxx", "<cmd>LspStop<cr>",                      desc = "Stop" },
     })
   end
-})
-
-features.add({
-  "Indicate presence of LSP actions",
-  after = { "which-key", "snacks" },
-  plugins = {
-    {
-      "kosayoda/nvim-lightbulb",
-      ---@type nvim-lightbulb.Config
-      ---@diagnostic disable-next-line: missing-fields
-      opts = {
-        code_lenses = true,
-        autocmd = {
-          enabled = true,
-        },
-        filter = function(client_name, result)
-          if client_name == "lexical" and result.kind == "source.organizeImports" then
-            return false
-          end
-
-          return true
-        end,
-      },
-    },
-  },
-  setup = function()
-    local lightbulb_enabled = true
-    local nvim_lightbulb = require("nvim-lightbulb")
-
-    Snacks.toggle
-        .new({
-          name = "LSP Actions Lightbulb",
-          get = function()
-            return lightbulb_enabled
-          end,
-          set = function(state)
-            ---@type nvim-lightbulb.Config
-            ---@diagnostic disable-next-line: missing-fields
-            local next_config = {
-              code_lenses = state,
-              autocmd = { enabled = state },
-              sign = { enabled = state },
-            }
-
-            nvim_lightbulb.update_lightbulb(next_config)
-            nvim_lightbulb.setup(next_config)
-
-            lightbulb_enabled = state
-          end,
-        })
-        :map("<leader>lA")
-  end,
 })
 
 features.add({

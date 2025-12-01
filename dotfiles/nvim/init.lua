@@ -1131,7 +1131,7 @@ features.add({
   "Show diagnostics in virtual text",
   after = { "snacks" },
   setup = function()
-    -- Enable virtual lines by default
+    -- Disable virtual lines by default
     vim.diagnostic.config({
       virtual_lines = false,
     })
