@@ -54,6 +54,13 @@ require("folkevim")
 require("lang-tools")
 
 features.add({
+  "Project-specific settings (.nvim.lua)",
+  setup = function()
+    vim.o.exrc = true
+  end
+})
+
+features.add({
   "Environment-specific Colorscheme",
   id = "colorscheme",
   plugins = {
@@ -917,6 +924,11 @@ features.add({
       ---@type render.md.UserConfig
       opts = {
         file_types = { "markdown" },
+        code = {
+          -- Turn off any sign column related rendering.
+          -- Otherwise hover docs from lspsaga is ugly.
+          sign = false,
+        },
         latex = {
           enabled = false,
         },
@@ -1177,65 +1189,18 @@ features.add({
 })
 
 features.add({
-  "IexTests integration - Run Elixir tests in IEx from Neovim",
+  "Wrapper for terminal windows and terminal-based tools.",
   plugins = {
-    -- consider extracting this to a separate fieature
     {
       "waiting-for-dev/ergoterm.nvim",
-      config = function()
-        require("ergoterm").setup({})
-      end
+      ---@type ErgoTermConfig
+      opts = {}
     }
   },
   setup = function()
-    local terms = require("ergoterm")
-    local iex_tests_term = terms.Terminal:new({
-      cmd = "iex -S mix",
-      name = "IexTests",
-      layout = "right",
-      auto_list = false,
-      env = {
-        MIX_ENV = "test"
-      }
-    })
-
-    require("which-key").add({
-      {
-        "<leader>aii",
-        function()
-          iex_tests_term:toggle()
-        end,
-        desc = "Toggle IEx Tests Terminal",
-      },
-      {
-        "<leader>ait",
-        function()
-          iex_tests_term:start()
-          local file_path = vim.fn.expand("%")
-          local line_number = vim.fn.line(".")
-          iex_tests_term:send({ 'IexTests.test("' .. file_path .. ':' .. line_number .. '")' })
-        end,
-        desc = "Test Current Line in IEx",
-      },
-      {
-        "<leader>aiT",
-        function()
-          iex_tests_term:start()
-          local file_path = vim.fn.expand("%")
-          iex_tests_term:send({ 'IexTests.test("' .. file_path .. '")' })
-        end,
-        desc = "Test Current File in IEx",
-      },
-      {
-        "<leader>aid",
-        function()
-          iex_tests_term:start()
-          local directory_path = vim.fn.expand("%:p:h")
-          iex_tests_term:send({ 'IexTests.test("' .. directory_path .. '")' })
-        end,
-        desc = "Test Current Directory in IEx",
-      },
-    })
+    -- I need this require to always be here in order to `@type ErgoTermConfig` to work
+    ---@diagnostic disable-next-line: unused-local
+    local ergoterm = require("ergoterm")
   end
 })
 

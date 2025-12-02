@@ -23,6 +23,9 @@
   # release notes.
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
+  # Otherwise it fails with error
+  nix.package = pkgs.nix;
+
   programs.zsh = {
     shellAliases = {
       os-rebuild = "sudo darwin-rebuild switch --flake /Users/${username}/nix";

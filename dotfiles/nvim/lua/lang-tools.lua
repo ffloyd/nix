@@ -21,6 +21,10 @@ features.add({
           cmd = { "elixir-ls" },
         })
 
+        vim.lsp.config('expert', {
+          cmd = { "expert", "--stdio" },
+        })
+
         vim.lsp.enable({
           'cssls',
           'dockerls',
@@ -31,6 +35,7 @@ features.add({
           'hyprls',
           'lexical',
           'elixirls',
+          'expert',
           'lua_ls',
           'nixd',
           'rust_analyzer',
@@ -167,8 +172,9 @@ features.add({
           },
           lightbulb = {
             enable = true,
-            sign = true,
-            virtual_text = false,
+            sign = false,
+            virtual_text = true,
+            debounce = 3000,
           },
           outline = {
             win_width = 60,
@@ -316,4 +322,120 @@ features.add({
       end
     }):map("<leader>Tc")
   end
+})
+
+features.add({
+  "Advanced test runner",
+  after = { "which-key" },
+  plugins = {
+    {
+      "nvim-neotest/neotest",
+      dependencies = {
+        "nvim-neotest/nvim-nio",
+        "nvim-lua/plenary.nvim",
+        "antoinemadec/FixCursorHold.nvim",
+        "nvim-treesitter/nvim-treesitter",
+        -- adapters
+        "jfpedroza/neotest-elixir"
+      },
+      config = function()
+        ---@diagnostic disable-next-line: missing-fields
+        require("neotest").setup({
+          adapters = {
+            require("neotest-elixir"),
+          }
+        })
+      end
+    }
+  },
+  setup = function()
+    require("which-key").add({
+      { "<leader>uT",  group = "NeoTest" },
+      -- Running tests
+      { "<leader>uTt", "<cmd>Neotest run<cr>",          desc = "Run Nearest Test" },
+      { "<leader>uTf", "<cmd>Neotest run file<cr>",     desc = "Run File Tests" },
+      { "<leader>uTl", "<cmd>Neotest run last<cr>",     desc = "Run Last Test" },
+      { "<leader>uTx", "<cmd>Neotest stop<cr>",         desc = "Stop Test" },
+
+      -- Summary and output
+      { "<leader>uTs", "<cmd>Neotest summary<cr>",      desc = "Test Summary" },
+      { "<leader>uTo", "<cmd>Neotest output<cr>",       desc = "Show Test Output" },
+      { "<leader>uTO", "<cmd>Neotest output_panel<cr>", desc = "Show Test Output Panel" },
+    })
+  end
+})
+
+features.add({
+  "Simple test runner",
+  after = { "which-key" },
+  plugins = {
+    {
+      "quolpr/quicktest.nvim",
+      config = function()
+        local qt = require("quicktest")
+
+        qt.setup({
+          adapters = {
+            require("quicktest.adapters.golang")({}),
+            require("quicktest.adapters.vitest")({}),
+            require("quicktest.adapters.playwright")({}),
+            require("quicktest.adapters.pytest")({}),
+            require("quicktest.adapters.elixir"),
+          },
+          -- split or popup mode, when argument not specified
+          default_win_mode = "split",
+          use_builtin_colorizer = true
+        })
+      end,
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "MunifTanjim/nui.nvim",
+      },
+    }
+  },
+  setup = function()
+    local qt = require("quicktest")
+
+    require("which-key").add({
+      { "<leader>ut", group = "Quicktest" },
+      {
+        "<leader>utt",
+        qt.run_line,
+        desc = "Test Current Line",
+      },
+      {
+        "<leader>utf",
+        qt.run_file,
+        desc = "Test Current File",
+      },
+      {
+        '<leader>utd',
+        qt.run_dir,
+        desc = 'Test Current Directory',
+      },
+      {
+        '<leader>uta',
+        qt.run_all
+        ,
+        desc = 'Run All',
+      },
+      {
+        "<leader>tp",
+        qt.run_previous,
+        desc = "Run Previous",
+      },
+      {
+        "<leader>utw",
+        function()
+          qt.toggle_win("split")
+        end,
+        desc = "Toggle Test Window",
+      },
+      {
+        "<leader>utx",
+        qt.cancel_current_run,
+        desc = "Stop Current Run",
+      }
+    })
+  end,
 })
