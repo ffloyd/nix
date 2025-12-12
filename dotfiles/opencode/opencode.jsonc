@@ -6,8 +6,17 @@
   "provider": {
     "anthropic": {
       "models": {
-        "claude-sonnet-4-5-thinking": {
+        "sonnet-4-5-thinking-16k": {
           "id": "claude-sonnet-4-5",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 16000
+            },
+          }
+        },
+        "opus-4-5-thinking-16k": {
+          "id": "claude-opus-4-5",
           "options": {
             "thinking": {
               "type": "enabled",
@@ -44,7 +53,11 @@
     "bgtask": {
       "enabled": true,
       "type": "local",
-      "command": ["npx", "-y", "@nanoseil/mcp-bgtask"]
+      "command": [
+        "npx",
+        "-y",
+        "@nanoseil/mcp-bgtask"
+      ]
     }
   }
 }

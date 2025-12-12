@@ -84,6 +84,7 @@ features.add({
           elixir = { "mix" },
           terraform = { "terraform_fmt" },
           zig = { "zigfmt" },
+          json = { "prettier" },
         },
       },
     },
@@ -239,6 +240,7 @@ features.add({
       { "]e",          "<cmd>Lspsaga diagnostic_jump_next<cr>", desc = "Next Diagnostic" },
       { "[e",          "<cmd>Lspsaga diagnostic_jump_prev<cr>", desc = "Previous Diagnostic" },
       { "<leader>le",  group = "Diagnostics" },
+      { "<leader>lee", "<cmd>Lspsaga show_buf_diagnostics<cr>", desc = "Show buffer diagnostics" },
       { "<leader>lep", "<cmd>Lspsaga diagnostic_jump_prev<cr>", desc = "Previous Diagnostic" },
       { "<leader>len", "<cmd>Lspsaga diagnostic_jump_next<cr>", desc = "Next Diagnostic" },
 
