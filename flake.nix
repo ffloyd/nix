@@ -22,7 +22,7 @@
     };
 
     foundryvtt = {
-      url = "github:reckenrode/nix-foundryvtt";
+      url = "github:ffloyd/nix-foundryvtt";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -36,7 +36,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    opencode.url = "github:sst/opencode/v1.0.132";
+    opencode.url = "github:sst/opencode/v1.1.14";
 
     nix-inspect.url = "github:bluskript/nix-inspect";
     nixos-cli.url = "github:nix-community/nixos-cli";
@@ -229,6 +229,8 @@
           ./nixos/desktop.nix
           ./nixos/browser.nix
           ./nixos/gaming.nix
+          ./nixos/local-reverse-proxy.nix
+          ./nixos/local-vtt-server.nix
           # ./nixos/remote-fs.nix
         ];
         hmModules = [

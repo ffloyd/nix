@@ -1,5 +1,6 @@
 # Objective: browser of choice
 {
+  pkgs,
   inputs,
   username,
   ...
@@ -27,5 +28,9 @@
       enable = true;
       profileNames = ["Default Profile"];
     };
+
+    home.packages = [
+      pkgs.chromium
+    ];
   };
 }

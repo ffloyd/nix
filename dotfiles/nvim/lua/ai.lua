@@ -10,7 +10,16 @@ features.add({
   plugins = {
     {
       "folke/sidekick.nvim",
+      ---@type sidekick.config
       opts = {
+        cli = {
+          win = {
+            keys = {
+              -- OpenCode has ctrl-p mapped to command palette, so we use ctrl-i here
+              prompt = { "<c-o>", "prompt", mode = "t", desc = "insert prompt or context" },
+            }
+          }
+        },
         nes = {
           -- originally 100 which is too fast and triggers too often
           debounce = 500,
