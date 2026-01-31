@@ -12,7 +12,7 @@
   services.foundryvtt = {
     enable = true;
 
-    hostName = "vtt.lan";
+    hostName = "vtt.ffloyd.space";
     minifyStaticFiles = true;
 
     upnp = false;
