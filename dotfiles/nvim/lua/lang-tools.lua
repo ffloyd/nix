@@ -221,6 +221,10 @@ features.add({
 
     Snacks.toggle.inlay_hints():map("<leader>TI")
 
+    local lsp_log = function()
+      vim.cmd('tabnew ' .. vim.lsp.log.get_filename())
+    end
+
     require("which-key").add({
       -- LSP pickers, Snacks.picker powered when possible
       -- I avoid lspsaga pickers to have a more consistent experience
@@ -273,10 +277,10 @@ features.add({
       -- LSP Server Control
       { "<leader>lx",  group = "LSP Server" },
       { "<leader>lxc", Snacks.picker.lsp_config,                desc = "Configs" },
-      { "<leader>lxl", "<cmd>LspLog<cr>",                       desc = "Logs" },
-      { "<leader>lxr", "<cmd>LspRestart<cr>",                   desc = "Restart" },
-      { "<leader>lxs", "<cmd>LspStart<cr>",                     desc = "Start" },
-      { "<leader>lxx", "<cmd>LspStop<cr>",                      desc = "Stop" },
+      { "<leader>lxl", lsp_log,                                 desc = "Logs" },
+      { "<leader>lxr", "<cmd>lsp restart<cr>",                  desc = "Restart" },
+      { "<leader>lxs", "<cmd>lsp start<cr>",                    desc = "Start" },
+      { "<leader>lxx", "<cmd>lsp stop<cr>",                     desc = "Stop" },
     })
   end
 })
