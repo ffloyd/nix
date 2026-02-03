@@ -1,53 +1,55 @@
 # Objective: to install apps that cannot be properly or conviniently installed via nixpkgs
-_: {
-  homebrew = {
-    enable = true;
+{...}: {
+  flake.darwinModules.workbrew = _: {
+    homebrew = {
+      enable = true;
 
-    # Workbrew is enforced by employer
-    brewPrefix = "/opt/workbrew/bin";
+      # Workbrew is enforced by employer
+      brewPrefix = "/opt/workbrew/bin";
 
-    onActivation.cleanup = "uninstall";
+      onActivation.cleanup = "uninstall";
 
-    taps = [
-      "jwbargsten/misc"
-    ];
+      taps = [
+        "jwbargsten/misc"
+      ];
 
-    brews = [
-      "jwbargsten/misc/defbro"
-    ];
+      brews = [
+        "jwbargsten/misc/defbro"
+      ];
 
-    # commented out casks are already installed on machine and cannot be adopted by homebrew
-    casks = [
-      # Essential
-      "arc"
-      "notion-calendar"
-      "raycast"
-      "anytype"
+      # commented out casks are already installed on machine and cannot be adopted by homebrew
+      casks = [
+        # Essential
+        "arc"
+        "notion-calendar"
+        "raycast"
+        "anytype"
 
-      # Proton family
-      "proton-drive"
+        # Proton family
+        "proton-drive"
 
-      # Work-related
-      "loom"
-      "notion"
-      "linear-linear"
-      "livebook"
+        # Work-related
+        "loom"
+        "notion"
+        "linear-linear"
+        "livebook"
 
-      # Dev Tools
-      "dash"
-      "postman"
-      "proxyman"
-      "tableplus"
+        # Dev Tools
+        "dash"
+        "postman"
+        "proxyman"
+        "tableplus"
 
-      # Tools
-      # "send-to-kindle"
-      "domzilla-caffeine"
-      "launchcontrol"
-      # "winbox"
+        # Tools
+        # "send-to-kindle"
+        "domzilla-caffeine"
+        "launchcontrol"
+        # "winbox"
 
-      # Entertaiment
-      "spotify"
-      "vlc"
-    ];
+        # Entertaiment
+        "spotify"
+        "vlc"
+      ];
+    };
   };
 }

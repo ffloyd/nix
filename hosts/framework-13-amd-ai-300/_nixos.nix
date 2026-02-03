@@ -36,7 +36,7 @@
     #
     # Hardware setup
     #
-    ./hardware-configuration.nix
+    ./_hardware-configuration.nix
     # apply community-maintained hardware tweaks for the laptop
     inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
     # Apply audio enchancement made by community

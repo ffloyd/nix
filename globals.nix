@@ -1,3 +1,4 @@
+# Global configuration values shared across all hosts
 {
   nixExperimentalFeatures = ["nix-command" "flakes"];
 

@@ -1,235 +1,234 @@
-#
 # Objective: a convinient foundation applicable to both PC & server
-#
-{
-  inputs,
-  pkgs,
-  config,
-  globals,
-  private,
-  username,
-  hostname,
-  system,
-  ...
-}: {
-  imports = [
-    #
-    # Nix & related tools
-    #
-    inputs.nixos-cli.nixosModules.nixos-cli
-    {
-      services.nixos-cli = {
-        enable = true;
-        config = {
-          config_location = "/home/${username}/nix";
-          use_nvd = true;
-          apply.use_nom = true;
+{inputs, ...}: {
+  flake.nixosModules.base = {
+    pkgs,
+    config,
+    globals,
+    private,
+    username,
+    hostname,
+    system,
+    ...
+  }: {
+    imports = [
+      #
+      # Nix & related tools
+      #
+      inputs.nixos-cli.nixosModules.nixos-cli
+      {
+        services.nixos-cli = {
+          enable = true;
+          config = {
+            config_location = "/home/${username}/nix";
+            use_nvd = true;
+            apply.use_nom = true;
+          };
         };
-      };
 
-      nix.settings = {
-        substituters = ["https://watersucks.cachix.org"];
-        trusted-public-keys = [
-          "watersucks.cachix.org-1:6gadPC5R8iLWQ3EUtfu3GFrVY7X6I4Fwz/ihW25Jbv8="
+        nix.settings = {
+          substituters = ["https://watersucks.cachix.org"];
+          trusted-public-keys = [
+            "watersucks.cachix.org-1:6gadPC5R8iLWQ3EUtfu3GFrVY7X6I4Fwz/ihW25Jbv8="
+          ];
+        };
+
+        # Allow user to use nix features that require elevated privileges
+        # (e.g., managing binary caches).
+        nix.settings.trusted-users = ["root" username];
+
+        environment.systemPackages = [
+          inputs.nix-inspect.packages.${system}.default
+          pkgs.nix-tree
+
+          # used by nixos-cli:
+          pkgs.nix-output-monitor
+          pkgs.nvd
         ];
-      };
 
-      # Allow user to use nix features that require elevated privileges
-      # (e.g., managing binary caches).
-      nix.settings.trusted-users = ["root" username];
+        home-manager.users.${username}.programs.zsh.shellAliases = {
+          # os-rebuild = "sudo nixos-rebuild switch --flake ~/nix";
+          # os-rebuild-boot = "sudo nixos-rebuild boot --flake ~/nix --install-bootloader";
+          # os-gc = "sudo nix-collect-garbage -d";
+          os-rebuild = "nixos apply";
+          os-rebuild-boot = "nixos apply --no-activate --install-bootloader";
+          os-gc = "nixos generation delete --min 5 --all";
 
-      environment.systemPackages = [
-        inputs.nix-inspect.packages.${system}.default
-        pkgs.nix-tree
+          nixpkgs-search-exec = "nix-env -qaP";
+        };
+      }
 
-        # used by nixos-cli:
-        pkgs.nix-output-monitor
-        pkgs.nvd
-      ];
+      #
+      # User
+      #
+      {
+        users.users.${username} = {
+          isNormalUser = true;
+          description = private.fullName;
+          extraGroups = ["networkmanager" "wheel"];
+          packages = [];
+          shell = pkgs.zsh;
+        };
 
-      home-manager.users.${username}.programs.zsh.shellAliases = {
-        # os-rebuild = "sudo nixos-rebuild switch --flake ~/nix";
-        # os-rebuild-boot = "sudo nixos-rebuild boot --flake ~/nix --install-bootloader";
-        # os-gc = "sudo nix-collect-garbage -d";
-        os-rebuild = "nixos apply";
-        os-rebuild-boot = "nixos apply --no-activate --install-bootloader";
-        os-gc = "nixos generation delete --min 5 --all";
+        programs.zsh.enable = true; # Otherwise cannot use zsh as shell
+      }
 
-        nixpkgs-search-exec = "nix-env -qaP";
-      };
-    }
+      #
+      # Network
+      #
+      {
+        networking.hostName = hostname;
+        networking.networkmanager.enable = true;
 
-    #
-    # User
-    #
-    {
-      users.users.${username} = {
-        isNormalUser = true;
-        description = private.fullName;
-        extraGroups = ["networkmanager" "wheel"];
-        packages = [];
-        shell = pkgs.zsh;
-      };
+        services.openssh.enable = true;
 
-      programs.zsh.enable = true; # Otherwise cannot use zsh as shell
-    }
+        # Firewall setup
+        networking.firewall = {
+          enable = true;
+          allowedTCPPorts = [
+            5173 # Vite dev server
+          ];
+        };
+      }
 
-    #
-    # Network
-    #
-    {
-      networking.hostName = hostname;
-      networking.networkmanager.enable = true;
+      #
+      # Locale & timezone
+      #
+      {
+        time.timeZone = private.timezone;
+        i18n.defaultLocale = private.locale;
 
-      services.openssh.enable = true;
+        i18n.extraLocaleSettings = {
+          LC_ADDRESS = private.extraLocale;
+          LC_IDENTIFICATION = private.extraLocale;
+          LC_MEASUREMENT = private.extraLocale;
+          LC_MONETARY = private.extraLocale;
+          LC_NAME = private.extraLocale;
+          LC_NUMERIC = private.extraLocale;
+          LC_PAPER = private.extraLocale;
+          LC_TELEPHONE = private.extraLocale;
+          LC_TIME = private.extraLocale;
+        };
+      }
 
-      # Firewall setup
-      networking.firewall = {
-        enable = true;
-        allowedTCPPorts = [
-          5173 # Vite dev server
+      #
+      # Enable modern sound subsystem
+      #
+      {
+        # Consider using pw-cli, pw-mon, pw-top, wpctl commands
+        # for lov-level inspection and control.
+        security.rtkit.enable = true;
+        services.pipewire = {
+          enable = true;
+          alsa.enable = true;
+          alsa.support32Bit = true;
+          pulse.enable = true;
+          # If you want to use JACK applications, uncomment this
+          # jack.enable = true;
+        };
+      }
+
+      #
+      # Root shell environment
+      #
+      {
+        # I want at least basic NeoVim be accessible to the root user
+        # alongside with some essential CLI tools.
+        programs.neovim = {
+          enable = true;
+          viAlias = true;
+          vimAlias = true;
+          defaultEditor = true;
+        };
+
+        environment.systemPackages = with pkgs; [
+          bat
+          eza
+          wget
         ];
-      };
-    }
+      }
 
-    #
-    # Locale & timezone
-    #
-    {
-      time.timeZone = private.timezone;
-      i18n.defaultLocale = private.locale;
-
-      i18n.extraLocaleSettings = {
-        LC_ADDRESS = private.extraLocale;
-        LC_IDENTIFICATION = private.extraLocale;
-        LC_MEASUREMENT = private.extraLocale;
-        LC_MONETARY = private.extraLocale;
-        LC_NAME = private.extraLocale;
-        LC_NUMERIC = private.extraLocale;
-        LC_PAPER = private.extraLocale;
-        LC_TELEPHONE = private.extraLocale;
-        LC_TIME = private.extraLocale;
-      };
-    }
-
-    #
-    # Enable modern sound subsystem
-    #
-    {
-      # Consider using pw-cli, pw-mon, pw-top, wpctl commands
-      # for lov-level inspection and control.
-      security.rtkit.enable = true;
-      services.pipewire = {
-        enable = true;
-        alsa.enable = true;
-        alsa.support32Bit = true;
-        pulse.enable = true;
-        # If you want to use JACK applications, uncomment this
-        # jack.enable = true;
-      };
-    }
-
-    #
-    # Root shell environment
-    #
-    {
-      # I want at least basic NeoVim be accessible to the root user
-      # alongside with some essential CLI tools.
-      programs.neovim = {
-        enable = true;
-        viAlias = true;
-        vimAlias = true;
-        defaultEditor = true;
-      };
-
-      environment.systemPackages = with pkgs; [
-        bat
-        eza
-        wget
-      ];
-    }
-
-    #
-    # Global Fonts
-    #
-    {
-      fonts = {
-        enableDefaultPackages = true;
-        packages = globals.getFonts pkgs;
-      };
-    }
-
-    #
-    # Stylix - global theming system
-    #
-    inputs.stylix.nixosModules.stylix
-    {
-      stylix = {
-        enable = true;
-        autoEnable = false;
-
-        base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
-        image = ./desktop/bg.jpg;
-
+      #
+      # Global Fonts
+      #
+      {
         fonts = {
-          monospace = {
-            name = "IosevkaTerm Nerd Font Mono";
-            package = pkgs.nerd-fonts.iosevka-term;
-          };
-          serif = {
-            name = "Iosevka Nerd Font Propo";
-            package = pkgs.nerd-fonts.iosevka;
-          };
-          sansSerif = config.stylix.fonts.serif;
-          emoji = config.stylix.fonts.serif;
+          enableDefaultPackages = true;
+          packages = globals.getFonts pkgs;
         };
-      };
-    }
+      }
 
-    #
-    # Any NixOS machine should be able to use printers
-    #
-    {
-      services.printing = {
-        enable = true;
-        drivers = with pkgs; [
-          gutenprint
-          brgenml1lpr
-          brgenml1cupswrapper
-        ];
-      };
+      #
+      # Stylix - global theming system
+      #
+      inputs.stylix.nixosModules.stylix
+      {
+        stylix = {
+          enable = true;
+          autoEnable = false;
 
-      # needed for IPP printers support
-      services.avahi = {
-        enable = true;
-        nssmdns4 = true;
-        openFirewall = true;
-      };
+          base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+          image = ./desktop/bg.jpg;
 
-      # otherwise CUPS can be slow
-      services.colord.enable = true;
+          fonts = {
+            monospace = {
+              name = "IosevkaTerm Nerd Font Mono";
+              package = pkgs.nerd-fonts.iosevka-term;
+            };
+            serif = {
+              name = "Iosevka Nerd Font Propo";
+              package = pkgs.nerd-fonts.iosevka;
+            };
+            sansSerif = config.stylix.fonts.serif;
+            emoji = config.stylix.fonts.serif;
+          };
+        };
+      }
 
-      # I want to be able to manage printers via CUPS web interface
-      # without it I can do it, but UI is extremely slow for some reason
-      users.users.${username}.extraGroups = ["lpadmin"];
-    }
+      #
+      # Any NixOS machine should be able to use printers
+      #
+      {
+        services.printing = {
+          enable = true;
+          drivers = with pkgs; [
+            gutenprint
+            brgenml1lpr
+            brgenml1cupswrapper
+          ];
+        };
 
-    #
-    # Flatpack / flathub support
-    #
-    # Some applications are only available as flatpaks
-    # or has a significant version lag on Nixpkgs (like anytype at the time of writing).
-    #
-    # I manage flatpak only for user, not system-wide.
-    #
-    {
-      services.flatpak.enable = true;
+        # needed for IPP printers support
+        services.avahi = {
+          enable = true;
+          nssmdns4 = true;
+          openFirewall = true;
+        };
 
-      home-manager.users.${username} = {
-        imports = [inputs.nix-flatpak.homeManagerModules.nix-flatpak];
+        # otherwise CUPS can be slow
+        services.colord.enable = true;
 
-        home.packages = [pkgs.flatpak];
-      };
-    }
-  ];
+        # I want to be able to manage printers via CUPS web interface
+        # without it I can do it, but UI is extremely slow for some reason
+        users.users.${username}.extraGroups = ["lpadmin"];
+      }
+
+      #
+      # Flatpack / flathub support
+      #
+      # Some applications are only available as flatpaks
+      # or has a significant version lag on Nixpkgs (like anytype at the time of writing).
+      #
+      # I manage flatpak only for user, not system-wide.
+      #
+      {
+        services.flatpak.enable = true;
+
+        home-manager.users.${username} = {
+          imports = [inputs.nix-flatpak.homeManagerModules.nix-flatpak];
+
+          home.packages = [pkgs.flatpak];
+        };
+      }
+    ];
+  };
 }

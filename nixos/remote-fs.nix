@@ -1,69 +1,71 @@
 # Objective: convienient access to reomote filesystems and file storages
-{
-  config,
-  pkgs,
-  username,
-  ...
-}: {
-  home-manager.users.${username} = {
-    home.packages = [pkgs.rclone];
+{...}: {
+  flake.nixosModules.remote-fs = {
+    config,
+    pkgs,
+    username,
+    ...
+  }: {
+    home-manager.users.${username} = {
+      home.packages = [pkgs.rclone];
 
-    programs.zsh.shellAliases = {
-      os-rmounts-status = "systemctl --user status rclone-mounts";
-      os-rmounts-restart = "systemctl --user restart rclone-mounts";
-      os-rmounts-config = "rclone config";
-    };
-
-    systemd.user.services.rclone-mounts = {
-      Unit = {
-        Description = "Mount all rClone configurations";
+      programs.zsh.shellAliases = {
+        os-rmounts-status = "systemctl --user status rclone-mounts";
+        os-rmounts-restart = "systemctl --user restart rclone-mounts";
+        os-rmounts-config = "rclone config";
       };
 
-      Install.WantedBy = ["default.target"];
+      systemd.user.services.rclone-mounts = {
+        Unit = {
+          Description = "Mount all rClone configurations";
+        };
 
-      Service = let
-        home = config.home-manager.users.${username}.home.homeDirectory;
-        bin_paths = pkgs.lib.makeBinPath (with pkgs; [rclone coreutils gnused]);
-      in {
-        Type = "forking";
+        Install.WantedBy = ["default.target"];
 
-        # /run/wrappers/bin/ is needed for fusermount3 wrapper with correct permissions
-        Environment = ["PATH=/run/wrappers/bin/:${bin_paths}:$PATH"];
+        Service = let
+          home = config.home-manager.users.${username}.home.homeDirectory;
+          bin_paths = pkgs.lib.makeBinPath (with pkgs; [rclone coreutils gnused]);
+        in {
+          Type = "forking";
 
-        ExecStartPre = "${pkgs.writeShellScript "rClonePre" ''
-          remotes=$(rclone --config=${home}/.config/rclone/rclone.conf listremotes)
-          for remote in $remotes;
-          do
+          # /run/wrappers/bin/ is needed for fusermount3 wrapper with correct permissions
+          Environment = ["PATH=/run/wrappers/bin/:${bin_paths}:$PATH"];
+
+          ExecStartPre = "${pkgs.writeShellScript "rClonePre" ''
+            remotes=$(rclone --config=${home}/.config/rclone/rclone.conf listremotes)
+            for remote in $remotes;
+            do
+              name=$(echo "$remote" | sed "s/://g")
+              mkdir -p ${home}/"$name"
+            done
+          ''}";
+
+          ExecStart = "${pkgs.writeShellScript "rCloneStart" ''
+            remotes=$(rclone --config=${home}/.config/rclone/rclone.conf listremotes)
+            for remote in $remotes;
+            do
             name=$(echo "$remote" | sed "s/://g")
-            mkdir -p ${home}/"$name"
-          done
-        ''}";
+            rclone \
+              --config=${home}/.config/rclone/rclone.conf \
+              --vfs-cache-mode full \
+              --file-perms 0600 \
+              --dir-perms 0700 \
+              mount "$remote" "$name" &
+            done
+          ''}";
 
-        ExecStart = "${pkgs.writeShellScript "rCloneStart" ''
-          remotes=$(rclone --config=${home}/.config/rclone/rclone.conf listremotes)
-          for remote in $remotes;
-          do
-          name=$(echo "$remote" | sed "s/://g")
-          rclone \
-            --config=${home}/.config/rclone/rclone.conf \
-            --vfs-cache-mode full \
-            --file-perms 0600 \
-            --dir-perms 0700 \
-            mount "$remote" "$name" &
-          done
-        ''}";
+          ExecStop = "${pkgs.writeShellScript "rCloneStop" ''
+            remotes=$(rclone --config=${home}/.config/rclone/rclone.conf listremotes)
+            for remote in $remotes;
+            do
+            name=$(echo "$remote" | sed "s/://g")
+            fusermount3 -u ${home}/"$name"
+            done
+          ''}";
 
-        ExecStop = "${pkgs.writeShellScript "rCloneStop" ''
-          remotes=$(rclone --config=${home}/.config/rclone/rclone.conf listremotes)
-          for remote in $remotes;
-          do
-          name=$(echo "$remote" | sed "s/://g")
-          fusermount3 -u ${home}/"$name"
-          done
-        ''}";
-
-        Restart = "on-failure";
-        RestartSec = "30s";
+          Restart = "on-failure";
+          RestartSec = "30s";
+        };
       };
     };
   };

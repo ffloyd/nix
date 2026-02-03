@@ -38,7 +38,7 @@
     #
     # Hardware setup
     #
-    ./hardware-configuration.nix
+    ./_hardware-configuration.nix
     {
       # Enable bluetooth
       hardware.bluetooth.enable = true;
