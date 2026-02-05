@@ -60,9 +60,14 @@
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
+      debug = true;
+
       systems = ["x86_64-linux" "aarch64-darwin"];
 
       imports = [
+        ./globals.nix
+        ./private.nix
+        ./hosts-option.nix
         (import-tree ./hosts)
         (import-tree ./nixos)
         (import-tree ./darwin)

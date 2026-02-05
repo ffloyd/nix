@@ -1,7 +1,6 @@
 # Custom helper functions for use across the flake
 #
 # These are passed to modules via specialArgs.
-# They require nixpkgs.lib to be passed as argument.
 lib: rec {
   # Waiting for nix to build for every change in dotfiles is annoying.
   # To opt-out of this, we can create direct symlinks to dotfiles bypassing the store.

@@ -3,9 +3,10 @@
   flake.darwinModules.local-reverse-proxy = {
     pkgs,
     lib,
-    private,
+    config,
     ...
   }: let
+    config' = config;
     inherit (pkgs) caddy dnsmasq;
     addresses = {
       test = "127.0.0.1";
@@ -56,7 +57,7 @@
             local_certs
           }
 
-          ${private.workProjectsCaddyfile}
+          ${config'.private.workProjectsCaddyfile}
         '';
 
         launchd.daemons.caddy = {

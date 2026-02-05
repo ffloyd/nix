@@ -10,8 +10,6 @@
     ...
   }: {
     imports = [
-      ./development-environment/_ai-tooling.nix
-
       #
       # Core Git Setup
       #

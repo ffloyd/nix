@@ -1,10 +1,14 @@
 # Objective: a convinient foundation applicable to both PC & server
-{inputs, ...}: {
+{
+  inputs,
+  config,
+  ...
+}: let
+  config' = config;
+in {
   flake.nixosModules.base = {
     pkgs,
     config,
-    globals,
-    private,
     username,
     hostname,
     system,
@@ -63,7 +67,7 @@
       {
         users.users.${username} = {
           isNormalUser = true;
-          description = private.fullName;
+          description = config'.private.fullName;
           extraGroups = ["networkmanager" "wheel"];
           packages = [];
           shell = pkgs.zsh;
@@ -94,19 +98,19 @@
       # Locale & timezone
       #
       {
-        time.timeZone = private.timezone;
-        i18n.defaultLocale = private.locale;
+        time.timeZone = config'.private.timezone;
+        i18n.defaultLocale = config'.private.locale;
 
         i18n.extraLocaleSettings = {
-          LC_ADDRESS = private.extraLocale;
-          LC_IDENTIFICATION = private.extraLocale;
-          LC_MEASUREMENT = private.extraLocale;
-          LC_MONETARY = private.extraLocale;
-          LC_NAME = private.extraLocale;
-          LC_NUMERIC = private.extraLocale;
-          LC_PAPER = private.extraLocale;
-          LC_TELEPHONE = private.extraLocale;
-          LC_TIME = private.extraLocale;
+          LC_ADDRESS = config'.private.extraLocale;
+          LC_IDENTIFICATION = config'.private.extraLocale;
+          LC_MEASUREMENT = config'.private.extraLocale;
+          LC_MONETARY = config'.private.extraLocale;
+          LC_NAME = config'.private.extraLocale;
+          LC_NUMERIC = config'.private.extraLocale;
+          LC_PAPER = config'.private.extraLocale;
+          LC_TELEPHONE = config'.private.extraLocale;
+          LC_TIME = config'.private.extraLocale;
         };
       }
 
@@ -153,7 +157,7 @@
       {
         fonts = {
           enableDefaultPackages = true;
-          packages = globals.getFonts pkgs;
+          packages = config'.globals.getFonts pkgs;
         };
       }
 

@@ -6,54 +6,48 @@
   inputs,
   ...
 }: let
-  # Import data directly to avoid circular dependencies
-  globals = import ../globals.nix;
-  private = import ../private.nix;
   lib' = import ../lib.nix inputs.nixpkgs.lib;
-
-  hostname = "macos-work";
-  hostConfig = private.hosts.${hostname};
-  username = hostConfig.username;
-  system = "aarch64-darwin";
-  pkgs = inputs.nixpkgs.legacyPackages.${system};
+  hostConfig = config.hosts.macos-work;
 in {
   # Darwin configuration
   flake.darwinConfigurations.${hostConfig.hostname} = inputs.nix-darwin.lib.darwinSystem {
-    inherit system;
+    inherit (hostConfig) system;
 
     specialArgs = {
-      inherit inputs globals private username;
+      inherit (config) globals private;
+      inherit inputs;
+      inherit (hostConfig) username;
     };
 
-    modules = [
-      config.flake.darwinModules.workbrew
-      config.flake.darwinModules.local-reverse-proxy
-
-      # Machine-specific configuration
-      (import ./macos-work/_nix-darwin.nix)
-    ];
+    modules =
+      [
+        config.flake.darwinModules.workbrew
+        config.flake.darwinModules.local-reverse-proxy
+      ]
+      ++ hostConfig.darwinModules;
   };
 
   # Standalone Home Manager configuration
-  flake.homeConfigurations.${username} = inputs.home-manager.lib.homeManagerConfiguration {
+  flake.homeConfigurations.${hostConfig.username} = inputs.home-manager.lib.homeManagerConfiguration {
     pkgs = import inputs.nixpkgs {
-      inherit system;
+      inherit (hostConfig) system;
       config.allowUnfree = true;
     };
 
     extraSpecialArgs = {
-      inherit inputs private username system;
+      inherit inputs;
+      inherit (config) private;
+      inherit (hostConfig) username system;
       inherit (lib') mkDotfilesLink mkDotfilesDirectoryEntriesSymlinks mkEnvExports;
     };
 
-    modules = [
-      config.flake.homeModules.terminal
-      config.flake.homeModules.shell
-      config.flake.homeModules.gpg
-      config.flake.homeModules.development-environment
-
-      # Machine-specific configuration
-      (import ./macos-work/_home-manager.nix)
-    ];
+    modules =
+      [
+        config.flake.homeModules.terminal
+        config.flake.homeModules.shell
+        config.flake.homeModules.gpg
+        config.flake.homeModules.development-environment
+      ]
+      ++ hostConfig.homeModules;
   };
 }

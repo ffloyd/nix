@@ -1,12 +1,5 @@
-# Objective: Declare flake output options to allow merging across multiple modules
-#
-# Note: nixosModules is declared by flake-parts built-in module.
-# Note: homeModules is declared by home-manager flake module.
-# We only declare darwinModules here.
-{
-  lib,
-  ...
-}: {
+# Objective: enable flake-parts to define nix-darwin modules
+{lib, ...}: {
   options.flake = {
     darwinModules = lib.mkOption {
       type = lib.types.lazyAttrsOf lib.types.deferredModule;

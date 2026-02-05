@@ -8,7 +8,7 @@ NEVER NEVER NEVER NEVER EVER DO `git add`, `git push`, `git stage`, `git unstage
 
 __Do "why-comments", never do "what-comments".__ When write comments in code focus on answering "why is it here?" instead of explaining "what is it here?".
 
-__Never do handling of unexpected situations.__ Always think is some situation expected or not. If situation is unexpected - prefer to use exceptions (raise, throw, etc). If situation is expected - return outcome as a result. _If you unsure what's expected and what's not - ask me._
+__Never do handling of unexpected situations.__ Always think is some situation expected or not. If situation is unexpected - prefer to use exceptions (raise, throw, etc). If situation is expected - return outcome as a result. _If you unsure what's expected and what's not - ask user._
 
 __Always document responsibilities and expectations.__ Documentation for functions (and similar concepts) should focus on responsibilities and expectations. Do not merely explain "what function does". Explain "what is function responsible for and what are the function's expectations".
     - For example, function `make_frienship(user1, user2)` is responsible for making friendship between two users. It expects that both users are valid.
@@ -18,12 +18,12 @@ __Always document responsibilities and expectations.__ Documentation for functio
         - If expectations are not met - function raises exception or similar failure.
     - Follow this format:
         - first paragraph: responsibilities. For example: "Creates a friendship relationship between two users."
-        - second paragraph (optional): expectations if they present. For example: "Expects both users to be valid."
+        - second paragraph (optional): expectations if they present. For example: "Both users should be valid."
         - third paragraph (optional): important details. For example: "If users are already friends, does nothing."
 
 __Keep documentation actual.__ Always update documentation after code changes. Documentation is important, do your best to keep it actual.
 
-__Keep errors helpful.__ ALWAYS think about debugability. Especially when define error messages, log messages, error payloads, validation errors etc. Imagine an engineer or user seeing this error. Will it be enough to understand what is wrong and find related defects?
+__Keep errors helpful.__ ALWAYS think about how helpful error is when you define an error. Especially when designing error messages, log messages, error payloads, validation errors etc. Imagine an engineer or user seeing this error. Will it be enough to understand what is wrong and find related defects?
 
 # Common Coding Rules for Writing Tests
 
