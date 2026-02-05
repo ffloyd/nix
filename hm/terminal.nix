@@ -1,9 +1,10 @@
 # Objective: Terminal
-{...}: {
+{config, ...}: let
+  config' = config;
+in {
   flake.homeModules.terminal = {
     pkgs,
     config,
-    mkDotfilesLink,
     ...
   }: {
     home.packages = with pkgs; [
@@ -14,6 +15,6 @@
     # configuration files directly to the files in the dotfiles
     # directory of this repository. (Instead of making them part of the
     # Nix store.)
-    home.file.".config/kitty/kitty.conf".source = mkDotfilesLink config "kitty.conf";
+    home.file.".config/kitty/kitty.conf".source = config'.myLib.mkDotfilesLink config "kitty.conf";
   };
 }

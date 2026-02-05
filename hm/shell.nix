@@ -1,9 +1,10 @@
-{...}: {
+{config, ...}: let
+  config' = config;
+in {
   flake.homeModules.shell = {
     pkgs,
     lib,
     config,
-    mkDotfilesLink,
     ...
   }: {
     imports = [
@@ -25,7 +26,7 @@
       # powerlevel10k shell theme
       #
       {
-        home.file.".p10k.zsh".source = mkDotfilesLink config "p10k.zsh";
+        home.file.".p10k.zsh".source = config'.myLib.mkDotfilesLink config "p10k.zsh";
 
         programs.zsh = {
           initContent = ''
@@ -165,7 +166,7 @@
         let
           filename = "zshrc.functions";
         in {
-          home.file.".${filename}".source = mkDotfilesLink config filename;
+          home.file.".${filename}".source = config'.myLib.mkDotfilesLink config filename;
 
           home.packages = with pkgs; [
             libnotify

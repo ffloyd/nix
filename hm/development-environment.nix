@@ -1,12 +1,17 @@
 # Objective: This NixOS module sets up a comprehensive development environment shared across all machines, both macOS and NixOS.
-{inputs, ...}: {
+{
+  inputs,
+  config,
+  ...
+}: let
+  config' = config;
+in {
   flake.homeModules.development-environment = {
     pkgs,
     lib,
     config,
     system,
     private,
-    mkDotfilesLink,
     ...
   }: {
     imports = [
@@ -189,7 +194,7 @@
           "${neovim-npm-dir}/.keep".text = "";
 
           # Direct symlink to my actual NeoVim configuration
-          ".config/nvim".source = mkDotfilesLink config "nvim";
+          ".config/nvim".source = config'.myLib.mkDotfilesLink config "nvim";
         };
 
         home.sessionVariables.EDITOR = "nvim";

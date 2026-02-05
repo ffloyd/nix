@@ -6,7 +6,6 @@
   inputs,
   ...
 }: let
-  lib' = import ../lib.nix inputs.nixpkgs.lib;
   hostConfig = config.hosts.macos-work;
 in {
   # Darwin configuration
@@ -38,7 +37,6 @@ in {
       inherit inputs;
       inherit (config) private;
       inherit (hostConfig) username system;
-      inherit (lib') mkDotfilesLink mkDotfilesDirectoryEntriesSymlinks mkEnvExports;
     };
 
     modules =

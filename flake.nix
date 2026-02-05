@@ -67,6 +67,7 @@
       imports = [
         ./globals.nix
         ./private.nix
+        ./my-lib.nix
         ./hosts-option.nix
         (import-tree ./hosts)
         (import-tree ./nixos)

@@ -7,7 +7,6 @@
   inputs,
   ...
 }: let
-  lib' = import ../lib.nix inputs.nixpkgs.lib;
   hostConfig = config.hosts.nixos-desktop;
   pkgs-aot = inputs.nixpkgs-aot.legacyPackages.${hostConfig.system};
 in {
@@ -19,7 +18,6 @@ in {
       inherit inputs pkgs-aot;
       inherit (hostConfig) username hostname system;
       targetOS = "nixos";
-      inherit (lib') mkDotfilesLink mkDotfilesDirectoryEntriesSymlinks mkEnvExports;
     };
 
     modules =
@@ -45,7 +43,6 @@ in {
             inherit inputs;
             inherit (config) private;
             inherit (hostConfig) username system;
-            inherit (lib') mkDotfilesLink mkDotfilesDirectoryEntriesSymlinks mkEnvExports;
           };
 
           home-manager.users.${hostConfig.username} = {

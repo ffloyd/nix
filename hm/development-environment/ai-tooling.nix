@@ -2,14 +2,15 @@
 {
   inputs,
   lib,
+  config,
   ...
-}: {
+}: let
+  config' = config;
+in {
   flake.homeModules.development-environment = {
     pkgs,
     config,
     system,
-    mkDotfilesLink,
-    mkDotfilesDirectoryEntriesSymlinks,
     ...
   }: {
     imports = [
@@ -42,12 +43,12 @@
 
         home.file = lib.mkMerge [
           {
-            ".claude/CLAUDE.md".source = mkDotfilesLink config "ai-shared/coding-rules.md";
+            ".claude/CLAUDE.md".source = config'.myLib.mkDotfilesLink config "ai-shared/coding-rules.md";
             ".claude/commands/commit-staged.md".text = commitStagedCommand;
             ".claude/commands/review-staged.md".text = reviewStagedCommand;
-            ".claude/settings.json".source = mkDotfilesLink config "claude/settings.json";
+            ".claude/settings.json".source = config'.myLib.mkDotfilesLink config "claude/settings.json";
           }
-          (mkDotfilesDirectoryEntriesSymlinks config "claude/commands" ".claude/commands")
+          (config'.myLib.mkDotfilesDirectoryEntriesSymlinks config "claude/commands" ".claude/commands")
         ];
       })
 
@@ -103,15 +104,15 @@
 
         xdg.configFile = lib.mkMerge [
           {
-            "opencode/opencode.jsonc".source = mkDotfilesLink config "opencode/opencode.jsonc";
-            "opencode/AGENTS.md".source = mkDotfilesLink config "ai-shared/coding-rules.md";
+            "opencode/opencode.jsonc".source = config'.myLib.mkDotfilesLink config "opencode/opencode.jsonc";
+            "opencode/AGENTS.md".source = config'.myLib.mkDotfilesLink config "ai-shared/coding-rules.md";
 
             "opencode/command/commit-staged.md".text = commitStagedCommand;
             "opencode/command/review-staged.md".text = reviewStagedCommand;
           }
-          (mkDotfilesDirectoryEntriesSymlinks config "opencode/command" "opencode/command")
-          (mkDotfilesDirectoryEntriesSymlinks config "opencode/agent" "opencode/agent")
-          (mkDotfilesDirectoryEntriesSymlinks config "opencode/plugin" "opencode/plugin")
+          (config'.myLib.mkDotfilesDirectoryEntriesSymlinks config "opencode/command" "opencode/command")
+          (config'.myLib.mkDotfilesDirectoryEntriesSymlinks config "opencode/agent" "opencode/agent")
+          (config'.myLib.mkDotfilesDirectoryEntriesSymlinks config "opencode/plugin" "opencode/plugin")
         ];
       })
 
