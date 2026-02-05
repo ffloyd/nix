@@ -1,7 +1,11 @@
 # Objective: Audio enhancement for Framework 13 (original sound is poor)
-{...}: {
-  hosts.framework-13-amd-ai-300.nixosModules = [
-    {
+{
+  my.hosts.framework-13-amd-ai-300 = {
+    adjustments = [
+      "Audio enhancement"
+    ];
+
+    nixos = {
       hardware.framework.laptop13.audioEnhancement = {
         enable = true;
 
@@ -13,6 +17,6 @@
         # the correct one when UCM is disabled
         rawDeviceName = "alsa_output.pci-0000_c1_00.6.analog-stereo";
       };
-    }
-  ];
+    };
+  };
 }

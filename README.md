@@ -1,81 +1,74 @@
-# NixOS + macOS Configuration
+# NixOS + macOS + NeoVim Configuration
 
 Personal dotfiles and system configurations managed with Nix flakes.
 
-## Overview
+__Note:__ I switched to dendritic pattern recently.
+From implementation perspective it's functional and already convinient, but I still need to re-arrange some configurations and still experimenting with granularity.
+
+## What this repo is
 
 This repository contains my personal configurations for NixOS and macOS machines.
-It uses [Nix flakes](https://nixos.wiki/wiki/Flakes) to provide reproducible system configurations for:
-
-- [Framework laptop](https://frame.work/de/en) running NixOS with Hyprland
-- Desktop machine running NixOS
-- Work MacBook with nix-darwin
-
-The repository includes an extensive Neovim configuration (~30% of all config lines) with AI integrations.
-
-## Architecture
-
-Standard NixOS modules are used for NixOS configuration.
-[home-manager](https://github.com/nix-community/home-manager) is used for user-level configurations and for sharing modules between NixOS and macOS.
-[nix-darwin](https://github.com/LnL7/nix-darwin) is used for macOS system-level configurations.
-
-Home Manager's `mkOutOfStoreSymlink` is used to directly link dotfiles from the repository to the home directory bypassing the Nix store.
-This allows editing dotfiles in place without creating a new generation for each change.
-
-Sensitive data is stored in `private.nix` and `hardware-configuration.nix` files, which are encrypted using [git-crypt](https://www.agwa.name/projects/git-crypt/).
-
-As an output, the flake provides configurations for several machines.
-Each machine has a different set of modules enabled.
-
-NixOS hosts use merged configuration that includes both NixOS and Home Manager modules at the same time.
-MacOS hosts use separate configurations for nix-darwin and Home Manager: I change nix-darwin configuration much less frequently, so there is no point to wait for additional 10+ seconds when updating Home Manager part.
-
-## AI Tooling
-
-This repository uses a three-tier system for AI coding assistant configuration (Claude Code and OpenCode):
-
-1. **Shared "as is"** (`dotfiles/ai-shared/`): Content identical for both tools (e.g., coding rules). These files are symlinked directly and are editable without rebuild.
-
-2. **Shared snippets** (`hm/development-environment/ai-tooling/`): Content that needs tool-specific frontmatter (e.g., commit/review instructions). These files are used to generate tool-specific commands/agents and require rebuild to see changes.
-
-3. **Experimental** (tool-specific directories like `dotfiles/claude/commands/`, `dotfiles/opencode/agent/`): Single-tool experimental files. These are symlinked directly and editable, but require rebuild to discover new files.
-
-### Mixed Directories
-
-Home directories like `~/.claude/commands/` and `~/.config/opencode/agent/` contain both generated files (immutable, from Nix store) and experimental files (editable, from dotfiles). This allows stable shared commands to coexist with experimental work-in-progress commands.
-
-### Workflow
-
-1. **Experiment**: Create file in tool-specific directory (e.g., `dotfiles/claude/commands/experimental.md`), rebuild once to create symlink, then edit freely.
-2. **Share**: When stable and needed for both tools:
-   - If content is identical → move to `dotfiles/ai-shared/`
-   - If needs tool-specific adjustments → extract to `hm/development-environment/ai-tooling/`, add generation in `ai-tooling.nix`
-
-### Rebuild Requirements
-
-- **No rebuild needed**: Editing existing files in `dotfiles/ai-shared/` or tool-specific experimental files
-- **Rebuild required**: New experimental files, changes to shared snippets in `hm/development-environment/ai-tooling/`
-
-## Repository structure
+It is done as a [Nix flake](https://nixos.wiki/wiki/Flakes) which implements a top-level orchestrator for all my organized configurations and tools.
 
 
-| Files          | Purpose                                                                                                                                                                 |
-|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `flake.nix`    | The main entry point, defines configuration for all hosts.                                                                                                              |
-| `globals.nix`  | An attrs set with some global values. Propogated to all modules.                                                                                                        |
-| `private.nix`  | An attrs set with some global values that are personal data. Encrypted. Propogated to all modules.                                                         |
-| `hosts/*`      | Each host has a folder with machine-specific configuration. `hardware-configuration.nix` is a hardware configuration and also encrypted. |
-| `hm/*.nix`     |  Configuration modules that shared between NixOS and MacOS.                                                  |
-| `hm/development-environment/ai-tooling/` | AI shared snippets for generation (immutable, rebuild required for changes). |
-| `nixos/*.nix`  | NixOS configuration modules. Can include home-manager configurations that are NixOS-specific. |
-| `darwin/*.nix` | nix-darwin configuration modules. |
-| `dotfiles/ai-shared/` | AI content shared identically between tools (editable, no rebuild needed). |
-| `dotfiles/claude/`, `dotfiles/opencode/` | Tool configuration and experimental AI files (editable, rebuild to discover new files). |
-| `dotfiles/*` (other)   | These files are linked directly, not through Nix store. It allows to edit them in place without creating a new generation for each change.                              |
+| Path | |
+| --- | --- |
+| [flake.nix](flake.nix) | Entry point that wires everything together and defines flake outputs. |
+| [my/](my) | All custom options and helper modules, all namespaced under `my.*`. |
+| [aspects/](aspects) | Feature bundles: groups of NixOS, Darwin, and shared modules. |
+| [hosts/](hosts) | Per-machine definitions and host-specific modules. |
+| [dotfiles/](dotfiles) | Files that are symlinked directly into the home directory. |
+| [dotfiles/nvim](dotfiles/nvim) | NeoVim configuration. |
+
+
+## If you are new to Nix
+
+If you are just curious about Nix, this repo might look a bit dense at first, and that is normal.
+As an entry point to the Nix ecosystem, I recommend to check out the following resources:
+
+- [Official Nix(OS) website](https://nixos.org/) - for general information about Nix and NixOS.
+- [Vimjoyer Youtube channel](https://www.youtube.com/@vimjoyer) - this guy is amazing at explaining Nix and NixOS concepts in a very approachable and practical way. His channel was my entry point to Nix and I _highly_ recommend it.
+- Understanding of the following tools is essential to understand this repo. Also check related Vimjoyer's videos. 
+    - [flake.parts](https://flake.parts)
+    - [Home Manager](https://github.com/nix-community/home-manager)
+    - [nix-darwin](https://github.com/LnL7/nix-darwin)
+
+## Why Nix?
+
+Now I can do "ASDF peasants" jokes.
+
+On a more serious note, well... it's a toolkit that 
+
+- can manage dotfiles
+- supports both Linux and macOS
+- allows you to configure your system declaratively
+- makes reverting any changes as easy as reverting a commit
+- replaces [ASDF](https://asdf-vm.com/), [mise](https://mise.jdx.dev/) and similar "dev shell" tools. Provides reproducibility, not just replayability. 
+- can be used to define and build Docker images (and they will be reproducible, not just replayable like with Dockerfiles)
+- and more
+
+Just a single toolkit.
+While ASDF, homebrew, and other tools I mentioned much simpler and easier to use, they underperform in many aspects in comparison to Nix.
+One I mentioned here is the _reproducibility_ vs _replayability_.
+Let me explain on example of a Dockerfile.
+When you have line like `RUN apt-get update && apt-get install -y nodejs` in your Dockerfile, it will install the latest version of nodejs at the moment of building the image.
+This is replayable, but not reproducible, because the same Dockerfile can produce different outputs at different times.
+It's only the tip of the iceberg, Dockerfiles are not designed for reproducibility in general and have non-deterministic nature.
+Like ASDF, like mise, and many other popular tools.
+
+It's ok for many contexts to not have those strong guarantees and take some risks in exchange for simplicity.
+But personally, I prefer to master complex toolkit that is _fun to learn_, rather than waste time on simpler but boring tasks like fixing broken ASDF shims, dealing with Homebrew's quirks after system upgrade, and similar.
+With Nix such issues are less likely to happen, and when they do, they are usually easier and _more comfortable_ to fix.
+Moreover, Nix has a massive amount of interesting engineering decisions to learn from and become better engineer.
+
+In the end, I may not save a lot of time with Nix - it takes time to learn and Nix is pretty complex.
+In exchange, I avoid _a lot_ of frustration and have _a lot_ of fun in the process.
+After all, let be honest - we do things not for efficiency, _satisfaction_ is what we are really after, and Nix is a very satisfying tool to master.
+Like Vim, Emacs, Terraform - I have similar experience with them.
 
 ## Setup on NixOS
 
-The reposiory should be cloned into `nix` folder in the user's home folder.
+The repository should be cloned into the `nix` folder in the user's home directory.
 
 Installation command (in the root folder of the repository):
 
@@ -83,11 +76,11 @@ Installation command (in the root folder of the repository):
 sudo nixos-rebuild switch --flake .
 ```
 
-## Setup on MacOS
+## Setup on macOS
 
-The reposiory should be cloned into `nix` folder in the user's home folder.
+The repository should be cloned into the `nix` folder in the user's home directory.
 
-Install Nix and [homebrew](https://brew.sh/). Homebrew will be used only for installing casks. Then run the following command in the root folder of the repository:
+Install Nix and [Homebrew](https://brew.sh/). Then run the following command in the root folder of the repository:
 
 ``` shell
 nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake .
@@ -96,91 +89,105 @@ nix --extra-experimental-features nix-command --extra-experimental-features flak
 
 ## Configuration Philosophy
 
-This configuration uses an objective-based organization approach instead of more traditional category-based organization. Rather than grouping configurations by technical category (LSP, UI, Git tools), modules are organized around specific objectives or goals.
+This configuration leans toward an objective-based organization approach instead of a more traditional category-based organization.
+Rather than grouping configurations by technical category (LSP, UI, Git tools), modules are organized around specific objectives or goals.
 
-Each module focuses on what you want to achieve rather than what technology it uses. This approach is inspired by OKR (Objectives and Key Results) methodology, adapted for configuration management. The same philosophy drives both the Neovim configuration and the Nix module structure.
+When it makes sense, each feature module's naming and documentation focus on what it needs to achieve rather than what technology it uses.
+This approach is inspired by OKR (Objectives and Key Results) methodology, adapted for configuration management.
+The same philosophy drives both the Neovim configuration and the Nix module structure.
 
-On practice, nix module files are named after the objective/goal they designed to achieve and start with a comment explaining the objective.
-Each nix module may contain many sub-modules that implement technical features needed to achieve the objective.
-So, it's ok to comment a sub-module with "setup hyprland", but the file with it should be about "desktop environment setup"/`desktop.nix` (which explains reason we need hyprland) and not "hyprland configuration"/`hyprland.nix`.
+It helps me stay focused on the end goals and avoid concentrating too much on technical details.
 
-It helps me to stay focused on the end goals and avoid concentrating too much on technical details.
+_**Not every module here strictly follows this philosophy and it's by design.**
+If you have done OKRs, you would understand that defining good objectives is hard and often takes a lot of time and practice.
+While it forces you to ask yourself "why" more often, sometimes it's just better to put something in a separate file without overthinking._
 
-_**Not an every module here strictly follows this philosophy and it's by design.**
-If you did OKR, you would understand that defining good objectives is hard and often takes a lot of time and practice.
-While it forces to ask yourself "why" more often, sometimes it's just easier to put something in a separate file without overthinking._
+## Architecture
 
-## Common Nix Patterns
+Over time I designed or adopted various concepts to organize configurations.
 
-**Define module as a set of small sub-modules**
+### flake.parts and dendritic pattern
 
-Following defined configuration philosophy, I want each module to be a set of small sub-modules, each responsible for a specific feature.
-While the top-level module in a file is responsible for a specific objective, it may include multiple sub-modules that implement the technical details needed to achieve that objective.
-The benefit of this approach is that for every option, I can easily say which technical feature it belongs to and which higher-level objective it helps to achieve.
+I was truly impressed by the idea of a [dendritic pattern](https://github.com/mightyiam/dendritic).
+TL;DR: it is about shifting from:
 
-Every Nix module (NixOS, home-manager, nix-darwin) has `imports` attribute that can be used to include other modules.
-But also it can consume "inline" sub-modules:
+> Each Nix file structure is defined by its caller.
+> You need to understand where a file is used to understand how to read it.
+> Shared values are passed via `specialArgs` and `imports`.
 
-```nix
-{...}:
-{
-  imports = [
-    # include other file
-    ./submodule1.nix
+to something less cognitively demanding:
 
-    # inline sub-module
-    {
-      options.bla-bla.enable = true;
-    }
-  };
-}
-```
+> Each Nix file except for `flake.nix` is a [flake.parts](https://flake.parts) module.
+> Knowing what flake.parts is and how it works is enough to understand the structure of any file in the repository.
+> You can directly access any value from any other module.
 
-I cannot just split configuration using comments because Nix by default forbids duplicate keys in an attrs set:
+It also allows all Nix files to be merged together automatically using [import-tree](https://github.com/vic/import-tree) instead of manually importing each file.
 
-```nix
-{
-  #
-  # Feature A
-  #
-  # utils for feature A
-  home.pkgs = with pkgs; [ pkgA pkgB ];
+### Oh `my`
 
-  # ...
+I had to go beyond standard flake.parts capabilities.
+All Nix files that implement custom options and their behavior are located in the `my/` folder.
+All custom options are prefixed with `my.` to avoid potential conflicts with options from other flake.parts modules.
 
-  #
-  # Feature B
-  #
-  # utils for feature B
-  home.pkgs = with pkgs; [ pkgC pkgD ]; # <-- error: duplicate key
-}
-```
+### Aspects and hosts
 
-Such behavior is inconvenient when you want to split a module into smaller isolated parts each responsible for a specific feature.
-`mkMerge` function from `nixpkgs.lib` can also be used to merge multiple attrs sets into one, but it has some critical limitations (cannot merge modules that define options or imports).
+Simply speaking, main building blocks of the configuration are:
 
+- [NixOS modules](https://nixos.wiki/wiki/NixOS_modules) - for NixOS system-level configuration.
+- [nix-darwin](https://github.com/LnL7/nix-darwin) modules - for macOS system-level configurations.
+- [home-manager](https://github.com/nix-community/home-manager) modules - for user-level configurations and for shared modules that work both for NixOS and macOS.
 
-## Common tasks
+While for one host it would be ok to define those modules and import them into one machine configuration, I have multiple machines and their module sets are not identical.
+So I introduced `my.hosts` and `my.aspects` options.
 
-### Validation & Testing (NixOS)
-* Check flake validity: `nix flake check`
-* Test if configuration builds: `nixos-rebuild dry-build --flake .`
-* Preview activation changes: `nixos-rebuild dry-activate --flake .`
-* Format code: `nix fmt .`
-* Lint: `statix check`
+**Aspect** is a collection of NixOS, nix-darwin, and home-manager modules that together implement a specific feature set.
 
-### Applying Changes (NixOS)
-* Apply configuration: `nixos apply` (or use alias `os-rebuild`)
-* Apply to boot only: `nixos apply --no-activate --install-bootloader` (or alias `os-rebuild-boot`)
+**Host** is a concrete machine definition that I use, with its hostname, username, system type, and list of aspects that should be enabled on it.
 
-### Maintenance
-* Upgrade dependencies: `nix flake update`
-* Upgrade specific input: `nix flake update nixpkgs-aot`
-* Clean old generations: `nixos generation delete --min 5 --all` (or alias `os-gc`)
+Actual machine configurations are generated from host definitions and aspects.
+See `my/hosts.nix` and `my/aspects.nix` for options documentation and implementation details.
 
-### Using pkgs-aot (Ahead-of-Time Packages)
+The `aspects/` folder contains aspect definitions. Each aspect is either a single file or a folder with multiple files.
 
-When `nixpkgs-unstable` has build failures blocking full system upgrade, use `pkgs-aot` to access newer package versions selectively.
+The `hosts/` folder contains host definitions (`hosts/host-alias.nix`) and host-specific modules (`hosts/host-alias/*.nix`).
+
+### Shared constants and private data
+
+`my.consts` is a loosely typed attrset that serves as a container for global constants.
+flake.parts makes it available for any Nix file.
+Its main use case is sensitive data I do not want to share publicly, such as email addresses and similar.
+So I set them in `private.nix`, which is encrypted using [git-crypt](https://www.agwa.name/projects/git-crypt/).
+
+For example, `my.consts.personalEmail` is convenient because personal email is used in many places and does not belong to a single aspect.
+But I do not want to expose it openly for web crawlers and similar, so I keep it in `private.nix` and encrypt it with git-crypt.
+
+The `hosts/*/hardware-configuration.nix` files are another example of files I have encrypted with git-crypt.
+They are host-specific modules and unrelated to `my.consts`, but they contain serial numbers and other sensitive hardware data I do not want to expose.
+
+### Helpers
+
+Nix has an impressive standard library, but sometimes I need specific functions that are not available there.
+When possible, I keep them module-local.
+For the rest, I have `my.helpers` - a collection of helper functions that are used across different modules and aspects.
+Check `my/helpers.nix` for details.
+
+### Directly symlinked dotfiles
+
+Configuration files generated by Nix are immutable.
+Updating them requires re-evaluating the configuration, which takes 10-30 seconds on my machines.
+While it is ok or even beneficial for most of my cases, it is not ideal for dotfiles that I edit often or need a faster feedback loop for.
+
+Good examples are AI-related files, Neovim configuration, and terminal configuration.
+
+I made `my.helpers.mkOutOfStoreSymlink`, which is used to create symlinks to dotfiles directly from the repository to the home directory, bypassing the Nix store.
+This allows editing dotfiles in place like in good old times, no need to wait for Nix to re-evaluate and re-generate them.
+
+### Ahead-of-time packages
+
+For cases when recent `nixpkgs` has some problem that blocks a full system upgrade, but I need a newer version of some package, I introduced `pkgs-aot` to access newer package versions selectively.
+
+It is a second `nixpkgs` flake input that can be updated independently and available as `pkgs-aot` in any NixOS/home-manager/nix-darwin module.
+I can update this input independently from the main `nixpkgs` and use it for specific packages that I need to be newer than those in the main `nixpkgs`.
 
 ```nix
 { pkgs, pkgs-aot, ... }:
@@ -192,4 +199,21 @@ When `nixpkgs-unstable` has build failures blocking full system upgrade, use `pk
 }
 ```
 
-**Note:** `pkgs-aot.neovim` uses its complete dependency tree from `nixpkgs-aot` (separate from `pkgs`). Use for self-contained applications, be careful with libraries and global services.
+## Common tasks
+
+### Maintenance
+
+* Format code: `nix fmt .`
+* Check flake validity: `nix flake check --all-systems`
+* Upgrade dependencies: `nix flake update`
+* Upgrade specific input: `nix flake update nixpkgs-aot`
+
+### Validation & Testing (NixOS)
+
+* Test if configuration builds: `nixos-rebuild dry-build --flake .`
+* Preview activation changes: `nixos-rebuild dry-activate --flake .`
+* Lint: `statix check`
+
+### Applying Changes
+
+See aliases in `./aspects/base/nix.nix`.

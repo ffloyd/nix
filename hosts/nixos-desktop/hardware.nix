@@ -1,7 +1,11 @@
 # Objective: Hardware-specific configuration for desktop (Bluetooth and NVIDIA)
-{...}: {
-  hosts.nixos-desktop.nixosModules = [
-    {
+{
+  my.hosts.nixos-desktop = {
+    adjustments = [
+      "Desktop hardware tweaks"
+    ];
+
+    nixos = {
       # Enable bluetooth
       hardware.bluetooth.enable = true;
 
@@ -10,6 +14,6 @@
       hardware.nvidia.open = false;
       # TODO: fix it before next application on the desktop
       # nixpkgs.config.cudaSupport = true;
-    }
-  ];
+    };
+  };
 }

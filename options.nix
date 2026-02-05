@@ -1,7 +1,5 @@
-# Objective: Declare flake output options to allow merging across multiple modules
-#
-# Note: nixosModules is declared by flake-parts built-in module.
-# Note: homeModules is declared by home-manager flake module.
+# nixosModules is declared by flake-parts built-in module.
+# homeModules is declared by home-manager flake module.
 # We only declare darwinModules here.
 {
   lib,

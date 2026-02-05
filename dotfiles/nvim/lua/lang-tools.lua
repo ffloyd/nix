@@ -85,7 +85,7 @@ features.add({
       ---@type conform.setupOpts
       opts = {
         format_on_save = {
-          timeout_ms = 500,
+          timeout_ms = 1500,
         },
         default_format_opts = {
           lsp_format = "fallback",
@@ -95,6 +95,7 @@ features.add({
           terraform = { "terraform_fmt" },
           zig = { "zigfmt" },
           json = { "prettier" },
+          nix = { "nixflake" },
         },
       },
     },
@@ -103,6 +104,12 @@ features.add({
     vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
     local conform = require("conform")
+    conform.formatters.nixflake = {
+      command = "nix",
+      stdin = false,
+      args = { "fmt", "$FILENAME" },
+    }
+
     require("which-key").add({
       {
         "<leader>lf",

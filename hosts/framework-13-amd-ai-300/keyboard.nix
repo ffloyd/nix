@@ -1,7 +1,11 @@
-# Objective: Adjust internal keyboard behavior
-{...}: {
-  hosts.framework-13-amd-ai-300.nixosModules = [
-    {
+# Adjust internal keyboard behavior
+{
+  my.hosts.framework-13-amd-ai-300 = {
+    adjustments = [
+      "Keyboard remapping"
+    ];
+
+    nixos = {
       services.keyd = {
         enable = true;
         keyboards.default = {
@@ -25,6 +29,6 @@
           };
         };
       };
-    }
-  ];
+    };
+  };
 }

@@ -1,7 +1,11 @@
-# Objective: Bootloader configuration and Windows dualboot support
-{...}: {
-  hosts.nixos-desktop.nixosModules = [
-    {
+# Bootloader configuration and Windows dualboot support
+{
+  my.hosts.nixos-desktop = {
+    adjustments = [
+      "Bootloader and Windows dualboot"
+    ];
+
+    nixos = {
       boot.loader.efi.canTouchEfiVariables = true;
 
       boot.loader.systemd-boot = {
@@ -12,6 +16,6 @@
           efiDeviceHandle = "HD0b";
         };
       };
-    }
-  ];
+    };
+  };
 }

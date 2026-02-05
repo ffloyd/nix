@@ -60,21 +60,20 @@
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
-      debug = true;
+      debug = false;
 
       systems = ["x86_64-linux" "aarch64-darwin"];
 
       imports = [
-        ./globals.nix
-        ./private.nix
-        ./my-lib.nix
-        ./hosts-option.nix
+        (import-tree ./my)
+        (import-tree ./aspects)
         (import-tree ./hosts)
-        (import-tree ./nixos)
-        (import-tree ./darwin)
 
+        ./private.nix
+
+        # Darwin systems use nix-darwin and home-manager separately,
+        # so we need a properly typed flake output
         inputs.home-manager.flakeModules.home-manager
-        (import-tree ./hm)
       ];
 
       perSystem = {pkgs, ...}: {
