@@ -39,7 +39,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    opencode.url = "github:sst/opencode/v1.1.48";
+    # darwin builds of the most recent versions often broken
+    opencode-linux.url = "github:sst/opencode/v1.2.1";
+    opencode-darwin.url = "github:sst/opencode/v1.1.49";
 
     nix-inspect.url = "github:bluskript/nix-inspect";
     nixos-cli.url = "github:nix-community/nixos-cli";

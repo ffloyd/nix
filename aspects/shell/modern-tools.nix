@@ -10,21 +10,29 @@
       ["common" "Yazi terminal file manager"]
     ];
 
+    # I use stylix only on NixOS
+    homeNixos = {
+      stylix.targets = {
+        fzf.enable = true;
+        btop.enable = true;
+        bat.enable = true;
+        yazi.enable = true;
+      };
+    };
+
     home = {
       pkgs,
       lib,
       ...
     }: let
       inherit (lib) mkIf mkMerge;
-      inherit (pkgs.stdenv) isLinux isDarwin;
+      inherit (pkgs.stdenv) isDarwin;
     in {
       # Fuzzy finding for files, commands, and history
       programs.fzf = {
         enable = true;
         enableZshIntegration = true;
       };
-
-      stylix.targets.fzf.enable = mkIf isLinux true;
 
       # Better ls
       programs.eza = {
@@ -42,7 +50,6 @@
 
       # Better top
       programs.btop.enable = true;
-      stylix.targets.btop.enable = mkIf isLinux true;
 
       programs.htop.enable = true;
 
@@ -51,8 +58,6 @@
         {enable = true;}
         (mkIf isDarwin {config.theme = "Nord";})
       ];
-
-      stylix.targets.bat.enable = mkIf isLinux true;
 
       home.packages = with pkgs.bat-extras; [
         batman
@@ -71,8 +76,6 @@
           _7zz = pkgs._7zz-rar;
         };
       };
-
-      stylix.targets.yazi.enable = mkIf isLinux true;
     };
   };
 }

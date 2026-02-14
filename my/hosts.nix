@@ -164,6 +164,7 @@
         modules =
           (getModsFromAspects aspects "darwin")
           ++ [
+            {system.primaryUser = username;}
             darwin
           ];
       };

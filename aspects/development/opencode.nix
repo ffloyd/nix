@@ -45,10 +45,15 @@ in {
       # Many MCP servers are npm packages that need to be installed at runtime.
       # We wrap opencode to set up an isolated npm prefix directory so plugin
       # installations don't pollute the global npm prefix or require sudo.
+      inherit (pkgs.stdenv) isLinux;
       opencode-adjusted = pkgs.symlinkJoin {
         name = "opencode-adjusted";
         paths = [
-          inputs.opencode.packages.${system}.default
+          (
+            if isLinux
+            then inputs.opencode-linux.packages.${system}.default
+            else inputs.opencode-darwin.packages.${system}.default
+          )
         ];
         nativeBuildInputs = [
           pkgs.makeWrapper
