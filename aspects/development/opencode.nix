@@ -73,6 +73,7 @@ in {
       xdg.configFile = lib.mkMerge [
         {
           "opencode/opencode.jsonc".source = mkOutOfStoreSymlink config "opencode/opencode.jsonc";
+          "opencode/tui.jsonc".source = mkOutOfStoreSymlink config "opencode/tui.jsonc";
           "opencode/AGENTS.md".source = mkOutOfStoreSymlink config "ai-shared/coding-rules.md";
 
           "opencode/command/commit-staged.md".text = commitStagedCommand;
