@@ -5,6 +5,9 @@
     "opencode-go"
   ],
   "model": "opencode-go/glm-5",
+  "plugin": [
+    "@mohak34/opencode-notifier@latest"
+  ],
   "mcp": {
     "ctx7": {
       "enabled": true,

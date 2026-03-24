@@ -68,6 +68,7 @@ in {
     in {
       home.packages = [
         opencode-adjusted
+        pkgs.kdotool # used by @mohak34/opencode-notifier
       ];
 
       xdg.configFile = lib.mkMerge [

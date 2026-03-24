@@ -85,7 +85,7 @@ features.add({
       ---@type conform.setupOpts
       opts = {
         format_on_save = {
-          timeout_ms = 1500,
+          timeout_ms = 500,
         },
         default_format_opts = {
           lsp_format = "fallback",
