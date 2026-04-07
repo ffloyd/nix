@@ -142,18 +142,12 @@ features.add({
   plugins = {
     {
       "nvim-treesitter/nvim-treesitter",
+      branch = "main",
       build = ":TSUpdate",
       config = function()
-        local config = require("nvim-treesitter.configs")
-
-        ---@diagnostic disable-next-line: missing-fields
-        config.setup({
-          ensure_installed = "all",
-          auto_install = false,
-          highlight = { enable = true },
-          incremental_selection = { enable = true },
-          indent = { enable = true },
-        })
+        -- on the first intstall do `:TSInstall all` to install all parsers
+        -- consider uninstalling parsers using `:TSUninstall all` and installing again
+        -- in the case of troubles.
 
         -- also use for folding
         vim.o.foldmethod = "expr"

@@ -41,7 +41,7 @@
 
     # darwin builds of the most recent versions often broken
     opencode-linux = {
-      url = "github:sst/opencode/v1.2.27";
+      url = "github:sst/opencode/v1.3.17";
       # 1.2.1 had problems with its nixpkgs pin:
       # https://github.com/anomalyco/opencode/issues/13300
       inputs.nixpkgs.follows = "nixpkgs";
@@ -51,14 +51,12 @@
     nix-inspect.url = "github:bluskript/nix-inspect";
     nixos-cli.url = "github:nix-community/nixos-cli";
 
-    stylix = {
-      url = "github:nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
 
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell/?ref=v4.7.5";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {

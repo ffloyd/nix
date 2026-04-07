@@ -7,6 +7,8 @@
         nerd-fonts.iosevka-term
         nerd-fonts.iosevka
         (iosevka-bin.override {variant = "SS10";})
+        (iosevka-bin.override {variant = "Etoile";})
+        (iosevka-bin.override {variant = "Aile";})
       ];
   in {
     features = [

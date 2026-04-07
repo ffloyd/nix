@@ -1,5 +1,4 @@
 {
-  inputs,
   config,
   ...
 }: let
@@ -14,7 +13,6 @@ in {
       pkgs,
       lib,
       config,
-      system,
       ...
     }: let
       neovim-npm-dir = ".neovim-npm";
@@ -24,7 +22,7 @@ in {
         paths = [
           # I have to use nightly version because of vim.lsp.inline_completion
           # is not yet available in stable releases.
-          inputs.neovim-nightly-overlay.packages.${system}.default
+          pkgs.neovim
         ];
         nativeBuildInputs = [
           pkgs.makeWrapper
@@ -51,6 +49,7 @@ in {
           luajit
           fd
           ripgrep
+          tree-sitter
 
           # optional by https://github.com/MagicDuck/grug-far.nvim
           ast-grep

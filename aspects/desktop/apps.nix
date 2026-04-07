@@ -35,6 +35,8 @@
         pkgs.discord
 
         pkgs.vlc
+
+        pkgs.gimp-with-plugins
       ];
     };
   };

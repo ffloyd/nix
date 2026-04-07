@@ -10,16 +10,6 @@
       ["common" "Yazi terminal file manager"]
     ];
 
-    # I use stylix only on NixOS
-    homeNixos = {
-      stylix.targets = {
-        fzf.enable = true;
-        btop.enable = true;
-        bat.enable = true;
-        yazi.enable = true;
-      };
-    };
-
     home = {
       pkgs,
       lib,

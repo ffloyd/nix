@@ -8,10 +8,14 @@
 in {
   my.aspects.development = {
     features = [
-      ["common" "Claude Code configuration"]
+      ["macos" "Claude Code configuration"]
     ];
 
-    home = {
+    # I do not need Claude on my working machine,
+    # because it's shitty software.
+    # So I installed it on working Mac only
+    # because sometimes I need it for work.
+    homeDarwin = {
       config,
       system,
       ...

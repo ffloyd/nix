@@ -2,7 +2,7 @@
   my.aspects.browser = {
     description = "Web browser and related tools";
     features = [
-      ["nixos" "Zen browser with policies and Stylix theming"]
+      ["nixos" "Zen browser with policies"]
       ["nixos" "Chromium package"]
     ];
 
@@ -25,11 +25,6 @@
           AutofillAddressEnabled = false;
           AutofillCreditCardEnabled = false;
         };
-      };
-
-      stylix.targets.zen-browser = {
-        enable = true;
-        profileNames = ["Default Profile"];
       };
 
       home.packages = [
