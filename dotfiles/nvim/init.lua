@@ -143,15 +143,65 @@ features.add({
     {
       "nvim-treesitter/nvim-treesitter",
       branch = "main",
+      dependencies = { 'nvim-lua/plenary.nvim' },
+      lazy = false,
       build = ":TSUpdate",
       config = function()
-        -- on the first intstall do `:TSInstall all` to install all parsers
-        -- consider uninstalling parsers using `:TSUninstall all` and installing again
-        -- in the case of troubles.
+        local nvim_treesitter = require("nvim-treesitter")
 
-        -- also use for folding
-        vim.o.foldmethod = "expr"
-        vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+        local function is_available(lang)
+          local available = nvim_treesitter.get_available()
+          return vim.tbl_contains(available, lang)
+        end
+
+        local function is_installed(lang)
+          local installed = nvim_treesitter.get_installed()
+          return vim.tbl_contains(installed, lang)
+        end
+
+        local function enable(buf, lang)
+          if not vim.treesitter.language.add(lang) then
+            vim.notify(
+              "Cannot load treesitter parser for language " .. lang,
+              vim.log.levels.WARN
+            )
+            return
+          end
+
+          -- highlighting
+          vim.treesitter.start(buf, lang)
+          -- folds
+          vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+          vim.wo.foldmethod = 'expr'
+          -- indentation
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+
+        -- autoinstall for supported languages
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = "*",
+          callback = function(args)
+            local lang = vim.treesitter.language.get_lang(args.match)
+            if not lang or not is_available(lang) then
+              return
+            end
+
+            if is_installed(lang) then
+              enable(args.buf, lang)
+            else
+              -- while it works for simple cases,
+              -- for languages with a lot of injections (like svelte)
+              -- it is not enough.
+              -- So, do `:TSInstall all` once and rely on this mechanism
+              -- for the languages added after initial installation.
+              -- TODO: check after some time is autoinstall of injected languages
+              -- implemented in nvim-treesitter.
+              nvim_treesitter.install(lang):await(function()
+                enable(args.buf, lang)
+              end)
+            end
+          end
+        })
       end,
     },
   },
