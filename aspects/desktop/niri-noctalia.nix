@@ -1,4 +1,8 @@
-{inputs, config, ...}: let
+{
+  inputs,
+  config,
+  ...
+}: let
   inherit (config.my.helpers) mkOutOfStoreSymlink;
 in {
   my.aspects.desktop = {
@@ -41,7 +45,11 @@ in {
       services.upower.enable = true;
     };
 
-    homeNixos = {config, pkgs, ...}: {
+    homeNixos = {
+      config,
+      pkgs,
+      ...
+    }: {
       home.file.".config/niri/config.kdl".source = mkOutOfStoreSymlink config "niri/config.kdl";
 
       services.gpg-agent.pinentry.package = pkgs.pinentry-qt;

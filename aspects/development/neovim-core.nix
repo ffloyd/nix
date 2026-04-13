@@ -1,7 +1,4 @@
-{
-  config,
-  ...
-}: let
+{config, ...}: let
   inherit (config.my.helpers) mkOutOfStoreSymlink;
 in {
   my.aspects.development = {
