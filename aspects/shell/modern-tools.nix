@@ -61,6 +61,7 @@
       programs.yazi = {
         enable = true;
         enableZshIntegration = true;
+        shellWrapperName = "y";
         package = pkgs.yazi.override {
           # support for rar files
           _7zz = pkgs._7zz-rar;

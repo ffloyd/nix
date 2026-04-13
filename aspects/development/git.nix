@@ -38,6 +38,7 @@ in {
         signing = {
           key = personalGpgKey;
           signByDefault = true;
+          format = "openpgp";
         };
 
         includes = [

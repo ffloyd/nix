@@ -46,6 +46,9 @@ in {
       programs.zsh = {
         enable = true;
 
+        # new default for 26.05 state version
+        dotDir = "${config.xdg.configHome}/zsh";
+
         autocd = true;
         autosuggestion.enable = true;
         enableVteIntegration = true;

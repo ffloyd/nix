@@ -18,11 +18,11 @@
     }: {
       imports = [inputs.nixos-cli.nixosModules.nixos-cli];
 
-      services.nixos-cli = {
+      programs.nixos-cli = {
         enable = true;
-        config = {
+        settings = {
           config_location = "/home/${username}/nix";
-          use_nvd = true;
+          differ.command = ["nvd" "diff"];
           apply.use_nom = true;
         };
       };
@@ -41,7 +41,7 @@
         inputs.nix-inspect.packages.${system}.default
         pkgs.nix-tree
 
-        # used by nixos-cli:
+        # used by nixos-cli
         pkgs.nix-output-monitor
         pkgs.nvd
       ];

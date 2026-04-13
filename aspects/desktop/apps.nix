@@ -29,7 +29,7 @@
         pkgs.libreoffice
 
         pkgs.proton-pass
-        pkgs.protonvpn-gui
+        pkgs.proton-vpn
 
         pkgs.telegram-desktop
         pkgs.discord
