@@ -98,38 +98,15 @@ in {
       config,
       system,
       ...
-    }: let
-      claudeCommitStagedCommand = ''
-        ---
-        description: Commits staged changes with a well-structured message.
-        allowed-tools: Glob, Grep, LS, Read, Bash(git status --porcelain), Bash(git diff --cached), Bash(git log:*), Bash(git commit:*)
-        ---
-
-        ${commitInstructions}
-      '';
-
-      claudeReviewStagedCommand = ''
-        ---
-        description: Reviews staged changes and provides detailed analysis before committing.
-        allowed-tools: Bash, Git, Glob, Grep, LS, Read
-        ---
-
-        ${reviewStagedInstructions}
-      '';
-    in {
+    }: {
       home.packages = [
         inputs.nix-ai-tools.packages.${system}.claude-code
       ];
 
-      home.file = lib.mkMerge [
-        (mkDotfilesDirectoryEntriesSymlinks config "claude/commands" ".claude/commands")
-        {
-          ".claude/CLAUDE.md".source = mkOutOfStoreSymlink config "ai-shared/coding-rules.md";
-          ".claude/commands/commit-staged.md".text = claudeCommitStagedCommand;
-          ".claude/commands/review-staged.md".text = claudeReviewStagedCommand;
-          ".claude/settings.json".source = mkOutOfStoreSymlink config "claude/settings.json";
-        }
-      ];
+      home.file = {
+        ".claude/CLAUDE.md".source = mkOutOfStoreSymlink config "ai-shared/coding-rules.md";
+        ".claude/settings.json".source = mkOutOfStoreSymlink config "claude/settings.json";
+      };
     };
   };
 }
