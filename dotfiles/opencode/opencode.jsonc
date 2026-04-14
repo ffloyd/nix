@@ -4,7 +4,7 @@
     "opencode",
     "opencode-go"
   ],
-  "model": "opencode-go/glm-5",
+  "model": "opencode-go/glm-5.1",
   "plugin": [
     "@mohak34/opencode-notifier@latest"
   ],
