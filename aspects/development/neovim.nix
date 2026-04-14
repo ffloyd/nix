@@ -3,7 +3,7 @@
 in {
   my.aspects.development = {
     features = [
-      ["common" "Neovim setup and core dependencies"]
+      ["common" "Neovim, global language servers and formatters"]
     ];
 
     home = {
@@ -16,11 +16,7 @@ in {
       neovim-npm-dir-full = "${config.home.homeDirectory}/${neovim-npm-dir}";
       neovim-adjusted = pkgs.symlinkJoin {
         name = "neovim-adjusted";
-        paths = [
-          # I have to use nightly version because of vim.lsp.inline_completion
-          # is not yet available in stable releases.
-          pkgs.neovim
-        ];
+        paths = [pkgs.neovim];
         nativeBuildInputs = [
           pkgs.makeWrapper
         ];
@@ -43,6 +39,7 @@ in {
           neovim-adjusted
         ]
         ++ (with pkgs; [
+          # NeoVim runtime dependencies
           luajit
           fd
           ripgrep
@@ -60,6 +57,26 @@ in {
           # required by sidekick.nvim
           copilot-language-server
           lsof
+
+          # Global Language Servers
+          #
+          # For me it's more convenient to have _these ones_ globally installed.
+          #
+          # For others I usually define language server in the scope of a development shell:
+          # it makes development expirience more reproducible (especially for rarely visited projects).
+          dockerfile-language-server
+          gopls
+          lua-language-server
+          nixd
+          pyright
+          terraform-ls
+          vscode-json-languageserver
+
+          # Linters/formatters
+          commitlint
+          editorconfig-checker
+          hadolint
+          statix
         ]);
 
       home.file = {
@@ -79,5 +96,11 @@ in {
         vim = "nvim";
       };
     };
+
+    homeNixos = {pkgs, ...}: {
+      # on MacOS we already have a compiler as part of Command Line Tools
+      home.packages = [pkgs.gcc];
+    };
   };
 }
+
