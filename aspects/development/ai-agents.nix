@@ -57,21 +57,29 @@ in {
             then inputs.opencode-linux.packages.${system}.default
             else inputs.opencode-darwin.packages.${system}.default
           )
+          pkgs.uv # for some MCP servers like Kagi
+          pkgs.python3
         ];
         nativeBuildInputs = [
           pkgs.makeWrapper
         ];
+        #
+        # UV_PYTHON is required for proper uv/uvx functioning
+        # KAGI_API_KEY is essential for Kagi MCP server to work
+        # Not sure that it's the best way to pass it to OpenCode, though
+        #
         postBuild = ''
           wrapProgram $out/bin/opencode \
             --prefix PATH : ${lib.makeBinPath [pkgs.nodejs]} \
             --prefix PATH : "${opencode-npm-dir-full}/bin" \
-            --set NPM_CONFIG_PREFIX "~/${opencode-npm-dir}"
+            --set NPM_CONFIG_PREFIX "~/${opencode-npm-dir}" \
+            --set UV_PYTHON "${pkgs.python3}/bin/python3" \
+            --run "export KAGI_API_KEY=\$(${pkgs.pass}/bin/pass kagi-api-key)"
         '';
       };
     in {
       home.packages = [
         opencode-adjusted
-        pkgs.kdotool # used by @mohak34/opencode-notifier
         inputs.nix-ai-tools.packages.${system}.copilot-cli
       ];
 

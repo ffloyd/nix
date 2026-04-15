@@ -13,6 +13,14 @@
       "enabled": true,
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
+    },
+    "kagi": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "uvx",
+        "kagimcp"
+      ]
     }
   }
 }

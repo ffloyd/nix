@@ -41,9 +41,7 @@
 
     # darwin builds of the most recent versions often broken
     opencode-linux = {
-      url = "github:sst/opencode/v1.3.17";
-      # 1.2.1 had problems with its nixpkgs pin:
-      # https://github.com/anomalyco/opencode/issues/13300
+      url = "github:sst/opencode/v1.4.6";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     opencode-darwin.url = "github:sst/opencode/v1.1.49";
