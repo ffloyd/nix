@@ -3,6 +3,7 @@
     features = [
       ["common" "CLI tooling for scripts"]
       ["macos" "1Password CLI"]
+      ["common" "Proton Pass CLI"]
     ];
 
     home = {pkgs, ...}: {
@@ -12,8 +13,11 @@
         jq
         wget
 
-        # secrets management
+        # secrets management via pass
         (pass.withExtensions (exts: [exts.pass-otp]))
+
+        # Proton Pass CLI
+        proton-pass-cli
       ];
     };
 
