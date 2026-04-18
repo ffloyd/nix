@@ -9,11 +9,7 @@
       programs.winbox.enable = true;
     };
 
-    homeNixos = {
-      pkgs,
-      pkgs-aot,
-      ...
-    }: {
+    homeNixos = {pkgs, ...}: {
       services.flatpak.packages = [
         # sometimes it has a big version lag on nixpkgs
         "io.anytype.anytype"
@@ -23,8 +19,8 @@
       ];
 
       home.packages = [
-        # Unofficail non-Electron Tidal client
-        pkgs-aot.high-tide
+        # Unofficial non-Electron Tidal client
+        pkgs.tonearm
 
         pkgs.libreoffice
 
