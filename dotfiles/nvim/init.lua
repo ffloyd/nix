@@ -418,8 +418,7 @@ features.add({
           lualine_b = { "branch", "diff", "diagnostics" },
           lualine_c = { { "filename", path = 1 } },
           lualine_x = {
-            -- Copilot status shown separately via Sidekick indicator (defined in ai.lua)
-            { "lsp_status", ignore_lsp = { "copilot" } },
+            "lsp_status",
             "encoding",
             "fileformat",
             "filetype",

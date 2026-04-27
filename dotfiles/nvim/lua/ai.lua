@@ -6,7 +6,7 @@ local features = require("features")
 
 features.add({
   "AI assistants integration",
-  after = { "which-key", "snacks", "lualine" },
+  after = { "which-key", "snacks" },
   plugins = {
     {
       "folke/sidekick.nvim",
