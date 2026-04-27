@@ -28,7 +28,7 @@
         pkgs.proton-vpn
 
         pkgs.telegram-desktop
-        pkgs.discord
+        pkgs.signal-desktop
 
         pkgs.vlc
 
