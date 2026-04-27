@@ -10,7 +10,7 @@
         enable = true;
 
         # Workbrew is enforced by employer
-        brewPrefix = "/opt/workbrew/bin";
+        prefix = "/opt/workbrew";
 
         onActivation.cleanup = "uninstall";
 
