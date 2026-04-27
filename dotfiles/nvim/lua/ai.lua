@@ -5,7 +5,7 @@
 local features = require("features")
 
 features.add({
-  "AI assistants integration + Copilot next edit suggestions",
+  "AI assistants integration",
   after = { "which-key", "snacks", "lualine" },
   plugins = {
     {
@@ -21,91 +21,16 @@ features.add({
           }
         },
         nes = {
+          -- I've stopped using Copilot
+          enabled = false,
           -- originally 100 which is too fast and triggers too often
           debounce = 500,
         }
       }
-    },
-    {
-      "nvim-lualine/lualine.nvim",
-      opts = function(_, opts)
-        -- Copilot status in lualine
-        table.insert(opts.sections.lualine_x, 2, {
-          function()
-            local status = require("sidekick.status").get()
-
-            if not status then
-              return ""
-            end
-
-            -- Show busy icon if processing
-            -- color will represent the status kind
-            -- so we're aware of all kind + busy state combinations
-            if status.busy then
-              return ""
-            end
-
-            return status.kind == "Inactive" and ""
-                or status.kind == "Error" and ""
-                or status.kind == "Warning" and ""
-                or ""
-          end,
-          color = function()
-            local status = require("sidekick.status").get()
-
-            if not status then
-              return nil
-            end
-
-            local hlName = status.kind == "Inactive" and "Comment"
-                or status.kind == "Error" and "DiagnosticError"
-                or status.kind == "Warning" and "DiagnosticWarn"
-                or status.kind == "Normal" and "DiagnosticOk"
-                or "Special"
-
-            -- to always use lualine's background color
-            return { fg = require("utils").getFgHexColorFromHighlight(hlName) }
-          end,
-          cond = function()
-            return require("sidekick.status").get() ~= nil
-          end,
-        })
-
-        -- AI CLI status in lualine
-        table.insert(opts.sections.lualine_x, 3, {
-          function()
-            return "󱚣" -- AI CLI session active
-          end,
-
-          cond = function()
-            return #require("sidekick.status").cli() > 0
-          end,
-
-          color = function()
-            return { fg = require("utils").getFgHexColorFromHighlight("Special") }
-          end,
-        })
-      end
     }
   },
   setup = function()
-    vim.lsp.enable("copilot")
-
     require("which-key").add({
-      {
-        "<C-l>",
-        function()
-          require("sidekick").nes_jump_or_apply()
-        end,
-        desc = "Copilot Next Edit Suggestion",
-      },
-      {
-        "<A-l>",
-        function()
-          require("sidekick.nes").update()
-        end,
-        desc = "Copilot Next Edit Suggestion Update",
-      },
       {
         "<c-.>",
         function() require("sidekick.cli").toggle() end,
@@ -163,15 +88,5 @@ features.add({
         desc = "Sidekick Toggle Open",
       },
     })
-
-    Snacks.toggle.new({
-      name = "Next Edit Suggestion",
-      get = function()
-        return require("sidekick.nes").enabled
-      end,
-      set = function(state)
-        require("sidekick.nes").enable(state)
-      end
-    }):map("<leader>TN")
   end
 })
