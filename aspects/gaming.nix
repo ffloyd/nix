@@ -24,6 +24,11 @@
                 })
               ];
           });
+          openldap = prev.openldap.overrideAttrs (_: {
+            # Lutris build fails 
+            # https://github.com/NixOS/nixpkgs/issues/513245
+            doCheck = !prev.stdenv.hostPlatform.isi686;
+          });
         })
       ];
 

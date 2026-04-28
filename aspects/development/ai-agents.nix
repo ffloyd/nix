@@ -17,6 +17,15 @@ in {
       ["macos" "Claude Code configuration"]
     ];
 
+    nixos = {
+      nix.settings = {
+        extra-substituters = [ "https://cache.numtide.com" ];
+        extra-trusted-public-keys = [
+          "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+        ];
+      };
+    };
+
     home = {
       pkgs,
       config,
@@ -48,15 +57,10 @@ in {
       # Many MCP servers are npm packages that need to be installed at runtime.
       # We wrap opencode to set up an isolated npm prefix directory so plugin
       # installations don't pollute the global npm prefix or require sudo.
-      inherit (pkgs.stdenv) isLinux;
       opencode-adjusted = pkgs.symlinkJoin {
         name = "opencode-adjusted";
         paths = [
-          (
-            if isLinux
-            then inputs.opencode-linux.packages.${system}.default
-            else inputs.opencode-darwin.packages.${system}.default
-          )
+          inputs.llm-agents.packages.${system}.opencode
           pkgs.uv # for some MCP servers like Kagi
           pkgs.python3
         ];
@@ -80,7 +84,6 @@ in {
     in {
       home.packages = [
         opencode-adjusted
-        inputs.nix-ai-tools.packages.${system}.copilot-cli
       ];
 
       xdg.configFile = lib.mkMerge [
@@ -108,7 +111,7 @@ in {
       ...
     }: {
       home.packages = [
-        inputs.nix-ai-tools.packages.${system}.claude-code
+        inputs.llm-agents.packages.${system}.claude-code
       ];
 
       home.file = {

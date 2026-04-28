@@ -34,17 +34,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-ai-tools = {
-      url = "github:numtide/nix-ai-tools";
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # darwin builds of the most recent versions often broken
-    opencode-linux = {
-      url = "github:sst/opencode/v1.4.6";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    opencode-darwin.url = "github:sst/opencode/v1.1.49";
 
     nix-inspect.url = "github:bluskript/nix-inspect";
     nixos-cli.url = "github:nix-community/nixos-cli";
@@ -52,7 +45,7 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
 
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell/?ref=v4.7.5";
+      url = "github:noctalia-dev/noctalia-shell/?ref=v4.7.6";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
