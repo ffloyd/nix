@@ -84,6 +84,7 @@ in {
     in {
       home.packages = [
         opencode-adjusted
+        inputs.llm-agents.packages.${system}.pi
       ];
 
       xdg.configFile = lib.mkMerge [
