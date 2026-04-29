@@ -29,13 +29,12 @@
         };
 
         aspects = lib.mkOption {
-          type = lib.types.listOf lib.types.attrs;
+          type = lib.types.listOf (lib.types.enum (lib.attrNames config.my.aspects));
           default = [];
           description = ''
-            List of aspects to enable on this host.
+            Names of aspects to enable on this host.
 
-            Aspects are references to config.my.aspects values.
-            Use: aspects = with config.my.aspects; [ terminal desktop development ];
+            Use: aspects = ["base" "desktop"];
           '';
         };
 
@@ -101,7 +100,20 @@
     nixosHosts = filterAttrs (_: {system, ...}: hasSuffix "linux" system) config.my.hosts;
     darwinHosts = filterAttrs (_: {system, ...}: hasSuffix "darwin" system) config.my.hosts;
 
-    getModsFromAspects = aspects: category: forEach aspects (aspect: aspect.${category} or {});
+    getModsFromAspects = names: category:
+      forEach names (name:
+        config.my.aspects.${name}.${category} or {});
+
+    # Assert that every aspect enabled on a host has its dependsOn satisfied.
+    mkAspectAssertions = hostname: enabledAspectNames: {
+      assertions = forEach enabledAspectNames (name: let
+        needed = config.my.aspects.${name}.dependsOn or [];
+        absent = builtins.filter (dep: !builtins.elem dep enabledAspectNames) needed;
+      in {
+        assertion = absent == [];
+        message = "[Host '${hostname}'] Aspect '${name}' requires the following aspects to be defined on the host: ${toString absent}";
+      });
+    };
 
     mkNixosSystem = {
       hostname,
@@ -124,6 +136,7 @@
         modules =
           (getModsFromAspects aspects "nixos")
           ++ [
+            (mkAspectAssertions hostname aspects)
             {nixpkgs.config.allowUnfree = true;}
             nixos
 
@@ -164,6 +177,7 @@
         modules =
           (getModsFromAspects aspects "darwin")
           ++ [
+            (mkAspectAssertions hostname aspects)
             {system.primaryUser = username;}
             darwin
           ];
@@ -188,7 +202,10 @@
         };
 
         modules =
-          [home]
+          [
+            (mkAspectAssertions username aspects)
+            home
+          ]
           ++ (getModsFromAspects aspects "home")
           ++ (getModsFromAspects aspects "homeDarwin");
       };

@@ -28,9 +28,9 @@
         };
 
         dependsOn = lib.mkOption {
-          type = lib.types.listOf lib.types.attrs;
+          type = lib.types.listOf lib.types.str;
           default = [];
-          description = "Other aspects this aspect depends on";
+          description = "Names of other aspects this aspect depends on";
         };
 
         features = lib.mkOption {
