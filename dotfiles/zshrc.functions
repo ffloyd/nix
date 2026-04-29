@@ -23,6 +23,19 @@ doit() {
     eval "$cmd $@ && say 'Done' || say 'Oh fuck, it is failed'"
 }
 
+_how() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    local model="anthropic/claude-haiku-4-5"
+  else
+    local model="opencode-go/deepseek-v4-flash"
+  fi
+
+  opencode -m $model --agent plan run "Answer concisely and briefly (several sentences): how $*" 2> /dev/null | bat -p -l md
+}
+
+# allows to use ?, * in arguments as part of strings (without glob expansion)
+alias how='noglob _how'
+
 notify-ai-finished-task() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
     osascript -e 'display notification "The current task is done!" with title "AI Assistant"'
