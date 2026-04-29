@@ -95,6 +95,7 @@
   config = let
     inherit (lib) forEach hasSuffix;
     inherit (lib.attrsets) concatMapAttrs filterAttrs;
+    inherit (lib.strings) join;
     inherit (inputs.nixpkgs.lib) nixosSystem;
 
     nixosHosts = filterAttrs (_: {system, ...}: hasSuffix "linux" system) config.my.hosts;
@@ -106,12 +107,22 @@
 
     # Assert that every aspect enabled on a host has its dependsOn satisfied.
     mkAspectAssertions = hostname: enabledAspectNames: {
-      assertions = forEach enabledAspectNames (name: let
-        needed = config.my.aspects.${name}.dependsOn or [];
-        absent = builtins.filter (dep: !builtins.elem dep enabledAspectNames) needed;
+      assertions = forEach enabledAspectNames (aspectName: let
+        requiredAspectNames = config.my.aspects.${aspectName}.dependsOn or [];
+        absentAspectNames =
+          builtins.filter
+          (requiredAspectName: !(builtins.elem requiredAspectName enabledAspectNames))
+          requiredAspectNames;
+        absentAspectsString = join ", " (map (n: "'${n}'") absentAspectNames);
       in {
-        assertion = absent == [];
-        message = "[Host '${hostname}'] Aspect '${name}' requires the following aspects to be defined on the host: ${toString absent}";
+        assertion = absentAspectNames == [];
+        message =
+          (
+            if builtins.length absentAspectNames == 1
+            then "${absentAspectsString} aspect is"
+            else "${absentAspectsString} aspects are"
+          )
+          + " missing on host '${hostname}', but required by aspect '${aspectName}'!";
       });
     };
 
