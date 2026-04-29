@@ -176,12 +176,14 @@
       darwin,
       aspects,
       ...
-    }:
+    }: let
+      pkgs-aot = inputs.nixpkgs-aot.legacyPackages.${system};
+    in
       inputs.nix-darwin.lib.darwinSystem {
         inherit system;
 
         specialArgs = {
-          inherit hostname username system inputs;
+          inherit hostname username system inputs pkgs-aot;
           inherit (config) globals private;
         };
 
@@ -200,7 +202,9 @@
       home,
       aspects,
       ...
-    }:
+    }: let
+      pkgs-aot = inputs.nixpkgs-aot.legacyPackages.${system};
+    in
       inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
           inherit system;
@@ -208,7 +212,7 @@
         };
 
         extraSpecialArgs = {
-          inherit inputs username system;
+          inherit inputs username system pkgs-aot;
           inherit (config) private;
         };
 
