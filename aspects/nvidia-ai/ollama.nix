@@ -11,7 +11,7 @@
     }: {
       services.ollama = {
         enable = true;
-        acceleration = "cuda";
+        package = pkgs.ollama-cuda;
       };
 
       # nvtop is useful for monitoring GPU load

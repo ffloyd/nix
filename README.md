@@ -21,6 +21,10 @@ It is done as a [Nix flake](https://nixos.wiki/wiki/Flakes) which implements a t
 | [dotfiles/nvim](dotfiles/nvim) | NeoVim configuration. |
 
 
+**⚠ Vibecoded files**: Some files in this repo are flagged as *vibecoded* — generated or heavily modified by an AI assistant.
+These files should not be used as style or architecture references for other code in the project.
+Look for the `⚠ Vibecoded` banner at the top of such files.
+
 ## If you are new to Nix
 
 If you are just curious about Nix, this repo might look a bit dense at first, and that is normal.
@@ -200,6 +204,10 @@ I can update this input independently from the main `nixpkgs` and use it for spe
 ```
 
 ## Common tasks
+
+### Inspection
+
+* Overview of hosts, aspects, and adjustments: `nix run .#overview`
 
 ### Maintenance
 

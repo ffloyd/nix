@@ -12,8 +12,6 @@
       # NVIDIA
       services.xserver.videoDrivers = ["nvidia"];
       hardware.nvidia.open = false;
-      # TODO: fix it before next application on the desktop
-      # nixpkgs.config.cudaSupport = true;
     };
   };
 }
