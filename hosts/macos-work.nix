@@ -4,10 +4,6 @@
     username = "roman.kolesnev";
     system = "aarch64-darwin";
 
-    adjustments = [
-      "Host profile"
-    ];
-
     aspects = [
       "base"
       "shell"
@@ -16,5 +12,13 @@
       "development"
       "reverse-proxy"
     ];
+
+    darwin = {
+      system.stateVersion = 4;
+    };
+
+    home = {
+      home.stateVersion = "23.11";
+    };
   };
 }

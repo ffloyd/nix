@@ -5,10 +5,6 @@
     username = "ffloyd";
     system = "x86_64-linux";
 
-    adjustments = [
-      "Host profile"
-    ];
-
     aspects = [
       "base"
       "shell"
@@ -20,5 +16,13 @@
       "reverse-proxy"
       "wakeonlan"
     ];
+
+    nixos = {
+      system.stateVersion = "24.11";
+    };
+
+    home = {
+      home.stateVersion = "24.11";
+    };
   };
 }
