@@ -54,8 +54,7 @@ in {
           # required by snacks.nvim image viewer
           imagemagick
 
-          # required by sidekick.nvim
-          copilot-language-server
+          # required by opencode.nvim
           lsof
 
           # Global Language Servers

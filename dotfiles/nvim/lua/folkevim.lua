@@ -68,17 +68,17 @@ features.add({
             enabled = true,
             ui_select = true,
             actions = {
-              -- Why: Enables sending picker selections to Sidekick AI assistant
+              -- Why: Enables sending picker selections to OpenCode AI assistant
               -- without manual file path copying or content extraction
-              sidekick_send = function(...)
-                return require("sidekick.cli.snacks").send(...)
+              opencode_send = function(...)
+                return require("opencode").snacks_picker_send(...)
               end
             },
             win = {
               input = {
                 keys = {
                   ["<A-a>"] = {
-                    "sidekick_send",
+                    "opencode_send",
                     mode = { "n", "i" }
                   }
                 }
