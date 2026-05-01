@@ -4,7 +4,7 @@
 {
   my.hosts.framework-13-amd-ai-300 = {
     adjustments = [
-      "Microphone fix"
+      "Internal microphone fix"
     ];
 
     nixos = {

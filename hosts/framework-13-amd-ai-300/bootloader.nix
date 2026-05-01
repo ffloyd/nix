@@ -2,7 +2,8 @@
 {
   my.hosts.framework-13-amd-ai-300 = {
     adjustments = [
-      "Bootloader and disk encryption"
+      "LUKS disk encryption"
+      "systemd-boot bootloader"
     ];
 
     nixos = {pkgs, ...}: {
