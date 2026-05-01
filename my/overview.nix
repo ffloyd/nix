@@ -1,141 +1,152 @@
 # Objective: Provide a flake output that pretty-prints hosts, their aspects, features, and adjustments
-# ⚠ Vibecoded — do not use this file as a reference for generating other code in this project
 {
   lib,
   config,
   ...
 }: let
-  inherit (lib) concatMapStringsSep concatStringsSep sort attrNames hasSuffix optionalString;
-  inherit (builtins) lessThan filter stringLength genList;
-
-  # ============================================================================
   # ANSI formatting
-  # ============================================================================
+  #
+  # Useful resources:
+  # - https://ansi.tools/
+  # - https://www.tutorialpedia.org/blog/list-of-ansi-color-escape-sequences/#816-color-mode-basic--bright-colors
+  ansi = rec {
+    # It's known problem:
+    # https://discourse.nixos.org/t/how-can-i-put-an-nonprintable-character-in-a-nix-expression/47750/6
+    esc = builtins.fromJSON ''"\u001b"'';
 
-  esc = builtins.fromJSON ''"\u001b"'';
+    reset = esc + "[0m";
 
-  rst = esc + "[0m";
-  bld = esc + "[1m";
-  dim = esc + "[2m";
-  cyn = esc + "[96m";
-  ylw = esc + "[33m";
-  grn = esc + "[32m";
-  blu = esc + "[34m";
+    bold = esc + "[1m";
+    dim = esc + "[2m";
+    italic = esc + "[3m";
 
-  fmtCyn = s: "${bld}${cyn}${s}${rst}";
-  fmtDim = s: "${dim}${s}${rst}";
-  fmtYlw = s: "${bld}${ylw}${s}${rst}";
-  fmtGrn = s: "${bld}${grn}${s}${rst}";
-  fmtBlu = s: "${bld}${blu}${s}${rst}";
+    black = esc + "[30m";
+    red = esc + "[31m";
+    green = esc + "[32m";
+    yellow = esc + "[33m";
+    blue = esc + "[34m";
+    magenta = esc + "[35m";
+    cyan = esc + "[36m";
+    white = esc + "[37m";
 
-  # ============================================================================
-  # Helpers
-  # ============================================================================
-
-  hostScopeFor = system:
-    if hasSuffix "linux" system
-    then "nixos"
-    else "macos";
-
-  normFeature = pair: {
-    scope = builtins.elemAt pair 0;
-    feature = builtins.elemAt pair 1;
+    brightGreen = esc + "[92m";
+    brightWhite = esc + "[97m";
   };
 
-  isFeatureRelevant = hostScope: {scope, ...}:
-    scope == "common" || scope == hostScope;
+  fmtSeparator = str: with ansi; dim + white + str + reset;
+  fmtSecondary = str: with ansi; dim + white + italic + str + reset;
+  fmtHostkey = str: with ansi; bold + brightGreen + str + reset;
+  fmtSectionTitle = str: with ansi; bold + str + reset;
+  fmtAspectName = str: with ansi; bold + cyan + str + reset;
+  fmtAspectDesc = str: with ansi; italic + str + reset;
+  fmtFeaturePrefix = str: with ansi; italic + dim + blue + str + reset;
 
-  compareFeatures = a: b:
-    a.feature < b.feature;
-
-  repeatStr = s: n:
-    concatStringsSep "" (genList (_: s) n);
-
-  # ============================================================================
-  # Formatters
-  # ============================================================================
-
-  formatFeatureBody = hostScope: features: let
-    fs = map normFeature features;
-    relevant = filter (isFeatureRelevant hostScope) fs;
-    relevantSorted = sort compareFeatures relevant;
-    hostFeatures = filter (f: f.scope == hostScope) relevantSorted;
-    commonFeatures = filter (f: f.scope == "common") relevantSorted;
-
-    hostScopeLabel =
-      {
-        nixos = "NixOS-specific features";
-        macos = "macOS-specific features";
-      }.${
-        hostScope
-      };
-
-    commonPart =
-      if commonFeatures == []
-      then ""
-      else concatMapStringsSep "\n" (f: "    ${fmtDim "•"} ${f.feature}") commonFeatures;
-
-    hostPart =
-      if hostFeatures == []
-      then ""
-      else
-        "${fmtBlu "    ${hostScopeLabel}:"}\n"
-        + concatMapStringsSep "\n" (f: "      ${fmtDim "•"} ${f.feature}") hostFeatures;
-
-    parts = filter (p: p != "") [commonPart hostPart];
+  printList = strList: ident: let
+    inherit (builtins) concatStringsSep;
+    inherit (lib.strings) replicate;
+    listEntries =
+      map
+      (str: (replicate ident " ") + (fmtSeparator "• ") + str)
+      strList;
   in
-    if relevant == []
-    then fmtDim "    (no features listed for this host)"
-    else concatStringsSep "\n\n" parts;
+    concatStringsSep "\n" listEntries;
 
-  formatAspect = hostScope: aspectName: let
-    aspectCfg = config.my.aspects.${aspectName} or {};
-    desc =
-      optionalString (aspectCfg.description or "" != "")
-      "${fmtDim " — ${aspectCfg.description}"}";
-    featuresBody = formatFeatureBody hostScope (aspectCfg.features or []);
-  in "${fmtGrn aspectName}${desc}\n${featuresBody}";
+  # features stored as [scope description] pairs.
+  # it's convenient for writing, but it makes code that works with them less expressive
+  # so we transorm them to simple attrsets to improve readablity of the code here
+  normalizeFeatures = features: let
+    inherit (builtins) elemAt;
+  in
+    map
+    (feature: {
+      scope = elemAt feature 0;
+      desc = elemAt feature 1;
+    })
+    features;
 
-  formatAspects = hostScope: aspectNames:
-    concatMapStringsSep "\n\n"
-    (formatAspect hostScope)
-    (sort lessThan aspectNames);
+  featuresList = features: let
+    inherit (builtins) length;
+    prefixFor = feature:
+      if feature.scope == "common"
+      then ""
+      else fmtFeaturePrefix "[${feature.scope} only] ";
+    featureDescsWithPrefix =
+      map
+      (feature: prefixFor feature + feature.desc)
+      features;
+  in
+    if length features == 0
+    then fmtSecondary "    (no features for the host's system)"
+    else printList featureDescsWithPrefix 4;
 
-  formatAdjustments = adjustments:
-    if adjustments == []
-    then fmtDim "  (none)"
-    else concatMapStringsSep "\n" (a: "  ${fmtDim "•"} ${a}") adjustments;
-
-  formatHost = hostName: hostCfg: let
-    hostScope = hostScopeFor hostCfg.system;
-
-    SEP = 64;
-
-    headerPrefix = "━ ${fmtCyn hostCfg.hostname} ";
-    headerSuffix = repeatStr "━" (SEP - stringLength hostCfg.hostname - 3);
+  aspectReport = aspectName: system: let
+    inherit (builtins) filter;
+    aspect = config.my.aspects.${aspectName};
+    features = normalizeFeatures aspect.features;
+    hostSystemScope =
+      {
+        x86_64-linux = "nixos";
+        aarch64-darwin = "macos";
+      }.${
+        system
+      }
+      or (throw "overview: unknown system '${system}' — add a mapping for it.");
+    systemSpecificFeatures =
+      filter
+      (feat: feat.scope == hostSystemScope)
+      features;
+    commonFeatures =
+      filter
+      (feat: feat.scope == "common")
+      features;
+    relevantFeatures = systemSpecificFeatures ++ commonFeatures;
   in ''
-    ${fmtDim "${headerPrefix}${headerSuffix}"}
-      ${fmtDim "System :"} ${hostCfg.system}
-      ${fmtDim "User   :"} ${hostCfg.username}
+      ${fmtAspectName aspectName} - ${fmtAspectDesc aspect.description}
 
-    ${fmtYlw "Host-specific adjustments:"}
-    ${formatAdjustments hostCfg.adjustments}
-
-    ${fmtYlw "Aspects:"}
-
-    ${formatAspects hostScope hostCfg.aspects}
+    ${featuresList relevantFeatures}
   '';
 
-  hostsSorted = sort lessThan (attrNames config.my.hosts);
+  hostReport = hostkey: let
+    inherit (builtins) concatStringsSep;
+    hostConfig = config.my.hosts.${hostkey};
+    aspectReports =
+      map
+      (aspectName: aspectReport aspectName hostConfig.system)
+      hostConfig.aspects;
+  in ''
+    ${fmtSectionTitle "=> config.my.hosts."}${fmtHostkey hostkey}
+      ${fmtSecondary "hostname:"} ${hostConfig.hostname}
+      ${fmtSecondary "username:"} ${hostConfig.username}
+      ${fmtSecondary "system:  "} ${hostConfig.system}
 
-  overviewText =
-    concatMapStringsSep "\n"
-    (hostName: formatHost hostName config.my.hosts.${hostName})
-    hostsSorted;
+    ${fmtSectionTitle "Host-specific adjustments:"}
+
+    ${
+      if hostConfig.adjustments == []
+      then fmtSecondary "  (no adjustments defined)"
+      else printList hostConfig.adjustments 2
+    }
+
+    ${fmtSectionTitle "Aspects:"}
+
+    ${
+      if hostConfig.aspects == []
+      then fmtSecondary "  (no aspects enabled)"
+      else concatStringsSep "\n" aspectReports
+    }
+  '';
+
+  overviewText = let
+    inherit (builtins) attrNames concatStringsSep;
+    inherit (lib) trim;
+    hostReports = map hostReport (attrNames config.my.hosts);
+    untrimmed = concatStringsSep "\n" hostReports;
+  in
+    trim untrimmed;
 in {
   perSystem = {pkgs, ...}: {
     packages.overview = pkgs.writeShellScriptBin "overview" ''
-            cat <<'ENDOUTPUT'
+      cat <<ENDOUTPUT
       ${overviewText}
       ENDOUTPUT
     '';
