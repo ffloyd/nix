@@ -13,8 +13,8 @@ in {
   my.aspects.development = {
     features = [
       ["common" "OpenCode configuration"]
-      ["common" "GitHub Copilot CLI"]
       ["macos" "Claude Code configuration"]
+      ["nixos" "Tidewave agent"]
     ];
 
     nixos = {
@@ -24,6 +24,33 @@ in {
           "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
         ];
       };
+    };
+
+    homeNixos = {pkgs, ...}: let
+      inherit (pkgs) appimageTools fetchurl;
+      pname = "tidewave";
+      version = "latest";
+      src = fetchurl {
+        url = "https://github.com/tidewave-ai/tidewave_app/releases/latest/download/tidewave-app-amd64.AppImage";
+        hash = "sha256-XQrH31llzaZxY94NAy7xSp/RvOVzo+a+DoHjkv2nD7M=";
+      };
+      # Extract the AppImage contents so we can grab icons/desktop files
+      appimageContents = appimageTools.extract {inherit pname version src;};
+      tidewave = appimageTools.wrapType2 {
+        inherit pname version src;
+
+        extraInstallCommands = ''
+          install -m 444 -D ${appimageContents}/Tidewave.desktop \
+            $out/share/applications/${pname}.desktop
+
+          cp -r ${appimageContents}/usr/share/icons $out/share/
+
+          substituteInPlace $out/share/applications/${pname}.desktop \
+            --replace-fail 'Exec=tidewave-app' 'Exec=tidewave'
+        '';
+      };
+    in {
+      home.packages = [tidewave];
     };
 
     home = {
@@ -69,8 +96,6 @@ in {
         ];
         #
         # UV_PYTHON is required for proper uv/uvx functioning
-        # KAGI_API_KEY is essential for Kagi MCP server to work
-        # Not sure that it's the best way to pass it to OpenCode, though
         #
         postBuild = ''
           wrapProgram $out/bin/opencode \
