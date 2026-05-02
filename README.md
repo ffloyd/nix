@@ -5,6 +5,12 @@ Personal dotfiles and system configurations managed with Nix flakes.
 __Note:__ I switched to dendritic pattern recently.
 From implementation perspective it's functional and already convinient, but I still need to re-arrange some configurations and still experimenting with granularity.
 
+You can print outline of the current setup by executing:
+
+```
+nix run git+https://codeberg.org/ffloyd/nix#overview
+```
+
 ## What this repo is
 
 This repository contains my personal configurations for NixOS and macOS machines.
@@ -17,6 +23,7 @@ It is done as a [Nix flake](https://nixos.wiki/wiki/Flakes) which implements a t
 | [my/](my) | All custom options and helper modules, all namespaced under `my.*`. |
 | [aspects/](aspects) | Feature bundles: groups of NixOS, Darwin, and shared modules. |
 | [hosts/](hosts) | Per-machine definitions and host-specific modules. |
+| [secrets/](secrets) | Encrypted secrets managed with [agenix](https://github.com/ryantm/agenix). |
 | [dotfiles/](dotfiles) | Files that are symlinked directly into the home directory. |
 | [dotfiles/nvim](dotfiles/nvim) | NeoVim configuration. |
 
@@ -151,18 +158,17 @@ The `aspects/` folder contains aspect definitions. Each aspect is either a singl
 
 The `hosts/` folder contains host definitions (`hosts/host-alias.nix`) and host-specific modules (`hosts/host-alias/*.nix`).
 
-### Shared constants and private data
+### Shared constants
 
 `my.consts` is a loosely typed attrset that serves as a container for global constants.
 flake.parts makes it available for any Nix file.
-Its main use case is sensitive data I do not want to share publicly, such as email addresses and similar.
-So I set them in `private.nix`, which is encrypted using [git-crypt](https://www.agwa.name/projects/git-crypt/).
+Shared values like email addresses and locale settings are set in `consts.nix`.
 
-For example, `my.consts.personalEmail` is convenient because personal email is used in many places and does not belong to a single aspect.
-But I do not want to expose it openly for web crawlers and similar, so I keep it in `private.nix` and encrypt it with git-crypt.
+### Secret management
 
-The `hosts/*/hardware-configuration.nix` files are another example of files I have encrypted with git-crypt.
-They are host-specific modules and unrelated to `my.consts`, but they contain serial numbers and other sensitive hardware data I do not want to expose.
+Secrets are managed with [agenix](https://github.com/ryantm/agenix).
+Decription happens at activation time into an in-memory file system.
+The `secrets.nix` file declares which SSH keys can decrypt each secret.
 
 ### Helpers
 
@@ -211,6 +217,12 @@ I can update this input independently from the main `nixpkgs` and use it for spe
 * Check flake validity: `nix flake check --all-systems`
 * Upgrade dependencies: `nix flake update`
 * Upgrade specific input: `nix flake update nixpkgs-aot`
+
+### Secrets
+
+* Edit a secret: `agenix -e secrets/foo.age`
+* Rekey all secrets after changing recipients: `agenix --rekey`
+* The `secrets.nix` file declares which SSH public keys can decrypt each secret.
 
 ### Validation & Testing (NixOS)
 

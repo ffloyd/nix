@@ -1,8 +1,9 @@
 {inputs, ...}: {
   my.aspects.base = {
     features = [
-      ["nixos" "OS-level Agenix for usage in NixOS modules"]
-      ["common" "Home-Manager-level Agenix for cross-system secrets (API keys, etc)"]
+      ["nixos" "OS-level Agenix (age-encrypted secrets)"]
+      ["macos" "OS-level Agenix (age-encrypted secrets)"]
+      ["common" "Agenix for Home Manager (age-encrypted secrets)"]
     ];
 
     nixos = {
@@ -17,7 +18,7 @@
       ];
 
       age = {
-        identityPaths = [ "/home/${username}/.ssh/id_ed25519" ];
+        identityPaths = ["/home/${username}/.ssh/id_ed25519"];
         secrets.test.file = ../../secrets/test.age;
       };
 
@@ -53,6 +54,34 @@
         inputs.agenix.packages.${system}.default
 
         (pkgs.writeShellScriptBin "hm-agenix-test" ''
+          echo "Test secret path: ${config.age.secrets.test.path}"
+          echo "Test secret content:"
+          cat ${config.age.secrets.test.path}
+        '')
+      ];
+    };
+
+    darwin = {
+      config,
+      system,
+      username,
+      inputs,
+      pkgs,
+      ...
+    }: {
+      imports = [
+        inputs.agenix.darwinModules.default
+      ];
+
+      age = {
+        identityPaths = ["/Users/${username}/.ssh/id_ed25519"];
+        secrets.test.file = ../../secrets/test.age;
+      };
+
+      environment.systemPackages = [
+        inputs.agenix.packages.${system}.default
+
+        (pkgs.writeShellScriptBin "os-agenix-test" ''
           echo "Test secret path: ${config.age.secrets.test.path}"
           echo "Test secret content:"
           cat ${config.age.secrets.test.path}
