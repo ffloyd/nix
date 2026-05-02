@@ -77,8 +77,7 @@ in {
             --prefix PATH : ${lib.makeBinPath [pkgs.nodejs]} \
             --prefix PATH : "${opencode-npm-dir-full}/bin" \
             --set NPM_CONFIG_PREFIX "~/${opencode-npm-dir}" \
-            --set UV_PYTHON "${pkgs.python3}/bin/python3" \
-            --run "export KAGI_API_KEY=\$(cat ${config.age.secrets.kagi-api-key.path} 2>/dev/null || echo UNAVAILABLE)"
+            --set UV_PYTHON "${pkgs.python3}/bin/python3"
         '';
       };
     in {

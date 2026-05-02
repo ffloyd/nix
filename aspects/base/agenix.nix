@@ -45,6 +45,7 @@
 
       age = {
         identityPaths = ["${config.home.homeDirectory}/.ssh/id_ed25519"];
+        secretsDir = "${config.home.homeDirectory}/.secrets";
         secrets = {
           test.file = ../../secrets/test.age;
         };

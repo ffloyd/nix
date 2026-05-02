@@ -20,7 +20,10 @@
       "command": [
         "uvx",
         "kagimcp"
-      ]
+      ],
+      "environment": {
+        "KAGI_API_KEY": "{file:~/.secrets/kagi-api-key}"
+      }
     }
   }
 }
