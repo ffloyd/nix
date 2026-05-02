@@ -1,2 +1,0 @@
-private.nix filter=git-crypt diff=git-crypt
-*/**/hardware-configuration.nix filter=git-crypt diff=git-crypt

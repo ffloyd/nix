@@ -1,8 +1,17 @@
-{config, ...}: {
+{config, username, ...}: {
   my.hosts.macos-work = {
     adjustments = [
-      "Test domain resolver"
+      "Local apps domain resolver & reverse-proxy config"
     ];
+
+    home = {config, ...}: {
+      age.secrets.caddyfile = {
+        file = ../../secrets/Caddyfile.work;
+        mode = 644;
+      };
+
+      home.file.".local.Caddyfile".source = config.age.secrets.caddyfile.path;
+    };
 
     darwin = {pkgs, ...}: let
       inherit (pkgs) dnsmasq;
@@ -20,8 +29,11 @@
         '';
       };
 
+      # Agenix has no imlementation for nix-darwin modules
+      # so we do a trick here and "proxy" it through homeManager.
+      # Downside: may require manual restart of Caddy after boot.
       environment.etc."Caddyfile".text = ''
-        ${config.my.consts.workProjectsCaddyfile}
+        import /Users/${username}/.local.Caddyfile
       '';
 
       launchd.daemons.dnsmasq = {

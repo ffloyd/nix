@@ -24,6 +24,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     foundryvtt = {
       url = "github:ffloyd/nix-foundryvtt";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -64,8 +69,7 @@
         (import-tree ./my)
         (import-tree ./aspects)
         (import-tree ./hosts)
-
-        ./private.nix
+        ./consts.nix
 
         # Darwin systems use nix-darwin and home-manager separately,
         # so we need a properly typed flake output
