@@ -78,10 +78,12 @@ in {
             --prefix PATH : "${opencode-npm-dir-full}/bin" \
             --set NPM_CONFIG_PREFIX "~/${opencode-npm-dir}" \
             --set UV_PYTHON "${pkgs.python3}/bin/python3" \
-            --run "export KAGI_API_KEY=\$(${pkgs.pass}/bin/pass kagi-api-key)"
+            --run "export KAGI_API_KEY=\$(cat ${config.age.secrets.kagi-api-key.path} 2>/dev/null || echo UNAVAILABLE)"
         '';
       };
     in {
+      age.secrets.kagi-api-key.file = ../../secrets/kagi-api-key;
+
       home.packages = [
         opencode-adjusted
         inputs.llm-agents.packages.${system}.pi

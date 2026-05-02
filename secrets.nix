@@ -7,4 +7,5 @@ let
 in {
   "secrets/test.age".publicKeys = [framework-13-amd-ai-300];
   "secrets/Caddyfile.work".publicKeys = [framework-13-amd-ai-300];
+  "secrets/kagi-api-key".publicKeys = [framework-13-amd-ai-300];
 }
