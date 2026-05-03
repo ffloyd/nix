@@ -31,6 +31,7 @@ Some flake outputs are useful on their own — you don't need to install my syst
 | --- | --- | --- |
 | `#overview` | Pretty-prints all hosts, aspects, and their features. | `nix run git+https://codeberg.org/ffloyd/nix#overview` |
 | `#tidewave-app` | [Tidewave](https://tidewave.ai/) desktop app packaged for x86_64-linux platform | `nix run git+https://codeberg.org/ffloyd/nix#tidewave-app` |
+| `#tidewave-cli` | [Tidewave](https://tidewave.ai/) CLI packaged for x86_64-linux platform | `nix run git+https://codeberg.org/ffloyd/nix#tidewave-cli` |
 
 
 In a locally cloned repo, use `.` instead of the URL: `nix run .#tidewave-app`.

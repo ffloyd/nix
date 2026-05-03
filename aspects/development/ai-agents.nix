@@ -10,47 +10,10 @@
   commitInstructions = builtins.readFile ./ai-tooling/commit-instructions.md;
   reviewStagedInstructions = builtins.readFile ./ai-tooling/review-staged-instructions.md;
 in {
-  perSystem = {pkgs, ...}: {
-    packages.tidewave-app = let
-      inherit (pkgs) appimageTools fetchurl;
-      pname = "tidewave-app";
-      version = "v0.4.3";
-      src = fetchurl {
-        url = "https://github.com/tidewave-ai/tidewave_app/releases/download/${version}/tidewave-app-amd64.AppImage";
-        hash = "sha256-XQrH31llzaZxY94NAy7xSp/RvOVzo+a+DoHjkv2nD7M=";
-      };
-      # Extract the AppImage contents so we can grab icons/desktop files
-      appimageContents = appimageTools.extract {inherit pname version src;};
-    in
-      appimageTools.wrapType2 {
-        inherit pname version src;
-
-        extraInstallCommands = ''
-          install -m 444 -D ${appimageContents}/Tidewave.desktop \
-            $out/share/applications/${pname}.desktop
-
-          cp -r ${appimageContents}/usr/share/icons $out/share/
-        '';
-
-        meta = with lib; {
-          description = "Tidewave Desktop app";
-          longDescription = ''
-            Develop, test, and review alongside your web app, in the browser.
-            Works with your favorite coding agent and your web framework.
-          '';
-          homepage = "https://tidewave.ai/";
-          downloadPage = "https://github.com/tidewave-ai/tidewave_app/releases";
-          license = licenses.apsl20;
-          platforms = ["x86_64-linux"];
-        };
-      };
-  };
-
   my.aspects.development = {
     features = [
       ["common" "OpenCode configuration"]
       ["macos" "Claude Code configuration"]
-      ["nixos" "Tidewave agent"]
     ];
 
     nixos = {
@@ -60,10 +23,6 @@ in {
           "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
         ];
       };
-    };
-
-    homeNixos = {system, ...}: {
-      home.packages = [config.flake.packages.${system}.tidewave-app];
     };
 
     home = {
@@ -99,10 +58,11 @@ in {
       # installations don't pollute the global npm prefix or require sudo.
       opencode-adjusted = pkgs.symlinkJoin {
         name = "opencode-adjusted";
-        paths = [
-          inputs.llm-agents.packages.${system}.opencode
-          pkgs.uv # for some MCP servers like Kagi
-          pkgs.python3
+        meta.mainProgram = "opencode";
+        paths = with pkgs; [
+          opencode
+          uv # for some MCP servers like Kagi
+          python3
         ];
         nativeBuildInputs = [
           pkgs.makeWrapper
@@ -123,8 +83,13 @@ in {
 
       home.packages = [
         opencode-adjusted
-        inputs.llm-agents.packages.${system}.pi
+        pkgs.pi-coding-agent
       ];
+
+      home.sessionVariables = {
+        # otherwise Tidewave may have problems with using OpenCode
+        TIDEWAVE_OPENCODE_EXECUTABLE = "${lib.getExe opencode-adjusted}";
+      };
 
       xdg.configFile = lib.mkMerge [
         {
