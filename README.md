@@ -5,12 +5,6 @@ Personal dotfiles and system configurations managed with Nix flakes.
 __Note:__ I switched to dendritic pattern recently.
 From implementation perspective it's functional and already convinient, but I still need to re-arrange some configurations and still experimenting with granularity.
 
-You can print outline of the current setup by executing:
-
-```
-nix run git+https://codeberg.org/ffloyd/nix#overview
-```
-
 ## What this repo is
 
 This repository contains my personal configurations for NixOS and macOS machines.
@@ -27,6 +21,19 @@ It is done as a [Nix flake](https://nixos.wiki/wiki/Flakes) which implements a t
 | [dotfiles/](dotfiles) | Files that are symlinked directly into the home directory. |
 | [dotfiles/nvim](dotfiles/nvim) | NeoVim configuration. |
 
+
+## Standalone flake outputs
+
+Some flake outputs are useful on their own — you don't need to install my system or home-manager configurations to use them.
+
+
+| Output | Description | Command |
+| --- | --- | --- |
+| `#overview` | Pretty-prints all hosts, aspects, and their features. | `nix run git+https://codeberg.org/ffloyd/nix#overview` |
+| `#tidewave-app` | [Tidewave](https://tidewave.ai/) desktop app packaged for x86_64-linux platform | `nix run git+https://codeberg.org/ffloyd/nix#tidewave-app` |
+
+
+In a locally cloned repo, use `.` instead of the URL: `nix run .#tidewave-app`.
 
 ## If you are new to Nix
 

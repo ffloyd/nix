@@ -10,6 +10,42 @@
   commitInstructions = builtins.readFile ./ai-tooling/commit-instructions.md;
   reviewStagedInstructions = builtins.readFile ./ai-tooling/review-staged-instructions.md;
 in {
+  perSystem = {pkgs, ...}: {
+    packages.tidewave-app = let
+      inherit (pkgs) appimageTools fetchurl;
+      pname = "tidewave-app";
+      version = "v0.4.3";
+      src = fetchurl {
+        url = "https://github.com/tidewave-ai/tidewave_app/releases/download/${version}/tidewave-app-amd64.AppImage";
+        hash = "sha256-XQrH31llzaZxY94NAy7xSp/RvOVzo+a+DoHjkv2nD7M=";
+      };
+      # Extract the AppImage contents so we can grab icons/desktop files
+      appimageContents = appimageTools.extract {inherit pname version src;};
+    in
+      appimageTools.wrapType2 {
+        inherit pname version src;
+
+        extraInstallCommands = ''
+          install -m 444 -D ${appimageContents}/Tidewave.desktop \
+            $out/share/applications/${pname}.desktop
+
+          cp -r ${appimageContents}/usr/share/icons $out/share/
+        '';
+
+        meta = with lib; {
+          description = "Tidewave Desktop app";
+          longDescription = ''
+            Develop, test, and review alongside your web app, in the browser.
+            Works with your favorite coding agent and your web framework.
+          '';
+          homepage = "https://tidewave.ai/";
+          downloadPage = "https://github.com/tidewave-ai/tidewave_app/releases";
+          license = licenses.apsl20;
+          platforms = ["x86_64-linux"];
+        };
+      };
+  };
+
   my.aspects.development = {
     features = [
       ["common" "OpenCode configuration"]
@@ -26,31 +62,8 @@ in {
       };
     };
 
-    homeNixos = {pkgs, ...}: let
-      inherit (pkgs) appimageTools fetchurl;
-      pname = "tidewave";
-      version = "latest";
-      src = fetchurl {
-        url = "https://github.com/tidewave-ai/tidewave_app/releases/latest/download/tidewave-app-amd64.AppImage";
-        hash = "sha256-XQrH31llzaZxY94NAy7xSp/RvOVzo+a+DoHjkv2nD7M=";
-      };
-      # Extract the AppImage contents so we can grab icons/desktop files
-      appimageContents = appimageTools.extract {inherit pname version src;};
-      tidewave = appimageTools.wrapType2 {
-        inherit pname version src;
-
-        extraInstallCommands = ''
-          install -m 444 -D ${appimageContents}/Tidewave.desktop \
-            $out/share/applications/${pname}.desktop
-
-          cp -r ${appimageContents}/usr/share/icons $out/share/
-
-          substituteInPlace $out/share/applications/${pname}.desktop \
-            --replace-fail 'Exec=tidewave-app' 'Exec=tidewave'
-        '';
-      };
-    in {
-      home.packages = [tidewave];
+    homeNixos = {system, ...}: {
+      home.packages = [config.flake.packages.${system}.tidewave-app];
     };
 
     home = {
