@@ -1,17 +1,17 @@
-{config, ...}: {
+{...}: {
   my.hosts.macos-work = {
     adjustments = [
       "Local apps domain resolver & reverse-proxy config"
     ];
 
-    darwin = {pkgs, ...}: let
+    darwin = {pkgs, config, ...}: let
       inherit (pkgs) dnsmasq;
       dnsmasqPort = "53";
       dnsmasqBind = "127.0.0.1";
     in {
       age.secrets.caddyfile = {
         file = ../../secrets/Caddyfile.work;
-        mode = 644;
+        mode = "644";
       };
 
       environment.systemPackages = [

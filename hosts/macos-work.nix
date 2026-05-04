@@ -3,7 +3,7 @@
     hostname = "Remote-Roman-Kolesnev";
     username = "roman.kolesnev";
     email = "roman.kolesnev@remote.com";
-    gpgKey = "AB33F11BEF576E3D";
+    gpgKey = "C201FFD35504A494";
     system = "aarch64-darwin";
 
     aspects = [
