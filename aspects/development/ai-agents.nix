@@ -28,7 +28,6 @@ in {
     home = {
       pkgs,
       config,
-      system,
       ...
     }: let
       opencodeCommitStagedCommand = ''
@@ -86,11 +85,6 @@ in {
         pkgs.pi-coding-agent
       ];
 
-      home.sessionVariables = {
-        # otherwise Tidewave may have problems with using OpenCode
-        TIDEWAVE_OPENCODE_EXECUTABLE = "${lib.getExe opencode-adjusted}";
-      };
-
       xdg.configFile = lib.mkMerge [
         {
           "opencode/opencode.jsonc".source = mkOutOfStoreSymlink config "opencode/opencode.jsonc";
@@ -112,11 +106,11 @@ in {
     # because sometimes I need it for work.
     homeDarwin = {
       config,
-      system,
+      pkgs,
       ...
     }: {
       home.packages = [
-        inputs.llm-agents.packages.${system}.claude-code
+        pkgs.claude-code
       ];
 
       home.file = {

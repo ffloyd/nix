@@ -9,8 +9,8 @@
       license = pkgs.lib.licenses.apsl20;
       platforms = ["x86_64-linux"];
       homepage = "https://tidewave.ai/";
-      inherit (pkgs) fetchurl appimageTools stdenv;
-    in {
+      inherit (pkgs) fetchurl appimageTools stdenv buildFHSEnv;
+
       tidewave-app = let
         pname = "tidewave-app";
         src = fetchurl {
@@ -37,13 +37,13 @@
           };
         };
 
-      tidewave-cli = stdenv.mkDerivation rec {
+      tidewave-cli-unwrapped = stdenv.mkDerivation rec {
         pname = "tidewave-cli";
         inherit version;
 
         src = fetchurl {
-          url = "https://github.com/tidewave-ai/tidewave_app/releases/download/${version}/tidewave-cli-x86_64-unknown-linux-musl";
-          hash = "sha256-TRuoDUyHRXShQm/P1x9OtyAcU8pgw16oZy1TpvXL4UI=";
+          url = "https://github.com/tidewave-ai/tidewave_app/releases/download/${version}/tidewave-cli-x86_64-unknown-linux-gnu";
+          hash = "sha256-CReL8t+fIdOjNXB+hYNBZUtuO5YASf4gdac0/80UQk4=";
         };
 
         dontUnpack = true; # it's a single binary, no archive to unpack
@@ -55,13 +55,18 @@
           install -m755 -D $src $out/bin/${pname}
           runHook postInstall
         '';
-
-        meta = {
-          description = "Tidewave CLI";
-          inherit longDescription license platforms homepage;
-        };
       };
-    };
+
+      tidewave-cli = buildFHSEnv {
+        inherit (tidewave-cli-unwrapped) pname version meta;
+
+        runScript = "tidewave-cli";
+
+        targetPkgs = pkgs: [
+          tidewave-cli-unwrapped
+        ];
+      };
+    in [tidewave-app tidewave-cli];
   };
 
   my.aspects.development = {
