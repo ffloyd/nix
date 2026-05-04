@@ -6,7 +6,7 @@ in {
       ["common" "Git, SSH, and commit signing setup"]
     ];
 
-    home = {pkgs, ...}: {
+    home = {...}: {
       programs.ssh = {
         enable = true;
         enableDefaultConfig = false;
@@ -51,15 +51,12 @@ in {
               };
               commit.gpgSign = true;
               tag.gpgSign = true;
-              core.sshCommand = "ssh -i ~/.ssh/id_work";
+              # for the case if I need to use a separate ssh key
+              # core.sshCommand = "ssh -i ~/.ssh/id_work";
             };
           }
         ];
       };
-
-      home.packages = with pkgs; [
-        git-crypt
-      ];
     };
 
     homeDarwin = {
