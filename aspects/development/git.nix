@@ -1,12 +1,16 @@
 {config, ...}: let
-  inherit (config.my.consts) personalEmail workEmail personalGpgKey workGpgKey fullName;
+  inherit (config.my.consts) fullName;
 in {
   my.aspects.development = {
     features = [
       ["common" "Git, SSH, and commit signing setup"]
     ];
 
-    home = {...}: {
+    home = {
+      email,
+      gpgKey,
+      ...
+    }: {
       programs.ssh = {
         enable = true;
         enableDefaultConfig = false;
@@ -29,33 +33,17 @@ in {
 
         settings = {
           user.name = fullName;
-          user.email = personalEmail;
+          user.email = email;
 
           push.autoSetupRemote = true;
           init.defaultBranch = "main";
         };
 
         signing = {
-          key = personalGpgKey;
+          key = gpgKey;
           signByDefault = true;
           format = "openpgp";
         };
-
-        includes = [
-          {
-            condition = "gitdir:~/Work/";
-            contents = {
-              user = {
-                email = workEmail;
-                signingkey = workGpgKey;
-              };
-              commit.gpgSign = true;
-              tag.gpgSign = true;
-              # for the case if I need to use a separate ssh key
-              # core.sshCommand = "ssh -i ~/.ssh/id_work";
-            };
-          }
-        ];
       };
     };
 

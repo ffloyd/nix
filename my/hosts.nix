@@ -17,6 +17,16 @@
           description = "Primary user account name";
         };
 
+        email = lib.mkOption {
+          type = lib.types.str;
+          description = "Git email for this host";
+        };
+
+        gpgKey = lib.mkOption {
+          type = lib.types.str;
+          description = "GPG signing key for this host";
+        };
+
         description = lib.mkOption {
           type = lib.types.str;
           default = "";
@@ -133,6 +143,8 @@
     mkNixosSystem = {
       hostname,
       username,
+      email,
+      gpgKey,
       system,
       nixos,
       home,
@@ -145,7 +157,7 @@
         inherit system;
 
         specialArgs = {
-          inherit hostname username pkgs-aot system;
+          inherit hostname username email gpgKey pkgs-aot system;
         };
 
         modules =
@@ -160,7 +172,7 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = {
-                inherit hostname username system pkgs-aot;
+                inherit hostname username email gpgKey system pkgs-aot;
               };
 
               home-manager.users.${username} = {
@@ -176,6 +188,8 @@
     mkDarwinSystem = {
       hostname,
       username,
+      email,
+      gpgKey,
       system,
       darwin,
       aspects,
@@ -187,8 +201,7 @@
         inherit system;
 
         specialArgs = {
-          inherit hostname username system inputs pkgs-aot;
-          inherit (config) globals private;
+          inherit hostname username email gpgKey system inputs pkgs-aot;
         };
 
         modules =
@@ -202,6 +215,8 @@
 
     mkHomeConfiguration = {
       username,
+      email,
+      gpgKey,
       system,
       home,
       aspects,
@@ -216,8 +231,7 @@
         };
 
         extraSpecialArgs = {
-          inherit inputs username system pkgs-aot;
-          inherit (config) private;
+          inherit inputs username email gpgKey system pkgs-aot;
         };
 
         modules =

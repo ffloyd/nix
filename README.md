@@ -19,6 +19,7 @@ It is done as a [Nix flake](https://nixos.wiki/wiki/Flakes) which implements a t
 | [hosts/](hosts) | Per-machine definitions and host-specific modules. |
 | [secrets/](secrets) | Encrypted secrets managed with [agenix](https://github.com/ryantm/agenix). |
 | [dotfiles/](dotfiles) | Files that are symlinked directly into the home directory. |
+| [tricks/](tricks) | Patterns documented for future reference. Usually, I add here were removing some pattern from implementation. |
 | [dotfiles/nvim](dotfiles/nvim) | NeoVim configuration. |
 
 

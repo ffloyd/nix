@@ -1,6 +1,7 @@
 # Objective: Define my.consts option as a loosely typed container for global constants
 #
-# Values are set by globals.nix and private.nix files at the top level.
+# Values are set by consts.nix file at the top level.
+#
 # This allows centralizing all constants under the my.consts namespace while keeping
 # sensitive data encrypted in a separate file.
 {lib, ...}: {

@@ -3,6 +3,8 @@
   my.hosts.nixos-desktop = {
     hostname = "nixos";
     username = "ffloyd";
+    email = "roman@ffloyd.space";
+    gpgKey = "A16DC4CD1A040EDE";
     system = "x86_64-linux";
 
     aspects = [

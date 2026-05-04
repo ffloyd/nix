@@ -3,6 +3,8 @@
   my.hosts.framework-13-amd-ai-300 = {
     hostname = "framework13";
     username = "ffloyd";
+    email = "roman@ffloyd.space";
+    gpgKey = "A16DC4CD1A040EDE";
     system = "x86_64-linux";
 
     aspects = [

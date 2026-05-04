@@ -2,6 +2,8 @@
   my.hosts.macos-work = {
     hostname = "Remote-Roman-Kolesnev";
     username = "roman.kolesnev";
+    email = "roman.kolesnev@remote.com";
+    gpgKey = "AB33F11BEF576E3D";
     system = "aarch64-darwin";
 
     aspects = [
